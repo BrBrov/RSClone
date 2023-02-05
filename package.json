@@ -1,0 +1,24 @@
+{
+  "name": "rsclone",
+  "version": "1.0.0",
+  "description": "RSClone",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BrBrov/RSClone.git"
+  },
+  "keywords": [
+    "Task",
+    "of",
+    "RSSchool"
+  ],
+  "author": "RNC",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BrBrov/RSClone/issues"
+  },
+  "homepage": "https://github.com/BrBrov/RSClone#readme"
+}
