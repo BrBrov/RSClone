@@ -1,0 +1,87 @@
+.container {
+  width: 100%;
+}
+
+.wrapper {
+  max-width: 1920px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.top {
+  display: flex;
+  width: 100%;
+  height: 90%;
+  flex-direction: row;
+  gap: 50px;
+}
+
+.top__left-side{
+  display: flex;
+  width: 30%;
+  flex-direction: column;
+  justify-content: center;
+  gap: 30px;
+}
+
+.top__left-menu {
+  background-color: brown;
+}
+
+.top__player-wrapper {
+  background-color: #fd8b03;
+}
+
+.top__right-side {
+  display: flex;
+  position: relative;
+  z-index: 0;
+  width: 70%;
+  flex-direction: column;
+  justify-content: center;
+  gap: 30px;
+}
+
+.top__header{
+  display: flex;
+  position: sticky;
+  z-index: 2;
+  flex-direction: row;
+}
+
+.top__main {
+  display: flex;
+  position: relative;
+  z-index: 1;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.footer {
+  display: flex;
+  width: 100%;
+  height: 10%;
+  align-self: center;
+  box-sizing: border-box;
+  padding: 0 30px;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.footer__git-wrapper,
+.footer__rs-wrapper {
+  display: flex;
+  width: 30px;
+  height: 30px;
+  justify-content: center;
+}
+
+.footer__git-img,
+.footer__rs-img {
+  width: 100%;
+  height: 100%;
+  align-self: center;
+  cursor: pointer;
+}

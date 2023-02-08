@@ -6,16 +6,18 @@
         "airbnb-typescript/base",
         "plugin:@typescript-eslint/recommended"
     ],
+    "env": {
+        "browser": true,
+        "es2021": true,
+        "node": true
+    },
+    "overrides": [
+    ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
-        "ecmaVersion": 2020,
+        "ecmaVersion": "latest",
         "sourceType": "module",
         "project": "./tsconfig.json"
-    },
-    "env": {
-        "es6": true,
-        "browser": true,
-        "node": true
     },
     "rules": {
         "no-debugger": "off",
@@ -25,8 +27,8 @@
         "prettier/prettier": [
             "error",
             {
-              "endOfLine": "auto"
+                "endOfLine": "auto"
             }
-          ]
+        ]
     }
 }
