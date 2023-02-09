@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="512" height="512">
+  <linearGradient id="CSvpaZ4qPm8422LlvPHWAa" x1="32" x2="32" y1="7" y2="57.184" gradientUnits="userSpaceOnUse" spreadMethod="reflect">
+    <stop offset="0" stop-color="#1a6dff" />
+    <stop offset="1" stop-color="#c822ff" />
+  </linearGradient>
+  <path fill="url(#CSvpaZ4qPm8422LlvPHWAa)" d="M56,51c0,2.761-2.239,5-5,5H13c-2.761,0-5-2.239-5-5V13c0-2.761,2.239-5,5-5h38 c2.761,0,5,2.239,5,5V51z M54,13c0-1.657-1.343-3-3-3H13c-1.657,0-3,1.343-3,3v38c0,1.657,1.343,3,3,3h38c1.657,0,3-1.343,3-3V13z" />
+  <linearGradient id="CSvpaZ4qPm8422LlvPHWAb" x1="32" x2="32" y1="17" y2="48.013" gradientUnits="userSpaceOnUse" spreadMethod="reflect">
+    <stop offset="0" stop-color="#6dc7ff" />
+    <stop offset="1" stop-color="#e6abff" />
+  </linearGradient>
+  <path fill="url(#CSvpaZ4qPm8422LlvPHWAb)" d="M46,44c0,1.105-0.895,2-2,2H20c-1.105,0-2-0.895-2-2V20c0-1.105,0.895-2,2-2h24 c1.105,0,2,0.895,2,2V44z" />
+</svg>

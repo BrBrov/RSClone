@@ -9,4 +9,11 @@ declare global {
     file: string;
     logo: string;
   }
+
+  interface PlayerViewData {
+    artist: string;
+    title: string;
+    duration: number;
+    logo: string;
+  }
 }
