@@ -1,0 +1,48 @@
+.top__card {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+}
+
+.top__song-wrapper {
+  position: relative;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.top__song-img {
+  width: 100%;
+  height: 100%;
+}
+
+.top__label-wrapper {
+  position: relative;
+  z-index: 1;
+  height: 80px;
+  display: flex;
+  margin-top: 0;
+  text-align: center;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  backdrop-filter: brightness(50%);
+}
+
+.top__song-artist,
+.top__song-title {
+  color: #aedbd5;
+  text-shadow: 0 0 4px #1a2f7a;
+}
+
+.top__song-artist {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.top__song-title {
+  font-size: 0.8rem;
+  font-weight: 400;
+}
