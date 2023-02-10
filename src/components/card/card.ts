@@ -1,16 +1,28 @@
 import './card.scss';
+import Page from '../page';
 
 export default class Card {
   public card: HTMLElement;
 
-  constructor(data: SongData) {
+  playSong: (a: number) => void;
+
+  page: Page;
+
+  constructor(data: SongData, page: Page) {
+    this.page = page;
     this.card = this.createCard(data);
     this.addListeners();
+    this.playSong = function (id: number) {
+      return page.playSong(id);
+    };
   }
 
   private createCard(data: SongData): HTMLElement {
     const wrapper: HTMLElement = document.createElement('div');
     wrapper.className = 'top__card';
+    wrapper.id = `song${data.id}`;
+    const page = this.page;
+    wrapper.addEventListener('click', () => page.playSong(data.id));
 
     let container: HTMLElement = document.createElement('div');
     container.className = 'top__song-wrapper';

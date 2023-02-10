@@ -1,10 +1,14 @@
 import './songs-block.scss';
 import Card from '../card/card';
+import Page from '../page';
 
 export default class SongsBlock {
   public songsBlock: HTMLElement;
 
-  constructor(title: string, data: Array<SongData>) {
+  page: Page;
+
+  constructor(title: string, data: Array<SongData>, page: Page) {
+    this.page = page;
     this.songsBlock = this.createBlock(title, data);
   }
 
@@ -25,8 +29,9 @@ export default class SongsBlock {
     const cardWrapper: HTMLElement = document.createElement('div');
     cardWrapper.className = 'top__cards-block';
 
+    data.sort(() => Math.random() - 0.5);
     data.forEach((item: SongData) => {
-      const card = new Card(item);
+      const card = new Card(item, this.page);
       cardWrapper.append(card.card);
     });
 

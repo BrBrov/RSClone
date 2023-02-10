@@ -14,6 +14,8 @@ export default class Page {
 
   private songsBlock: SongsBlock | undefined;
 
+  public songs: Array<SongData> = [];
+
   constructor() {
     this.body = document.body;
     this.state = new State();
@@ -40,7 +42,7 @@ export default class Page {
 
     this.player.add(fake);
 
-    const songs: Array<SongData> = [
+    this.songs = [
       {
         id: 1,
         artist: 'Harry Styles',
@@ -143,10 +145,15 @@ export default class Page {
       },
     ];
 
-    this.songsBlock = new SongsBlock('Popular songs', songs);
+    this.songsBlock = new SongsBlock('Popular songs', this.songs, this);
 
     const main: HTMLElement = this.body.querySelector('.top__main') as HTMLElement;
 
     main.append(this.songsBlock.songsBlock);
+  }
+
+  public playSong(id: number) {
+    const curSong = this.songs.find((elem) => elem.id === id);
+    if (curSong) this.player.add(curSong);
   }
 }
