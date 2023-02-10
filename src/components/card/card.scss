@@ -1,13 +1,12 @@
 .top__card {
   position: relative;
+  z-index: 0;
   width: 200px;
   height: 200px;
   overflow: hidden;
 }
 
 .top__song-wrapper {
-  position: relative;
-  z-index: 0;
   width: 100%;
   height: 100%;
 }

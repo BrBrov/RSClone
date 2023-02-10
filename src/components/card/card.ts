@@ -50,7 +50,6 @@ export default class Card {
   }
 
   private onFocus(ev: Event): void {
-    console.log(ev);
     ev.stopPropagation();
     const label: HTMLElement = this.card.querySelector('.top__label-wrapper') as HTMLElement;
 

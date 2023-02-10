@@ -1,11 +1,14 @@
 import '../assets/svg/git.svg';
 import '../assets/png/rss.png';
-import './page.scss';
 import Player from './player/player';
 import SongsBlock from './songs-block/songs-block';
+import State from '../utils/state';
+import StaticMain from './static-main/static-main';
 
 export default class Page {
   private body: HTMLElement;
+
+  private state: State;
 
   private player: Player;
 
@@ -13,11 +16,12 @@ export default class Page {
 
   constructor() {
     this.body = document.body;
+    this.state = new State();
     this.player = new Player();
-    this.init();
   }
 
   public start(): void {
+    this.body.append(new StaticMain().getElems());
     const playerWrapper: HTMLElement = this.body.querySelector('.top__player-wrapper') as HTMLElement;
     playerWrapper.append(this.player.view.player);
 
@@ -144,99 +148,5 @@ export default class Page {
     const main: HTMLElement = this.body.querySelector('.top__main') as HTMLElement;
 
     main.append(this.songsBlock.songsBlock);
-  }
-
-  private init(): void {
-    const pageContainer: HTMLElement = document.createElement('div');
-    pageContainer.className = 'container';
-
-    const page: HTMLElement = document.createElement('div');
-    page.className = 'wrapper';
-
-    pageContainer.append(page);
-
-    const top = document.createElement('div');
-    top.className = 'top';
-
-    page.append(top);
-
-    const footer = document.createElement('footer');
-    footer.className = 'footer';
-
-    this.createFooter(footer);
-
-    page.append(footer);
-
-    const left = document.createElement('div');
-    left.className = 'top__left-side';
-
-    this.createLeftSide(left);
-
-    top.append(left);
-
-    const right = document.createElement('div');
-    right.className = 'top__right-side';
-
-    this.createRightSide(right);
-
-    top.append(right);
-
-    this.body.append(pageContainer);
-  }
-
-  private createFooter(footer: HTMLElement): void {
-    let wrapper: HTMLElement = document.createElement('div');
-    wrapper.className = 'footer__git-wrapper';
-
-    let img: HTMLImageElement = document.createElement('img');
-    img.className = 'footer__git-img';
-    img.alt = 'Git';
-    img.src = './assets/svg/git.svg';
-
-    img.addEventListener('click', (): void => {
-      location.href = 'https://github.com/BrBrov/RSClone';
-    });
-
-    wrapper.append(img);
-    footer.append(wrapper);
-
-    wrapper = document.createElement('div');
-    wrapper.className = 'footer__rs-wrapper';
-
-    img = document.createElement('img');
-    img.className = 'footer__rs-img';
-    img.alt = 'RSSchool';
-    img.src = './assets/png/rss.png';
-
-    img.addEventListener('click', (): void => {
-      location.href = 'https://rs.school';
-    });
-
-    wrapper.append(img);
-    footer.append(wrapper);
-  }
-
-  private createLeftSide(left: HTMLElement): void {
-    let container: HTMLElement = document.createElement('div');
-    container.className = 'top__left-menu';
-
-    left.append(container);
-
-    container = document.createElement('div');
-    container.className = 'top__player-wrapper';
-
-    left.append(container);
-  }
-
-  private createRightSide(right: HTMLElement): void {
-    let container: HTMLElement = document.createElement('header');
-    container.className = 'top__header';
-
-    right.append(container);
-
-    container = document.createElement('main');
-    container.className = 'top__main';
-
-    right.append(container);
   }
 }

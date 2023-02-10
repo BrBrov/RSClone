@@ -67,7 +67,7 @@ export default class Player {
 
   private listeners(): void {
     const playBtn: HTMLButtonElement = this.view.player.querySelector('.top__play-stop') as HTMLButtonElement;
-    console.dir(playBtn);
+
     playBtn.addEventListener('click', this.playListener.bind(this));
 
     this.audio.addEventListener('timeupdate', this.timerListener.bind(this));

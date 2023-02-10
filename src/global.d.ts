@@ -16,4 +16,11 @@ declare global {
     duration: number;
     logo: string;
   }
+
+  interface StateData {
+    lang: string;
+    auth: boolean;
+    token: string;
+    user: string;
+  }
 }
