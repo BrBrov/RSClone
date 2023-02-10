@@ -39,7 +39,7 @@
   z-index: 0;
   width: 80%;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 30px;
   background-image: linear-gradient( to top, #121212, #121212, #121212, #121212, #121212, #161419, #1a151e, #201522, #311327, #430d24, #53051b, #5e0506 );
 }
@@ -48,8 +48,8 @@
   display: flex;
   width: 100%;
   height: 40px;
-  position: sticky;
   flex-direction: row;
+  justify-content: space-between;
 }
 
 .top__main {

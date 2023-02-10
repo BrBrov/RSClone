@@ -5,6 +5,7 @@ import SongsBlock from './songs-block/songs-block';
 import State from '../utils/state';
 import StaticMain from './static-main/static-main';
 import SearchElem from './search/search';
+import Login from './login/login';
 
 export default class Page {
   private body: HTMLElement;
@@ -12,6 +13,8 @@ export default class Page {
   private state: State;
 
   private search: SearchElem;
+
+  private login: Login;
 
   private player: Player;
 
@@ -21,6 +24,7 @@ export default class Page {
     this.body = document.body;
     this.state = new State();
     this.search = new SearchElem();
+    this.login = new Login();
     this.player = new Player();
   }
 
@@ -29,6 +33,7 @@ export default class Page {
 
     const header: HTMLElement = this.body.querySelector('.top__header') as HTMLElement;
     header.append(this.search.getElem());
+    header.append(this.login.getElems());
 
     const playerWrapper: HTMLElement = this.body.querySelector('.top__player-wrapper') as HTMLElement;
     playerWrapper.append(this.player.view.player);
