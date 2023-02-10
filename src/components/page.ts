@@ -4,11 +4,14 @@ import Player from './player/player';
 import SongsBlock from './songs-block/songs-block';
 import State from '../utils/state';
 import StaticMain from './static-main/static-main';
+import SearchElem from './search/search';
 
 export default class Page {
   private body: HTMLElement;
 
   private state: State;
+
+  private search: SearchElem;
 
   private player: Player;
 
@@ -17,11 +20,16 @@ export default class Page {
   constructor() {
     this.body = document.body;
     this.state = new State();
+    this.search = new SearchElem();
     this.player = new Player();
   }
 
   public start(): void {
     this.body.append(new StaticMain().getElems());
+
+    const header: HTMLElement = this.body.querySelector('.top__header') as HTMLElement;
+    header.append(this.search.getElem());
+
     const playerWrapper: HTMLElement = this.body.querySelector('.top__player-wrapper') as HTMLElement;
     playerWrapper.append(this.player.view.player);
 
