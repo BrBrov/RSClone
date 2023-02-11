@@ -1,6 +1,7 @@
 import './songs-block.scss';
 import Card from '../card/card';
 import Page from '../page';
+import { createByTag } from '../../utils/heap';
 
 export default class SongsBlock {
   public songsBlock: HTMLElement;
@@ -13,30 +14,18 @@ export default class SongsBlock {
   }
 
   private createBlock(title: string, data: Array<SongData>): HTMLElement {
-    const wrapper: HTMLElement = document.createElement('div');
-    wrapper.className = 'top__block-wrapper';
-
-    const titleWrap: HTMLElement = document.createElement('div');
-    titleWrap.className = 'top__wrapper-title';
-
-    const text: HTMLSpanElement = document.createElement('span');
-    text.className = 'top__title-block';
+    const wrapper = createByTag({ tag: 'div', class: 'top__block-wrapper' });
+    const titleWrap = createByTag({ tag: 'div', class: 'top__wrapper-title', parent: wrapper });
+    const text = createByTag({ tag: 'span', class: 'top__title-block', parent: titleWrap });
     text.textContent = title;
 
-    titleWrap.append(text);
-    wrapper.append(titleWrap);
-
-    const cardWrapper: HTMLElement = document.createElement('div');
-    cardWrapper.className = 'top__cards-block';
+    const cardWrapper = createByTag({ tag: 'div', class: 'top__cards-block', parent: wrapper });
 
     data.sort(() => Math.random() - 0.5);
     data.forEach((item: SongData) => {
       const card = new Card(item, this.page);
       cardWrapper.append(card.card);
     });
-
-    wrapper.append(cardWrapper);
-
     return wrapper;
   }
 }
