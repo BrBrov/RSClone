@@ -6,11 +6,14 @@ import State from '../utils/state';
 import StaticMain from './static-main/static-main';
 import SearchElem from './search/search';
 import Login from './login/login';
+import Logo from './logo/logo';
 
 export default class Page {
   private body: HTMLElement;
 
   private state: State;
+
+  private logo: Logo;
 
   private search: SearchElem;
 
@@ -23,6 +26,7 @@ export default class Page {
   constructor() {
     this.body = document.body;
     this.state = new State();
+    this.logo = new Logo();
     this.search = new SearchElem();
     this.login = new Login();
     this.player = new Player();
@@ -30,6 +34,9 @@ export default class Page {
 
   public start(): void {
     this.body.append(new StaticMain().getElems());
+
+    const leftTopSide: HTMLElement = this.body.querySelector('.top__left-menu') as HTMLElement;
+    leftTopSide.append(this.logo.getLogo());
 
     const header: HTMLElement = this.body.querySelector('.top__header') as HTMLElement;
     header.append(this.search.getElem());
