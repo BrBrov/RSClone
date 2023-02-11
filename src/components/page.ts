@@ -7,6 +7,7 @@ import StaticMain from './static-main/static-main';
 import SearchElem from './search/search';
 import Login from './login/login';
 import Logo from './logo/logo';
+import LangquageSwitcher from './lang-button/lang-button';
 
 export default class Page {
   private body: HTMLElement;
@@ -16,6 +17,8 @@ export default class Page {
   private logo: Logo;
 
   private search: SearchElem;
+
+  private langSwitch: LangquageSwitcher;
 
   private login: Login;
 
@@ -28,6 +31,7 @@ export default class Page {
     this.state = new State();
     this.logo = new Logo();
     this.search = new SearchElem();
+    this.langSwitch = new LangquageSwitcher();
     this.login = new Login();
     this.player = new Player();
   }
@@ -40,6 +44,7 @@ export default class Page {
 
     const header: HTMLElement = this.body.querySelector('.top__header') as HTMLElement;
     header.append(this.search.getElem());
+    header.append(this.langSwitch.getElems());
     header.append(this.login.getElems());
 
     const playerWrapper: HTMLElement = this.body.querySelector('.top__player-wrapper') as HTMLElement;
