@@ -2,6 +2,7 @@ import '../assets/svg/git.svg';
 import '../assets/png/rss.png';
 import Player from './player/player';
 import SongsBlock from './songs-block/songs-block';
+import LeftMenu from './left-menu/left-menu';
 import State from '../utils/state';
 import StaticMain from './static-main/static-main';
 
@@ -13,6 +14,8 @@ export default class Page {
   private player: Player;
 
   private songsBlock: SongsBlock | undefined;
+
+  private leftMenu: LeftMenu | undefined;
 
   public songs: Array<SongData> = [];
 
@@ -144,6 +147,10 @@ export default class Page {
           'https://is4-ssl.mzstatic.com/image/thumb/Music122/v4/69/e0/27/69e02785-714c-d0b9-ba68-04a2361fa7e5/075679730466.jpg/400x400cc.jpg',
       },
     ];
+
+    this.leftMenu = new LeftMenu();
+    const leftSide: HTMLElement = this.body.querySelector('.top__left-menu') as HTMLElement;
+    leftSide.append(this.leftMenu.leftMenu);
 
     this.songsBlock = new SongsBlock('Popular songs', this.songs, this);
 
