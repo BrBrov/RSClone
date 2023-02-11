@@ -1,0 +1,61 @@
+.top__logo-wrapper {
+  display: flex;
+  width: 95%;
+  box-sizing: content-box;
+  padding-top: 20px;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 30px;
+}
+
+.top__logo-block {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+}
+
+.top__wrapper-logo {
+  width: 40px;
+  height: 40px;
+}
+
+.top__logo {
+  width: 100%;
+  height: 100%;
+}
+
+.top__logo-title {
+  font-size: 2.2rem;
+  font-weight: 500;
+  color: rgb(174, 187, 224);
+}
+
+.top__pls-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+}
+
+.top__pls-icon {
+  width: 22px;
+  height: 22px;
+  box-sizing: content-box;
+  padding: 3px;
+  background-color: rgb(175, 199, 219);
+}
+
+.top__pls-img {
+  width: 100%;
+  height: 100%;
+}
+
+.top__pls-playlist {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: rgb(174, 187, 224);
+}

@@ -1,0 +1,30 @@
+.top__block-wrapper {
+  display: flex;
+  width: 98%;
+  margin: 0 auto;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 20px;
+}
+
+.top__wrapper-title {
+  display: flex;
+  width: 95%;
+  justify-content: flex-start;
+}
+
+.top__title-block {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #adcaf2;
+}
+
+.top__cards-block {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 10px;
+}
