@@ -25,7 +25,9 @@ export default class Page {
 
   private player: Player;
 
-  private songsBlock: SongsBlock | undefined;
+  private songsBlockPopular: SongsBlock | undefined;
+
+  private songsBlockRecently: SongsBlock | undefined;
 
   private leftMenu: LeftMenu | undefined;
 
@@ -177,11 +179,11 @@ export default class Page {
     const leftSide: HTMLElement = this.body.querySelector('.top__left-menu') as HTMLElement;
     leftSide.append(this.leftMenu.leftMenu);
 
-    this.songsBlock = new SongsBlock('Popular songs', this.songs, this);
-
     const main: HTMLElement = this.body.querySelector('.top__main') as HTMLElement;
-
-    main.append(this.songsBlock.songsBlock);
+    this.songsBlockPopular = new SongsBlock('Popular songs', this.songs, this);
+    main.append(this.songsBlockPopular.songsBlock);
+    this.songsBlockRecently = new SongsBlock('Recently played', this.songs, this);
+    main.append(this.songsBlockRecently.songsBlock);
   }
 
   public playSong(id: number) {
