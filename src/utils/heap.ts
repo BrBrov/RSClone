@@ -14,3 +14,5 @@ export function createByTag(param: ParamCreateByTag) {
   if (param.parent) param.parent.appendChild(tmp);
   return tmp;
 }
+
+export const nSongInPage = 10;

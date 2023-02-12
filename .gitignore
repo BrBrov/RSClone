@@ -7,3 +7,7 @@
 /.idea/jsLibraryMappings.xml
 /.idea/codeStyles/Project.xml
 /.idea/watcherTasks.xml
+/dist/
+*.d.ts
+*.map
+
