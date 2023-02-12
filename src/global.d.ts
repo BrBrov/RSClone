@@ -2,6 +2,7 @@ export {};
 
 declare global {
   interface SongData {
+    _id?: string;
     id: number;
     artist: string;
     title: string;

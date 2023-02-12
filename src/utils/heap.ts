@@ -15,4 +15,4 @@ export function createByTag(param: ParamCreateByTag) {
   return tmp;
 }
 
-export const nSongInPage = 10;
+export const nSongInPage = 30;

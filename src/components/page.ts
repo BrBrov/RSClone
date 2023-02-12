@@ -216,15 +216,12 @@ export default class Page {
     if (curSong) this.player.add(curSong);
   }
 
-  public getSongs(type: string, val: string) {
+  public getSongs(type: string, val: string, title: string) {
     if (type == 'genre') {
-      this.base.getGenre(-1, nSongInPage, val).then((result) => {
-        if (result.cpunt !== null) {
-          return result.items;
-        }
+      this.base.getGenre(1, nSongInPage, val).then((result) => {
+        if (result.items.tracks) this.showCollectionOfSongs(result.items.tracks, title);
       });
     }
-    return this.songs;
   }
 
   public showCollectionOfSongs(songs: Array<SongData>, title: string) {

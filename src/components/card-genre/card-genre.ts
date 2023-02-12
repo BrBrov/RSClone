@@ -22,7 +22,7 @@ export default class CardGenre {
       wrapper.style.background = data.bg1;
     });
     wrapper.addEventListener('click', () => {
-      this.page.showCollectionOfSongs(this.page.getSongs('genre', data.key), data.name);
+      this.page.getSongs('genre', data.key, data.name);
     });
 
     const container = createByTag({ tag: 'div', class: 'genre__card-wrapper', parent: wrapper });

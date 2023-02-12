@@ -16,9 +16,8 @@ class Base {
     this.user_query = this.base + '/login';
   }
 
-  getGenre = async (page = -1, limit = nSongInPage, genre = 'pop') => {
-    let hvost = `?genre=${genre}`;
-    if (page !== -1) hvost += `&page=${page}&limit=${limit}`;
+  getGenre = async (page = 1, limit = nSongInPage, genre = 'pop') => {
+    const hvost = `?genre=${genre}&page=${page}&limit=${limit}`;
     console.log(this.style_query + hvost);
     const response = await fetch(this.style_query + hvost, {
       method: 'GET', // *GET, POST, PUT, DELETE, etc.
