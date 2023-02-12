@@ -7,6 +7,7 @@ import StaticMain from './static-main/static-main';
 import SearchElem from './search/search';
 import Login from './login/login';
 import Logo from './logo/logo';
+import LoginPopUp from './popup-section/connect-popup';
 
 export default class Page {
   private body: HTMLElement;
@@ -22,6 +23,12 @@ export default class Page {
   private player: Player;
 
   private songsBlock: SongsBlock | undefined;
+
+  private popupLogin: LoginPopUp | undefined;
+
+  private popupSignup: LoginPopUp | undefined;
+
+  private popupLogout: LoginPopUp | undefined;
 
   constructor() {
     this.body = document.body;
@@ -166,7 +173,16 @@ export default class Page {
     this.songsBlock = new SongsBlock('Popular songs', songs);
 
     const main: HTMLElement = this.body.querySelector('.top__main') as HTMLElement;
+    // const wrapper: HTMLElement = this.body.querySelector('.wrapper') as HTMLElement;
+    const container: HTMLElement = this.body.querySelector('.container') as HTMLElement;
 
     main.append(this.songsBlock.songsBlock);
+
+    this.popupLogin = new LoginPopUp();
+    this.popupSignup = new LoginPopUp();
+    this.popupLogout = new LoginPopUp();
+    container.append(this.popupLogin.popupLogin);
+    // container.append(this.popupSignup.popupSignup);
+    // container.append(this.popupLogout.popupLogout);
   }
 }
