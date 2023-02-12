@@ -11,7 +11,7 @@
 
 .left-menu__list-item {
   list-style-type: none; 
-  font-size: 16px;
+  font-size: 18px;
   color: #adcaf2;
   padding-bottom:15px;
   cursor: pointer;
@@ -19,4 +19,10 @@
 
 .fa-solid {
   padding-right: 10px;
+}
+
+.left-menu__href {
+  margin-left: 15px;
+  color: #ff6a62;
+  text-decoration: none;
 }

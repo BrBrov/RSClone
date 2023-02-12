@@ -2,6 +2,7 @@ import '../assets/svg/git.svg';
 import '../assets/png/rss.png';
 import Player from './player/player';
 import SongsBlock from './songs-block/songs-block';
+import GenresBlock from './genres-block/genres-block';
 import LeftMenu from './left-menu/left-menu';
 import State from '../utils/state';
 import StaticMain from './static-main/static-main';
@@ -29,9 +30,13 @@ export default class Page {
 
   private songsBlockRecently: SongsBlock | undefined;
 
+  private genresBlock: GenresBlock | undefined;
+
   private leftMenu: LeftMenu | undefined;
 
   public songs: Array<SongData> = [];
+
+  public genres: Array<GenreData> = [];
 
   constructor() {
     this.body = document.body;
@@ -72,6 +77,7 @@ export default class Page {
 
     this.player.add(fake);
 
+    //TODO: need real songs
     this.songs = [
       {
         id: 1,
@@ -175,13 +181,27 @@ export default class Page {
       },
     ];
 
-    this.leftMenu = new LeftMenu();
+    this.genres = [
+      { key: 'pop', name: 'Popular', img: 'popular.jpg', bg1: 'rgb(175 175 39 / 71%)', bg2: 'yellow' },
+      { key: 'rock', name: 'Rock', img: 'rock.jpg', bg1: '#7bb0a6', bg2: '#1dabb8' },
+      { key: 'hip', name: 'Hip-hop', img: 'hip-hop.png', bg1: '#f29b34', bg2: '#ff7416' },
+      { key: 'electronic', name: 'Electronic', img: 'electronic.png', bg1: '#777777', bg2: '#999999' },
+      { key: 'dance', name: 'Dance', img: 'dance.png', bg1: '#2c82c9', bg2: '#83d6de' },
+      { key: 'music', name: 'Lyric', img: 'lyric.jpg', bg1: '#7e3661', bg2: '#bb3658' },
+      { key: 'house', name: 'House', img: 'house.png', bg1: '#a0b58d', bg2: '#8c7e51' },
+    ];
+
+    this.leftMenu = new LeftMenu(this);
     const leftSide: HTMLElement = this.body.querySelector('.top__left-menu') as HTMLElement;
     leftSide.append(this.leftMenu.leftMenu);
 
     const main: HTMLElement = this.body.querySelector('.top__main') as HTMLElement;
     this.songsBlockPopular = new SongsBlock('Popular songs', this.songs, this);
     main.append(this.songsBlockPopular.songsBlock);
+
+    this.genresBlock = new GenresBlock('Music by genres', this.genres, this);
+    main.append(this.genresBlock.genresBlock);
+
     this.songsBlockRecently = new SongsBlock('Recently played', this.songs, this);
     main.append(this.songsBlockRecently.songsBlock);
   }
