@@ -18,7 +18,8 @@ export default class LeftMenu {
 
     const ul = createByTag({ tag: 'ul', class: 'left-menu__list', parent: wrapper });
     const li = createByTag({ tag: 'li', class: 'left-menu__list-item', parent: ul });
-    li.innerHTML = '<i class="fa-solid fa-house"></i> <span class="left-menu__list-item">Home</li>';
+    li.innerHTML =
+      '<i class="fa-solid fa-house"></i> <span class="left-menu__list-item"><a class="left-menu__href" href="./">Home</a></li>';
     /*
     TODO: many playLists
     li = createByTag({ tag: 'li', class: 'left-menu__list-item', parent: ul });

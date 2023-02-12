@@ -21,6 +21,9 @@ export default class CardGenre {
     wrapper.addEventListener('mouseout', () => {
       wrapper.style.background = data.bg1;
     });
+    wrapper.addEventListener('click', () => {
+      this.page.showCollectionOfSongs(this.page.getSongs('genre', data.key), data.name);
+    });
 
     const container = createByTag({ tag: 'div', class: 'genre__card-wrapper', parent: wrapper });
     const img = <HTMLImageElement>createByTag({ tag: 'img', class: 'genre__card-img', parent: container });

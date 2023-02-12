@@ -113,7 +113,7 @@ export default class Page {
         id: 4,
         artist: 'Lil Nas X',
         title: 'STAR WALKIN(League of Legends Worlds Anthem)',
-        genre: 'pop',
+        genre: 'hip',
         file:
           'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/6d/4b/66/6d4b6697-57ec-f34c-a56d-53c7fe48acea/mzaf_14430168494514608993.plus.aac.ep.m4a',
         logo:
@@ -153,7 +153,7 @@ export default class Page {
         id: 4,
         artist: 'Lil Nas X',
         title: 'STAR WALKIN(League of Legends Worlds Anthem)',
-        genre: 'pop',
+        genre: 'rock',
         file:
           'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/6d/4b/66/6d4b6697-57ec-f34c-a56d-53c7fe48acea/mzaf_14430168494514608993.plus.aac.ep.m4a',
         logo:
@@ -163,7 +163,7 @@ export default class Page {
         id: 1,
         artist: 'Harry Styles',
         title: 'Late Night Talking',
-        genre: 'pop',
+        genre: 'rock',
         file:
           'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/3c/2c/82/3c2c8235-9907-0405-b21c-8fd66d285e56/mzaf_6122099414111658029.plus.aac.ep.m4a',
         logo:
@@ -173,7 +173,7 @@ export default class Page {
         id: 2,
         artist: 'Oliver Tree & Robin Schulz',
         title: 'Miss You',
-        genre: 'pop',
+        genre: 'hip',
         file:
           'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/78/d1/8f/78d18f9f-671b-3c3c-0033-917651170937/mzaf_14625856779470870222.plus.aac.ep.m4a',
         logo:
@@ -209,5 +209,19 @@ export default class Page {
   public playSong(id: number) {
     const curSong = this.songs.find((elem) => elem.id === id);
     if (curSong) this.player.add(curSong);
+  }
+
+  public getSongs(type: string, val: string) {
+    if (type == 'genre') {
+      return this.songs.filter((elem) => elem.genre === val);
+    }
+    return this.songs;
+  }
+
+  public showCollectionOfSongs(songs: Array<SongData>, title: string) {
+    const main: HTMLElement = this.body.querySelector('.top__main') as HTMLElement;
+    main.innerHTML = '';
+    const tmpSongs = new SongsBlock(title, songs, this);
+    main.append(tmpSongs.songsBlock);
   }
 }
