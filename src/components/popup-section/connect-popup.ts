@@ -68,6 +68,7 @@ export default class LoginPopUp {
       inpute = document.getElementById('login-email') as HTMLInputElement;
       inputp = document.getElementById('login-password') as HTMLInputElement;
 
+      //TODO:
       // auth
       //   .signInWithEmailAndPassword(inpute, inputp)
       //   .then((cred) => {
@@ -135,6 +136,7 @@ export default class LoginPopUp {
       inpute = document.getElementById('signup-email') as HTMLInputElement;
       inputp = document.getElementById('signup-password') as HTMLInputElement;
 
+      //TODO:
       // auth
       //   .signInWithEmailAndPassword(inpute, inputp)
       //   .then((cred) => {
