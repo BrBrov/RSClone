@@ -1,0 +1,23 @@
+.top__lang-wrapper {
+  display: flex;
+  width: 25px;
+  height: 25px;
+  box-sizing: content-box;
+  padding: 2px;
+  align-self: center;
+  justify-content: center;
+  align-items: center;
+  background-color: #fdfdfd;
+  border-top: 2px solid #01ffdd;
+  border-right: 2px solid #ff0040;
+  border-bottom: 2px solid #12a30d;
+  border-left: 2px solid #f0e004;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.top__lang-text {
+  color: #082e64;
+  font-size: 1rem;
+  font-weight: 600;
+}

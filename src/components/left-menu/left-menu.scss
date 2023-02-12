@@ -1,0 +1,28 @@
+.left-menu__wrapper{
+  color: white;
+}
+.left-menu__logo {
+  margin:20px; 
+  text-align: center;
+}
+.left-menu__img {
+  max-width:85%;
+}
+
+.left-menu__list-item {
+  list-style-type: none; 
+  font-size: 18px;
+  color: #adcaf2;
+  padding-bottom:15px;
+  cursor: pointer;
+}
+
+.fa-solid {
+  padding-right: 10px;
+}
+
+.left-menu__href {
+  margin-left: 15px;
+  color: #ff6a62;
+  text-decoration: none;
+}

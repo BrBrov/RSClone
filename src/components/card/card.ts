@@ -1,45 +1,39 @@
 import './card.scss';
+import Page from '../page';
+import { createByTag } from '../../utils/heap';
 
 export default class Card {
   public card: HTMLElement;
 
-  constructor(data: SongData) {
+  playSong: (a: number) => void;
+
+  page: Page;
+
+  constructor(data: SongData, page: Page) {
+    this.page = page;
     this.card = this.createCard(data);
     this.addListeners();
+    this.playSong = function (id: number) {
+      return page.playSong(id);
+    };
   }
 
   private createCard(data: SongData): HTMLElement {
-    const wrapper: HTMLElement = document.createElement('div');
-    wrapper.className = 'top__card';
+    const wrapper = createByTag({ tag: 'div', class: 'top__card', id: `song${data.id}` });
+    const page = this.page;
+    wrapper.addEventListener('click', () => page.playSong(data.id));
 
-    let container: HTMLElement = document.createElement('div');
-    container.className = 'top__song-wrapper';
-
-    const img: HTMLImageElement = document.createElement('img');
-    img.className = 'top__song-img';
+    let container = createByTag({ tag: 'div', class: 'top__song-wrapper', parent: wrapper });
+    const img = <HTMLImageElement>createByTag({ tag: 'img', class: 'top__song-img', parent: container });
     img.alt = data.title;
     img.src = data.logo;
 
-    container.append(img);
-    wrapper.append(container);
+    container = createByTag({ tag: 'div', class: 'top__label-wrapper', parent: wrapper });
+    const titleArt = createByTag({ tag: 'span', class: 'top__song-artist', parent: container });
+    titleArt.innerHTML = data.artist;
 
-    container = document.createElement('div');
-    container.className = 'top__label-wrapper';
-
-    let title: HTMLElement = document.createElement('span');
-    title.className = 'top__song-artist';
-    title.innerHTML = data.artist;
-
-    container.append(title);
-
-    title = document.createElement('span');
-    title.className = 'top__song-title';
-    title.innerHTML = data.title;
-
-    container.append(title);
-
-    wrapper.append(container);
-
+    const titleSong = createByTag({ tag: 'span', class: 'top__song-title', parent: container });
+    titleSong.innerHTML = data.title;
     return wrapper;
   }
 

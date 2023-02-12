@@ -2,11 +2,14 @@ import '../assets/svg/git.svg';
 import '../assets/png/rss.png';
 import Player from './player/player';
 import SongsBlock from './songs-block/songs-block';
+import GenresBlock from './genres-block/genres-block';
+import LeftMenu from './left-menu/left-menu';
 import State from '../utils/state';
 import StaticMain from './static-main/static-main';
 import SearchElem from './search/search';
 import Login from './login/login';
 import Logo from './logo/logo';
+import LangquageSwitcher from './lang-button/lang-button';
 
 export default class Page {
   private body: HTMLElement;
@@ -17,17 +20,30 @@ export default class Page {
 
   private search: SearchElem;
 
+  private langSwitch: LangquageSwitcher;
+
   private login: Login;
 
   private player: Player;
 
-  private songsBlock: SongsBlock | undefined;
+  private songsBlockPopular: SongsBlock | undefined;
+
+  private songsBlockRecently: SongsBlock | undefined;
+
+  private genresBlock: GenresBlock | undefined;
+
+  private leftMenu: LeftMenu | undefined;
+
+  public songs: Array<SongData> = [];
+
+  public genres: Array<GenreData> = [];
 
   constructor() {
     this.body = document.body;
     this.state = new State();
     this.logo = new Logo();
     this.search = new SearchElem();
+    this.langSwitch = new LangquageSwitcher();
     this.login = new Login();
     this.player = new Player();
   }
@@ -40,6 +56,7 @@ export default class Page {
 
     const header: HTMLElement = this.body.querySelector('.top__header') as HTMLElement;
     header.append(this.search.getElem());
+    header.append(this.langSwitch.getElems());
     header.append(this.login.getElems());
 
     const playerWrapper: HTMLElement = this.body.querySelector('.top__player-wrapper') as HTMLElement;
@@ -60,7 +77,8 @@ export default class Page {
 
     this.player.add(fake);
 
-    const songs: Array<SongData> = [
+    //TODO: need real songs
+    this.songs = [
       {
         id: 1,
         artist: 'Harry Styles',
@@ -95,7 +113,7 @@ export default class Page {
         id: 4,
         artist: 'Lil Nas X',
         title: 'STAR WALKIN(League of Legends Worlds Anthem)',
-        genre: 'pop',
+        genre: 'hip',
         file:
           'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/6d/4b/66/6d4b6697-57ec-f34c-a56d-53c7fe48acea/mzaf_14430168494514608993.plus.aac.ep.m4a',
         logo:
@@ -135,7 +153,7 @@ export default class Page {
         id: 4,
         artist: 'Lil Nas X',
         title: 'STAR WALKIN(League of Legends Worlds Anthem)',
-        genre: 'pop',
+        genre: 'rock',
         file:
           'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/6d/4b/66/6d4b6697-57ec-f34c-a56d-53c7fe48acea/mzaf_14430168494514608993.plus.aac.ep.m4a',
         logo:
@@ -145,7 +163,7 @@ export default class Page {
         id: 1,
         artist: 'Harry Styles',
         title: 'Late Night Talking',
-        genre: 'pop',
+        genre: 'rock',
         file:
           'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/3c/2c/82/3c2c8235-9907-0405-b21c-8fd66d285e56/mzaf_6122099414111658029.plus.aac.ep.m4a',
         logo:
@@ -155,7 +173,7 @@ export default class Page {
         id: 2,
         artist: 'Oliver Tree & Robin Schulz',
         title: 'Miss You',
-        genre: 'pop',
+        genre: 'hip',
         file:
           'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/78/d1/8f/78d18f9f-671b-3c3c-0033-917651170937/mzaf_14625856779470870222.plus.aac.ep.m4a',
         logo:
@@ -163,10 +181,47 @@ export default class Page {
       },
     ];
 
-    this.songsBlock = new SongsBlock('Popular songs', songs);
+    this.genres = [
+      { key: 'pop', name: 'Popular', img: 'popular.jpg', bg1: 'rgb(175 175 39 / 71%)', bg2: 'yellow' },
+      { key: 'rock', name: 'Rock', img: 'rock.jpg', bg1: '#7bb0a6', bg2: '#1dabb8' },
+      { key: 'hip', name: 'Hip-hop', img: 'hip-hop.png', bg1: '#f29b34', bg2: '#ff7416' },
+      { key: 'electronic', name: 'Electronic', img: 'electronic.png', bg1: '#777777', bg2: '#999999' },
+      { key: 'dance', name: 'Dance', img: 'dance.png', bg1: '#2c82c9', bg2: '#83d6de' },
+      { key: 'music', name: 'Lyric', img: 'lyric.jpg', bg1: '#7e3661', bg2: '#bb3658' },
+      { key: 'house', name: 'House', img: 'house.png', bg1: '#a0b58d', bg2: '#8c7e51' },
+    ];
+
+    this.leftMenu = new LeftMenu(this);
+    const leftSide: HTMLElement = this.body.querySelector('.top__left-menu') as HTMLElement;
+    leftSide.append(this.leftMenu.leftMenu);
 
     const main: HTMLElement = this.body.querySelector('.top__main') as HTMLElement;
+    this.songsBlockPopular = new SongsBlock('Popular songs', this.songs, this);
+    main.append(this.songsBlockPopular.songsBlock);
 
-    main.append(this.songsBlock.songsBlock);
+    this.genresBlock = new GenresBlock('Music by genres', this.genres, this);
+    main.append(this.genresBlock.genresBlock);
+
+    this.songsBlockRecently = new SongsBlock('Recently played', this.songs, this);
+    main.append(this.songsBlockRecently.songsBlock);
+  }
+
+  public playSong(id: number) {
+    const curSong = this.songs.find((elem) => elem.id === id);
+    if (curSong) this.player.add(curSong);
+  }
+
+  public getSongs(type: string, val: string) {
+    if (type == 'genre') {
+      return this.songs.filter((elem) => elem.genre === val);
+    }
+    return this.songs;
+  }
+
+  public showCollectionOfSongs(songs: Array<SongData>, title: string) {
+    const main: HTMLElement = this.body.querySelector('.top__main') as HTMLElement;
+    main.innerHTML = '';
+    const tmpSongs = new SongsBlock(title, songs, this);
+    main.append(tmpSongs.songsBlock);
   }
 }

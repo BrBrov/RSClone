@@ -23,4 +23,12 @@ declare global {
     token: string;
     user: string;
   }
+
+  interface GenreData {
+    key: string;
+    name: string;
+    img: string;
+    bg1: string;
+    bg2: string;
+  }
 }

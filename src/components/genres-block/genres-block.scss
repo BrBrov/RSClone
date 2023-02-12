@@ -1,0 +1,32 @@
+.genre__cards-block {
+  display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom:20px;
+}
+
+.genre__block-wrapper {
+  display: flex;
+  width: 98%;
+  margin: 0 auto;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 20px;
+  cursor: pointer;
+}
+
+.genre__wrapper-title {
+  display: flex;
+  width: 95%;
+  justify-content: flex-start;
+}
+
+.genre__title-block {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #adcaf2;
+}
