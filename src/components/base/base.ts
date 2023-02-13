@@ -5,16 +5,19 @@ class Base {
 
   user_query: string;
 
-  song_query: string;
+  random_query: string;
 
   style_query: string;
 
+  one_query: string;
+
   constructor() {
-    this.base = 'http://127.0.0.1:8081';
-    // this.base = local.origin;
-    this.song_query = this.base + '/track';
+    this.base = 'http://127.0.0.1:8080';
+    //this.base = 'https://rs-clone-tan.vercel.app';
+    this.random_query = this.base + '/tracks';
     this.style_query = this.base + '/style';
     this.user_query = this.base + '/login';
+    this.one_query = this.base + '/play';
   }
 
   getGenre = async (page = 1, limit = nSongInPage, genre = 'pop') => {
@@ -35,6 +38,43 @@ class Base {
 
     return {
       items: await response.json(),
+      cpunt: response.headers.get('X-Total-Count'),
+    };
+  };
+
+  getSet = async (limit = nSongInPage, page = 1) => {
+    const hvost = `?limit=${limit}&page=${page}`;
+    const response = await fetch(this.random_query + hvost, {
+      method: 'GET',
+      mode: 'cors',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+    });
+
+    return {
+      items: await response.json(),
+      cpunt: response.headers.get('X-Total-Count'),
+    };
+  };
+
+  getOneSong = async (id = 1) => {
+    const hvost = `?id=${id}`;
+    const response = await fetch(this.one_query + hvost, {
+      method: 'GET',
+      mode: 'cors',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+    });
+    return {
+      item: await response.json(),
       cpunt: response.headers.get('X-Total-Count'),
     };
   };
