@@ -1,5 +1,6 @@
 import '../assets/svg/git.svg';
 import '../assets/png/rss.png';
+import Base from './base/base';
 import Player from './player/player';
 import SongsBlock from './songs-block/songs-block';
 import GenresBlock from './genres-block/genres-block';
@@ -10,6 +11,7 @@ import SearchElem from './search/search';
 import Login from './login/login';
 import Logo from './logo/logo';
 import LangquageSwitcher from './lang-button/lang-button';
+import { nSongInPage } from '../utils/heap';
 
 export default class Page {
   private body: HTMLElement;
@@ -38,7 +40,10 @@ export default class Page {
 
   public genres: Array<GenreData> = [];
 
-  constructor() {
+  public base: Base;
+
+  constructor(base: Base) {
+    this.base = base;
     this.body = document.body;
     this.state = new State();
     this.logo = new Logo();
@@ -211,11 +216,12 @@ export default class Page {
     if (curSong) this.player.add(curSong);
   }
 
-  public getSongs(type: string, val: string) {
+  public getSongs(type: string, val: string, title: string) {
     if (type == 'genre') {
-      return this.songs.filter((elem) => elem.genre === val);
+      this.base.getGenre(1, nSongInPage, val).then((result) => {
+        if (result.items.tracks) this.showCollectionOfSongs(result.items.tracks, title);
+      });
     }
-    return this.songs;
   }
 
   public showCollectionOfSongs(songs: Array<SongData>, title: string) {
