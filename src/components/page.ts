@@ -12,6 +12,7 @@ import Login from './login/login';
 import Logo from './logo/logo';
 import LangquageSwitcher from './lang-button/lang-button';
 import { nSongInPage } from '../utils/heap';
+import Requests from '../utils/requests';
 
 export default class Page {
   private body: HTMLElement;
@@ -81,6 +82,39 @@ export default class Page {
     };
 
     this.player.add(fake);
+
+    const enText: string[] = ['Popular songs', 'Music by genres', 'Recently played'];
+    const ruText: string[] = ['Популярные песни', 'Музыка по жанрам', 'Недавно играло'];
+
+    const title: string[] = this.state.getLang() === 'en' ? enText : ruText;
+
+    this.genres = [
+      { key: 'pop', name: 'Popular', img: 'popular.jpg', bg1: 'rgb(175 175 39 / 71%)', bg2: 'yellow' },
+      { key: 'rock', name: 'Rock', img: 'rock.jpg', bg1: '#7bb0a6', bg2: '#1dabb8' },
+      { key: 'hip', name: 'Hip-hop', img: 'hip-hop.png', bg1: '#f29b34', bg2: '#ff7416' },
+      { key: 'electronic', name: 'Electronic', img: 'electronic.png', bg1: '#777777', bg2: '#999999' },
+      { key: 'dance', name: 'Dance', img: 'dance.png', bg1: '#2c82c9', bg2: '#83d6de' },
+      { key: 'music', name: 'Lyric', img: 'lyric.jpg', bg1: '#7e3661', bg2: '#bb3658' },
+      { key: 'house', name: 'House', img: 'house.png', bg1: '#a0b58d', bg2: '#8c7e51' },
+    ];
+    const main: HTMLElement = this.body.querySelector('.top__main') as HTMLElement;
+
+    const request = new Requests();
+    request
+      .getRandomSongs()
+      .then((resp: SongData[]) => {
+        this.songsBlockPopular = new SongsBlock(title[0], resp, this);
+        main.append(this.songsBlockPopular.songsBlock);
+      })
+      .then(() => {
+        this.genresBlock = new GenresBlock(title[1], this.genres, this);
+        main.append(this.genresBlock.genresBlock);
+      });
+
+    request.getRandomSongs().then((resp: SongData[]) => {
+      this.songsBlockRecently = new SongsBlock(title[2], resp, this);
+      main.append(this.songsBlockRecently.songsBlock);
+    });
 
     //TODO: need real songs
     this.songs = [
@@ -186,34 +220,9 @@ export default class Page {
       },
     ];
 
-    this.genres = [
-      { key: 'pop', name: 'Popular', img: 'popular.jpg', bg1: 'rgb(175 175 39 / 71%)', bg2: 'yellow' },
-      { key: 'rock', name: 'Rock', img: 'rock.jpg', bg1: '#7bb0a6', bg2: '#1dabb8' },
-      { key: 'hip', name: 'Hip-hop', img: 'hip-hop.png', bg1: '#f29b34', bg2: '#ff7416' },
-      { key: 'electronic', name: 'Electronic', img: 'electronic.png', bg1: '#777777', bg2: '#999999' },
-      { key: 'dance', name: 'Dance', img: 'dance.png', bg1: '#2c82c9', bg2: '#83d6de' },
-      { key: 'music', name: 'Lyric', img: 'lyric.jpg', bg1: '#7e3661', bg2: '#bb3658' },
-      { key: 'house', name: 'House', img: 'house.png', bg1: '#a0b58d', bg2: '#8c7e51' },
-    ];
-
     this.leftMenu = new LeftMenu(this);
     const leftSide: HTMLElement = this.body.querySelector('.top__left-menu') as HTMLElement;
     leftSide.append(this.leftMenu.leftMenu);
-
-    const main: HTMLElement = this.body.querySelector('.top__main') as HTMLElement;
-    const enText: string[] = ['Popular songs', 'Music by genres', 'Recently played'];
-    const ruText: string[] = ['Популярные песни', 'Музыка по жанрам', 'Недавно играло'];
-
-    const title: string[] = this.state.getLang() === 'en' ? enText : ruText;
-
-    this.songsBlockPopular = new SongsBlock(title[0], this.songs, this);
-    main.append(this.songsBlockPopular.songsBlock);
-
-    this.genresBlock = new GenresBlock(title[1], this.genres, this);
-    main.append(this.genresBlock.genresBlock);
-
-    this.songsBlockRecently = new SongsBlock(title[2], this.songs, this);
-    main.append(this.songsBlockRecently.songsBlock);
 
     this.addListeners();
   }

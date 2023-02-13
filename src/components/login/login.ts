@@ -53,7 +53,6 @@ export default class Login {
   }
 
   private setText(text: HTMLSpanElement, state: State): void {
-    console.dir(text);
     if (state.getAuth()) {
       text.textContent = state.getLang() === 'en' ? 'Account' : 'Аккаунт';
     } else {
