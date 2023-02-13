@@ -10,7 +10,8 @@ class Base {
   style_query: string;
 
   constructor() {
-    this.base = 'http://127.0.0.1:8080';
+    this.base = 'http://127.0.0.1:8081';
+    // this.base = local.origin;
     this.song_query = this.base + '/track';
     this.style_query = this.base + '/style';
     this.user_query = this.base + '/login';
@@ -18,8 +19,8 @@ class Base {
 
   getGenre = async (page = 1, limit = nSongInPage, genre = 'pop') => {
     const hvost = `?genre=${genre}&page=${page}&limit=${limit}`;
-    console.log(this.style_query + hvost);
-    const response = await fetch(this.style_query + hvost, {
+    const uri = new URL(this.style_query + hvost);
+    const response = await fetch(uri, {
       method: 'GET', // *GET, POST, PUT, DELETE, etc.
       mode: 'cors', // no-cors, *cors, same-origin
       cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached

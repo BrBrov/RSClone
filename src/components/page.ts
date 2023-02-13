@@ -201,14 +201,21 @@ export default class Page {
     leftSide.append(this.leftMenu.leftMenu);
 
     const main: HTMLElement = this.body.querySelector('.top__main') as HTMLElement;
-    this.songsBlockPopular = new SongsBlock('Popular songs', this.songs, this);
+    const enText: string[] = ['Popular songs', 'Music by genres', 'Recently played'];
+    const ruText: string[] = ['Популярные песни', 'Музыка по жанрам', 'Недавно играло'];
+
+    const title: string[] = this.state.getLang() === 'en' ? enText : ruText;
+
+    this.songsBlockPopular = new SongsBlock(title[0], this.songs, this);
     main.append(this.songsBlockPopular.songsBlock);
 
-    this.genresBlock = new GenresBlock('Music by genres', this.genres, this);
+    this.genresBlock = new GenresBlock(title[1], this.genres, this);
     main.append(this.genresBlock.genresBlock);
 
-    this.songsBlockRecently = new SongsBlock('Recently played', this.songs, this);
+    this.songsBlockRecently = new SongsBlock(title[2], this.songs, this);
     main.append(this.songsBlockRecently.songsBlock);
+
+    this.addListeners();
   }
 
   public playSong(id: number) {
@@ -229,5 +236,24 @@ export default class Page {
     main.innerHTML = '';
     const tmpSongs = new SongsBlock(title, songs, this);
     main.append(tmpSongs.songsBlock);
+  }
+
+  private addListeners(): void {
+    const lang: HTMLElement = this.langSwitch.getElems();
+    lang.addEventListener('click', this.changeLang.bind(this));
+  }
+
+  private changeLang(ev: Event): void {
+    ev.stopPropagation();
+    const language: string | undefined = this.state.getLang();
+    const langSwitchData = language === 'en' ? 'ru' : 'en';
+    this.state.setlang(langSwitchData);
+    this.langSwitch.switch();
+    this.search.switchlanguage(this.state);
+    this.genresBlock?.switchLang();
+    this.songsBlockPopular?.switchLang();
+    this.songsBlockRecently?.switchLang();
+    this.leftMenu?.switchLang();
+    this.login.switchLang(this.state);
   }
 }
