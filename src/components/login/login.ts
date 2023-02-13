@@ -4,7 +4,7 @@ import '../../assets/svg/autorized.svg';
 import State from '../../utils/state';
 
 export default class Login {
-  private loginBtn: HTMLElement;
+  private readonly loginBtn: HTMLElement;
 
   constructor() {
     this.loginBtn = this.createLoginBtn();
