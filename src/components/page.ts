@@ -10,20 +10,19 @@ import StaticMain from './static-main/static-main';
 import SearchElem from './search/search';
 import Login from './login/login';
 import Logo from './logo/logo';
-import LangquageSwitcher from './lang-button/lang-button';
+import LanguageSwitcher from './lang-button/lang-button';
 import { nSongInPage } from '../utils/heap';
-import Requests from '../utils/requests';
 
 export default class Page {
   private body: HTMLElement;
 
-  private state: State;
+  private readonly state: State;
 
   private logo: Logo;
 
   private search: SearchElem;
 
-  private langSwitch: LangquageSwitcher;
+  private langSwitch: LanguageSwitcher;
 
   private login: Login;
 
@@ -49,7 +48,7 @@ export default class Page {
     this.state = new State();
     this.logo = new Logo();
     this.search = new SearchElem();
-    this.langSwitch = new LangquageSwitcher();
+    this.langSwitch = new LanguageSwitcher();
     this.login = new Login();
     this.player = new Player();
     this.base.getSet(500, 1).then((result) => (this.songs = result.items.tracks));
@@ -69,11 +68,6 @@ export default class Page {
     const playerWrapper: HTMLElement = this.body.querySelector('.top__player-wrapper') as HTMLElement;
     playerWrapper.append(this.player.view.player);
 
-    const enText: string[] = ['Popular songs', 'Music by genres', 'Recently played'];
-    const ruText: string[] = ['Популярные песни', 'Музыка по жанрам', 'Недавно играло'];
-
-    const title: string[] = this.state.getLang() === 'en' ? enText : ruText;
-
     this.genres = [
       { key: 'pop', name: 'Popular', img: 'popular.jpg', bg1: 'rgb(175 175 39 / 71%)', bg2: 'yellow' },
       { key: 'rock', name: 'Rock', img: 'rock.jpg', bg1: '#7bb0a6', bg2: '#1dabb8' },
@@ -83,7 +77,6 @@ export default class Page {
       { key: 'music', name: 'Lyric', img: 'lyric.jpg', bg1: '#7e3661', bg2: '#bb3658' },
       { key: 'house', name: 'House', img: 'house.png', bg1: '#a0b58d', bg2: '#8c7e51' },
     ];
-    const main: HTMLElement = this.body.querySelector('.top__main') as HTMLElement;
 
     const rand = Math.round(Math.random() * 330);
     this.base.getOneSong(rand).then((result) => {
@@ -94,8 +87,8 @@ export default class Page {
     const leftSide: HTMLElement = this.body.querySelector('.top__left-menu') as HTMLElement;
     leftSide.append(this.leftMenu.leftMenu);
 
-    this.addListeners();
     this.showMain();
+    this.addListeners();
   }
 
   public playSong(id: number) {
@@ -117,6 +110,7 @@ export default class Page {
     const tmpSongs = new SongsBlock(title, songs, this);
     main.append(tmpSongs.songsBlock);
   }
+
   private addListeners(): void {
     const lang: HTMLElement = this.langSwitch.getElems();
     lang.addEventListener('click', this.changeLang.bind(this));
@@ -124,6 +118,7 @@ export default class Page {
 
   private changeLang(ev: Event): void {
     ev.stopPropagation();
+    console.log('++++');
     const language: string | undefined = this.state.getLang();
     const langSwitchData = language === 'en' ? 'ru' : 'en';
     this.state.setlang(langSwitchData);
@@ -134,18 +129,31 @@ export default class Page {
     this.songsBlockRecently?.switchLang();
     this.leftMenu?.switchLang();
     this.login.switchLang(this.state);
+  }
+
   public showMain() {
     const main: HTMLElement = this.body.querySelector('.top__main') as HTMLElement;
     main.innerHTML = '';
-    this.base.getSet(10, 1).then((result) => {
-      const tmpSongs = new SongsBlock('Popular songs', result.items.tracks, this);
-      main.append(tmpSongs.songsBlock);
-      this.genresBlock = new GenresBlock('Music by genres', this.genres, this);
-      if (this.genresBlock) main.append(this.genresBlock.genresBlock);
-    });
-    this.base.getSet(10, 2).then((result) => {
-      const tmpSongs = new SongsBlock('Recently played', result.items.tracks, this);
-      main.append(tmpSongs.songsBlock);
-    });
+    const title = this.checkTitlesBlock();
+    this.base
+      .getSet(10, 1)
+      .then((result) => {
+        this.songsBlockPopular = new SongsBlock(title[0], result.items.tracks, this);
+        main.append(this.songsBlockPopular.songsBlock);
+        this.genresBlock = new GenresBlock(title[1], this.genres, this);
+        if (this.genresBlock) main.append(this.genresBlock.genresBlock);
+      })
+      .then(() => this.base.getSet(10, 2))
+      .then((result) => {
+        this.songsBlockRecently = new SongsBlock(title[2], result.items.tracks, this);
+        main.append(this.songsBlockRecently.songsBlock);
+      });
+  }
+
+  private checkTitlesBlock(): string[] {
+    const enText: string[] = ['Popular songs', 'Music by genres', 'Recently played'];
+    const ruText: string[] = ['Популярные песни', 'Музыка по жанрам', 'Недавно играло'];
+
+    return this.state.getLang() === 'en' ? enText : ruText;
   }
 }
