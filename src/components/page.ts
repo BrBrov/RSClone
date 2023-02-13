@@ -200,7 +200,7 @@ export default class Page {
     const leftSide: HTMLElement = this.body.querySelector('.top__left-menu') as HTMLElement;
     leftSide.append(this.leftMenu.leftMenu);
 
-    const main: HTMLElement = this.body.querySelector('.top__main') as HTMLElement;
+    /*const main: HTMLElement = this.body.querySelector('.top__main') as HTMLElement;
     this.songsBlockPopular = new SongsBlock('Popular songs', this.songs, this);
     main.append(this.songsBlockPopular.songsBlock);
 
@@ -208,7 +208,8 @@ export default class Page {
     main.append(this.genresBlock.genresBlock);
 
     this.songsBlockRecently = new SongsBlock('Recently played', this.songs, this);
-    main.append(this.songsBlockRecently.songsBlock);
+    main.append(this.songsBlockRecently.songsBlock);*/
+    this.showMain();
   }
 
   public playSong(id: number) {
@@ -229,5 +230,20 @@ export default class Page {
     main.innerHTML = '';
     const tmpSongs = new SongsBlock(title, songs, this);
     main.append(tmpSongs.songsBlock);
+  }
+
+  public showMain() {
+    const main: HTMLElement = this.body.querySelector('.top__main') as HTMLElement;
+    main.innerHTML = '';
+    this.base.getSet(10, 1).then((result) => {
+      const tmpSongs = new SongsBlock('Popular songs', result.items.tracks, this);
+      main.append(tmpSongs.songsBlock);
+      this.genresBlock = new GenresBlock('Music by genres', this.genres, this);
+      if (this.genresBlock) main.append(this.genresBlock.genresBlock);
+    });
+    this.base.getSet(10, 2).then((result) => {
+      const tmpSongs = new SongsBlock('Recently played', result.items.tracks, this);
+      main.append(tmpSongs.songsBlock);
+    });
   }
 }
