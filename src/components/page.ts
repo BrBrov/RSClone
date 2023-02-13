@@ -68,20 +68,10 @@ export default class Page {
     const playerWrapper: HTMLElement = this.body.querySelector('.top__player-wrapper') as HTMLElement;
     playerWrapper.append(this.player.view.player);
 
-    //TODO: fake data!
-
-    const fake: SongData = {
-      id: 1,
-      artist: 'Sam Smith & Kim Petras',
-      title: 'Unholy',
-      genre: 'pop',
-      file:
-        'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/3c/2c/82/3c2c8235-9907-0405-b21c-8fd66d285e56/mzaf_6122099414111658029.plus.aac.ep.m4a',
-      logo:
-        'https://is2-ssl.mzstatic.com/image/thumb/Music122/v4/0d/97/a6/0d97a649-760f-522c-269d-9d710dc372ba/22UM1IM07174.rgb.jpg/400x400cc.jpg',
-    };
-
-    this.player.add(fake);
+    const rand = Math.round(Math.random() * 330);
+    this.base.getOneSong(rand).then((result) => {
+      if (result.item) this.player.add(result.item);
+    });
 
     this.genres = [
       { key: 'pop', name: 'Popular', img: 'popular.jpg', bg1: 'rgb(175 175 39 / 71%)', bg2: 'yellow' },
