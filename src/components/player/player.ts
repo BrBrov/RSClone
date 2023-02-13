@@ -46,6 +46,13 @@ export default class Player {
       };
       this.audio.onload = (ev: Event) => resolve(ev);
       this.audio.onerror = (err: Event | string) => reject(err);
+      this.audio.onended = () => {
+        this.stop();
+        this.isPlay = false;
+        const range = this.view.player.querySelector('.top__range-duration') as HTMLInputElement;
+        range.value = '0';
+        this.view.setPlayStop();
+      };
     });
   }
 
