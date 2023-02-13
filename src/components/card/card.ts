@@ -27,6 +27,7 @@ export default class Card {
     const img = <HTMLImageElement>createByTag({ tag: 'img', class: 'top__song-img', parent: container });
     img.alt = data.title;
     img.src = data.logo;
+    img.addEventListener('click', () => page.playSong(data.id));
 
     container = createByTag({ tag: 'div', class: 'top__label-wrapper', parent: wrapper });
     const titleArt = createByTag({ tag: 'span', class: 'top__song-artist', parent: container });
@@ -48,7 +49,7 @@ export default class Card {
     const label: HTMLElement = this.card.querySelector('.top__label-wrapper') as HTMLElement;
 
     const frames = new KeyframeEffect(label, [{ transform: 'translateY(-140px)' }], {
-      duration: 500,
+      duration: 1000,
       fill: 'forwards',
     });
 
@@ -61,7 +62,7 @@ export default class Card {
     const label: HTMLElement = this.card.querySelector('.top__label-wrapper') as HTMLElement;
 
     const frames = new KeyframeEffect(label, [{ transform: 'translateY(140px)' }], {
-      duration: 500,
+      duration: 1000,
       fill: 'forwards',
     });
 
