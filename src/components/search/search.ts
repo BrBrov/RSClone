@@ -13,6 +13,14 @@ export default class SearchElem {
     return this.search;
   }
 
+  public switchlanguage(state: State): void {
+    const lang = state.getLang();
+    const text = lang === 'en' ? 'Search' : 'Найти';
+
+    const input = this.search.querySelector('.top__search') as HTMLInputElement;
+    input.placeholder = text;
+  }
+
   private createSearch(): HTMLElement {
     const wrapper: HTMLElement = document.createElement('div');
     wrapper.className = 'top__search-wrapper';
@@ -33,10 +41,10 @@ export default class SearchElem {
     input.type = 'text';
 
     const state = new State();
-    if (state.getLang() === 'ru') {
-      input.placeholder = 'Найти';
-    } else {
+    if (state.getLang() === 'en') {
       input.placeholder = 'Search';
+    } else {
+      input.placeholder = 'Найти';
     }
 
     wrapper.append(input);

@@ -22,8 +22,8 @@ class Base {
 
   getGenre = async (page = 1, limit = nSongInPage, genre = 'pop') => {
     const hvost = `?genre=${genre}&page=${page}&limit=${limit}`;
-    console.log(this.style_query + hvost);
-    const response = await fetch(this.style_query + hvost, {
+    const uri = new URL(this.style_query + hvost);
+    const response = await fetch(uri, {
       method: 'GET', // *GET, POST, PUT, DELETE, etc.
       mode: 'cors', // no-cors, *cors, same-origin
       cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached

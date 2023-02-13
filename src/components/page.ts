@@ -12,6 +12,7 @@ import Login from './login/login';
 import Logo from './logo/logo';
 import LangquageSwitcher from './lang-button/lang-button';
 import { nSongInPage } from '../utils/heap';
+import Requests from '../utils/requests';
 
 export default class Page {
   private body: HTMLElement;
@@ -68,10 +69,10 @@ export default class Page {
     const playerWrapper: HTMLElement = this.body.querySelector('.top__player-wrapper') as HTMLElement;
     playerWrapper.append(this.player.view.player);
 
-    const rand = Math.round(Math.random() * 330);
-    this.base.getOneSong(rand).then((result) => {
-      if (result.item) this.player.add(result.item);
-    });
+    const enText: string[] = ['Popular songs', 'Music by genres', 'Recently played'];
+    const ruText: string[] = ['Популярные песни', 'Музыка по жанрам', 'Недавно играло'];
+
+    const title: string[] = this.state.getLang() === 'en' ? enText : ruText;
 
     this.genres = [
       { key: 'pop', name: 'Popular', img: 'popular.jpg', bg1: 'rgb(175 175 39 / 71%)', bg2: 'yellow' },
@@ -82,11 +83,18 @@ export default class Page {
       { key: 'music', name: 'Lyric', img: 'lyric.jpg', bg1: '#7e3661', bg2: '#bb3658' },
       { key: 'house', name: 'House', img: 'house.png', bg1: '#a0b58d', bg2: '#8c7e51' },
     ];
+    const main: HTMLElement = this.body.querySelector('.top__main') as HTMLElement;
+
+    const rand = Math.round(Math.random() * 330);
+    this.base.getOneSong(rand).then((result) => {
+      if (result.item) this.player.add(result.item);
+    });
 
     this.leftMenu = new LeftMenu(this);
     const leftSide: HTMLElement = this.body.querySelector('.top__left-menu') as HTMLElement;
     leftSide.append(this.leftMenu.leftMenu);
 
+    this.addListeners();
     this.showMain();
   }
 
@@ -109,7 +117,23 @@ export default class Page {
     const tmpSongs = new SongsBlock(title, songs, this);
     main.append(tmpSongs.songsBlock);
   }
+  private addListeners(): void {
+    const lang: HTMLElement = this.langSwitch.getElems();
+    lang.addEventListener('click', this.changeLang.bind(this));
+  }
 
+  private changeLang(ev: Event): void {
+    ev.stopPropagation();
+    const language: string | undefined = this.state.getLang();
+    const langSwitchData = language === 'en' ? 'ru' : 'en';
+    this.state.setlang(langSwitchData);
+    this.langSwitch.switch();
+    this.search.switchlanguage(this.state);
+    this.genresBlock?.switchLang();
+    this.songsBlockPopular?.switchLang();
+    this.songsBlockRecently?.switchLang();
+    this.leftMenu?.switchLang();
+    this.login.switchLang(this.state);
   public showMain() {
     const main: HTMLElement = this.body.querySelector('.top__main') as HTMLElement;
     main.innerHTML = '';
