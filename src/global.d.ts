@@ -31,5 +31,6 @@ declare global {
     img: string;
     bg1: string;
     bg2: string;
+    count?: number;
   }
 }

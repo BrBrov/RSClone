@@ -1,6 +1,7 @@
 import '../assets/svg/git.svg';
 import '../assets/png/rss.png';
 import Base from './base/base';
+import Router from './router/router';
 import Player from './player/player';
 import SongsBlock from './songs-block/songs-block';
 import GenresBlock from './genres-block/genres-block';
@@ -10,7 +11,10 @@ import StaticMain from './static-main/static-main';
 import SearchElem from './search/search';
 import Login from './login/login';
 import Logo from './logo/logo';
-import LangquageSwitcher from './lang-button/lang-button';
+
+import Pagination from './pagination/pagination';
+import LanguageSwitcher from './lang-button/lang-button';
+
 import { nSongInPage } from '../utils/heap';
 
 export default class Page {
@@ -22,7 +26,7 @@ export default class Page {
 
   private search: SearchElem;
 
-  private langSwitch: LangquageSwitcher;
+  private langSwitch: LanguageSwitcher;
 
   private login: Login;
 
@@ -31,6 +35,8 @@ export default class Page {
   private songsBlockPopular: SongsBlock | undefined;
 
   private songsBlockRecently: SongsBlock | undefined;
+
+  private pagination: Pagination | undefined;
 
   private genresBlock: GenresBlock | undefined;
 
@@ -42,13 +48,16 @@ export default class Page {
 
   public base: Base;
 
-  constructor(base: Base) {
+  public router: Router;
+
+  constructor(base: Base, router: Router) {
     this.base = base;
+    this.router = router;
     this.body = document.body;
     this.state = new State();
     this.logo = new Logo();
     this.search = new SearchElem();
-    this.langSwitch = new LangquageSwitcher();
+    this.langSwitch = new LanguageSwitcher();
     this.login = new Login();
     this.player = new Player();
     this.base.getSet(500, 1).then((result) => (this.songs = result.items.tracks));
@@ -82,12 +91,21 @@ export default class Page {
       { key: 'music', name: 'Lyric', img: 'lyric.jpg', bg1: '#7e3661', bg2: '#bb3658' },
       { key: 'house', name: 'House', img: 'house.png', bg1: '#a0b58d', bg2: '#8c7e51' },
     ];
+    for (let i = 0; i < this.genres.length; i += 1)
+      this.genres[i].count = this.songs.filter((item) => item.genre === this.genres[i].key).length;
 
     this.leftMenu = new LeftMenu(this);
     const leftSide: HTMLElement = this.body.querySelector('.top__left-menu') as HTMLElement;
     leftSide.append(this.leftMenu.leftMenu);
 
-    this.showMain();
+    let tmpGen: GenreData | undefined;
+    let tmpPage = 1;
+    if (this.router.page !== null) tmpPage = this.router.page;
+    if (this.router.genre !== null) tmpGen = this.genres.find((item) => item.key === this.router.genre);
+    if (tmpGen && this.router.genre) this.getSongs('genre', this.router.genre, tmpGen.name, tmpPage);
+    else this.showMain();
+
+    //this.addListeners();
   }
 
   public playSong(id: number) {
@@ -95,11 +113,22 @@ export default class Page {
     if (curSong) this.player.add(curSong);
   }
 
-  public getSongs(type: string, val: string, title: string) {
+  public getSongs(type: string, val: string, title: string, page: number) {
+    let numPages = 1;
     if (type == 'genre') {
-      this.base.getGenre(1, nSongInPage, val).then((result) => {
-        if (result.items.tracks) this.showCollectionOfSongs(result.items.tracks, title);
-      });
+      //const genre = this.genres.find((item) => item.key === 'val');
+      this.base
+        .getGenre(page, nSongInPage, val)
+        .then((result) => {
+          if (result.items.tracks) {
+            this.showCollectionOfSongs(result.items.tracks, title);
+            numPages = Math.ceil(result.items.tracks.length / nSongInPage);
+          }
+        })
+        .then(() => {
+          this.pagination = new Pagination(this);
+          this.pagination.createPagination(page, numPages);
+        });
     }
   }
 
@@ -113,15 +142,26 @@ export default class Page {
   public showMain() {
     const main: HTMLElement = this.body.querySelector('.top__main') as HTMLElement;
     main.innerHTML = '';
-    this.base.getSet(10, 1).then((result) => {
-      const tmpSongs = new SongsBlock('Popular songs', result.items.tracks, this);
-      main.append(tmpSongs.songsBlock);
-      this.genresBlock = new GenresBlock('Music by genres', this.genres, this);
-      if (this.genresBlock) main.append(this.genresBlock.genresBlock);
-    });
-    this.base.getSet(10, 2).then((result) => {
-      const tmpSongs = new SongsBlock('Recently played', result.items.tracks, this);
-      main.append(tmpSongs.songsBlock);
-    });
+    const title = this.checkTitlesBlock();
+    this.base
+      .getSet(10, 1)
+      .then((result) => {
+        this.songsBlockPopular = new SongsBlock(title[0], result.items.tracks, this);
+        main.append(this.songsBlockPopular.songsBlock);
+        this.genresBlock = new GenresBlock(title[1], this.genres, this);
+        if (this.genresBlock) main.append(this.genresBlock.genresBlock);
+      })
+      .then(() => this.base.getSet(10, 2))
+      .then((result) => {
+        this.songsBlockRecently = new SongsBlock(title[2], result.items.tracks, this);
+        main.append(this.songsBlockRecently.songsBlock);
+      });
+  }
+
+  private checkTitlesBlock(): string[] {
+    const enText: string[] = ['Popular songs', 'Music by genres', 'Recently played'];
+    const ruText: string[] = ['Популярные песни', 'Музыка по жанрам', 'Слушают сейчас'];
+
+    return this.state.getLang() === 'en' ? enText : ruText;
   }
 }
