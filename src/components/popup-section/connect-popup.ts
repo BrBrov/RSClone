@@ -1,176 +1,368 @@
 import './connect-popup.scss';
+import './account.scss';
+import '../../assets/svg/autorized.svg';
+import State from '../../utils/state';
 
 export default class LoginPopUp {
-  constructor() {
-    this.poUp();
-    this.logIn();
-    this.sigUp();
-    this.logOut();
+  private isValidLogin = false;
+
+  private isValidPass = false;
+
+  private wnd: HTMLElement;
+
+  private state: State;
+
+  constructor(state: State) {
+    this.state = state;
+    this.wnd = document.createElement('div');
+    this.wnd.className = 'container__pop-wrapper';
+    this.wnd.addEventListener('wheel', (ev: Event) => ev.preventDefault());
   }
 
-  private poUp(): void {
-    const popup: HTMLElement = document.createElement('div');
-    popup.className = 'connect-popup';
-    // popup.className = 'connect-popup popup-section';
+  public getWND(): HTMLElement {
+    return this.wnd;
   }
 
-  private logIn(): void {
-    const logindiv: HTMLElement = document.createElement('div');
-    logindiv.className = 'login-form';
-    const i: HTMLElement = document.createElement('i');
-    i.className = 'fas';
-    logindiv.append(i);
-    const h3: HTMLElement = document.createElement('h3');
-    h3.innerText = 'Log In';
-    logindiv.append(h3);
+  public wndSignIn(): void {
+    this.isValidLogin = false;
+    this.isValidPass = false;
+    const lang = this.state.getLang();
+    const wrapper: HTMLElement = document.createElement('div');
+    wrapper.className = 'container__in-wrapper';
 
-    const form: HTMLFormElement = document.createElement('form');
-    form.action = '';
+    let block: HTMLElement = document.createElement('div');
+    block.className = 'container__exit-wrapper';
 
-    const dive: HTMLElement = document.createElement('div');
+    const close: HTMLSpanElement = document.createElement('span');
+    close.className = 'container__exit-popup ';
+    close.innerHTML = '<i class="container__close-img fa-solid fa-circle-xmark"></i>';
 
-    const labele: HTMLLabelElement = document.createElement('label');
-    labele.htmlFor = '';
-    labele.innerText = 'Email;';
-    let inpute: HTMLInputElement = document.createElement('input');
-    inpute.type = 'email';
-    inpute.id = 'login-email';
-    dive.append(labele, inpute);
-    form.append(dive);
+    const closeImg = close.querySelector('.container__close-img') as HTMLElement;
 
-    const divp: HTMLElement = document.createElement('div');
+    closeImg.addEventListener('click', this.close.bind(this));
 
-    const labelp: HTMLLabelElement = document.createElement('label');
-    labelp.htmlFor = 'signup-password';
-    labelp.innerText = 'Password:';
-    let inputp: HTMLInputElement = document.createElement('input');
-    inputp.type = 'password';
-    inputp.id = 'login-password';
-    dive.append(labelp, inputp);
-    form.append(divp);
+    block.append(close);
+    wrapper.append(block);
 
-    const diva: HTMLElement = document.createElement('div');
+    let text: HTMLSpanElement = document.createElement('span');
+    text.className = 'container__wnd-title';
+    text.textContent = lang === 'en' ? 'SignIn' : 'Вход в аккаунт';
 
-    const a: HTMLAnchorElement = document.createElement('a');
-    a.href = '#';
-    a.id = 'signup-link';
-    a.innerText = 'or Sign up';
-    const button: HTMLButtonElement = document.createElement('button');
-    button.type = 'submit';
-    button.innerText = 'Log in';
-    diva.append(a, button);
-    form.append(diva);
+    wrapper.append(text);
 
-    logindiv.append(form);
+    let input: HTMLInputElement = document.createElement('input');
+    input.className = 'container__login-input';
+    input.type = 'text';
+    input.placeholder = lang === 'en' ? 'Enter your login' : 'Введите логин';
+    input.maxLength = 24;
+    input.minLength = 3;
+    input.required = true;
 
-    logindiv.addEventListener('submit', (e) => {
-      e.preventDefault();
-      inpute = document.getElementById('login-email') as HTMLInputElement;
-      inputp = document.getElementById('login-password') as HTMLInputElement;
+    input.addEventListener('blur', this.loginListener.bind(this));
 
-      //TODO:
-      // auth
-      //   .signInWithEmailAndPassword(inpute, inputp)
-      //   .then((cred) => {
-      //     popup.style.transform = "translate(-50%, -50%) scale(0)";
-      //   })
-      //   .then(() => {
-      //     alertMessage.lastElementChild.innerText = "You're Logged In!";
-      //     openForm(alertMessage);
-      //     connectPopup.style.transform = "translate(-50%, -50%) scale(1)";
-      //   });
-    });
+    wrapper.append(input);
+
+    block = document.createElement('div');
+    block.className = 'container__pass-block';
+
+    input = document.createElement('input');
+    input.className = 'container__pass-input';
+    input.type = 'password';
+    input.placeholder = lang === 'en' ? 'Enter your password' : 'Введите проль';
+    input.minLength = 6;
+    input.maxLength = 128;
+    input.required = true;
+    input.autocomplete = 'current-password';
+
+    input.addEventListener('blur', this.passListener.bind(this));
+
+    block.append(input);
+
+    text = document.createElement('span');
+    text.className = 'container__pass-show';
+    text.innerHTML = '<i class="container__show-img fa-solid fa-key"></i>';
+
+    const showPass = text.querySelector('.container__show-img') as HTMLElement;
+
+    showPass.addEventListener('click', this.showPass.bind(this));
+
+    block.append(text);
+    wrapper.append(block);
+
+    const btn: HTMLButtonElement = document.createElement('button');
+    btn.className = 'container__sign-in';
+    btn.textContent = lang === 'en' ? 'Enter' : 'Вход';
+
+    btn.addEventListener('click', this.submit.bind(this));
+
+    wrapper.append(btn);
+
+    block = document.createElement('div');
+    block.className = 'container__to-signup';
+
+    text = document.createElement('span');
+    text.className = 'container__label-invitation';
+    text.textContent = lang === 'en' ? "Don't have an account?" : 'У вас нет аккаунта?';
+
+    block.append(text);
+
+    text = document.createElement('span');
+    text.className = 'container__invitation-register';
+    text.textContent = lang === 'en' ? 'Register' : 'Зарегестрироваться';
+    text.addEventListener('click', this.toSignUp.bind(this));
+
+    block.append(text);
+    wrapper.append(block);
+
+    this.wnd.append(wrapper);
   }
 
-  private sigUp(): void {
-    const signupdiv: HTMLElement = document.createElement('div');
-    signupdiv.className = 'signup-form';
-    const i: HTMLElement = document.createElement('i');
-    i.className = 'fas';
-    signupdiv.append(i);
-    const h3: HTMLElement = document.createElement('h3');
-    h3.innerText = 'Sign Up';
-    signupdiv.append(h3);
+  public wndSignUp(): void {
+    this.isValidLogin = false;
+    this.isValidPass = false;
+    const lang = this.state.getLang();
+    const wrapper: HTMLElement = document.createElement('div');
+    wrapper.className = 'container__up-wrapper';
 
-    const form: HTMLFormElement = document.createElement('form');
-    form.action = '';
+    let block: HTMLElement = document.createElement('div');
+    block.className = 'container__exit-wrapper';
 
-    const dive: HTMLElement = document.createElement('div');
+    const close: HTMLSpanElement = document.createElement('span');
+    close.className = 'container__exit-popup ';
+    close.innerHTML = '<i class="container__close-img fa-solid fa-circle-xmark"></i>';
 
-    const labele: HTMLLabelElement = document.createElement('label');
-    labele.htmlFor = '';
-    labele.innerText = 'Email;';
-    let inpute: HTMLInputElement = document.createElement('input');
-    inpute.type = 'email';
-    inpute.id = 'signup-email';
-    dive.append(labele, inpute);
-    form.append(dive);
+    const closeImg = close.querySelector('.container__close-img') as HTMLElement;
 
-    const divp: HTMLElement = document.createElement('div');
+    closeImg.addEventListener('click', this.close.bind(this));
 
-    const labelp: HTMLLabelElement = document.createElement('label');
-    labelp.htmlFor = 'signup-password';
-    labelp.innerText = 'Password:';
-    let inputp: HTMLInputElement = document.createElement('input');
-    inputp.type = 'password';
-    inputp.id = 'signup-password';
-    dive.append(labelp, inputp);
-    form.append(divp);
+    block.append(close);
+    wrapper.append(block);
 
-    const diva: HTMLElement = document.createElement('div');
+    let text: HTMLSpanElement = document.createElement('span');
+    text.className = 'container__wnd-title';
+    text.textContent = lang === 'en' ? 'SignUn' : 'Регистрация';
 
-    const a: HTMLAnchorElement = document.createElement('a');
-    a.href = '#';
-    a.id = 'login-link';
-    a.innerText = 'or Log in';
-    const button: HTMLButtonElement = document.createElement('button');
-    button.type = 'submit';
-    button.innerText = 'Sign up';
-    diva.append(a, button);
-    form.append(diva);
+    wrapper.append(text);
 
-    signupdiv.append(form);
+    let input: HTMLInputElement = document.createElement('input');
+    input.className = 'container__login-input';
+    input.type = 'text';
+    input.placeholder = lang === 'en' ? 'Enter your login' : 'Введите логин';
+    input.maxLength = 24;
+    input.minLength = 3;
+    input.required = true;
 
-    signupdiv.addEventListener('submit', (e) => {
-      e.preventDefault();
-      inpute = document.getElementById('signup-email') as HTMLInputElement;
-      inputp = document.getElementById('signup-password') as HTMLInputElement;
+    input.addEventListener('blur', this.loginListener.bind(this));
 
-      //TODO:
-      // auth
-      //   .signInWithEmailAndPassword(inpute, inputp)
-      //   .then((cred) => {
-      //     popup.style.transform = "translate(-50%, -50%) scale(0)";
-      //   })
-      //   .then(() => {
-      //     alertMessage.lastElementChild.innerText = "You're Logged In!";
-      //     openForm(alertMessage);
-      //     connectPopup.style.transform = "translate(-50%, -50%) scale(1)";
-      //   });
-    });
+    wrapper.append(input);
+
+    block = document.createElement('div');
+    block.className = 'container__pass-block';
+
+    input = document.createElement('input');
+    input.className = 'container__pass-input';
+    input.type = 'password';
+    input.placeholder = lang === 'en' ? 'Enter your password' : 'Введите проль';
+    input.minLength = 6;
+    input.maxLength = 128;
+    input.required = true;
+    input.autocomplete = 'current-password';
+
+    input.addEventListener('blur', this.passListener.bind(this));
+
+    block.append(input);
+
+    text = document.createElement('span');
+    text.className = 'container__pass-show';
+    text.innerHTML = '<i class="container__show-img fa-solid fa-key"></i>';
+
+    const showPass = text.querySelector('.container__show-img') as HTMLElement;
+
+    showPass.addEventListener('click', this.showPass.bind(this));
+
+    block.append(text);
+    wrapper.append(block);
+
+    const btn: HTMLButtonElement = document.createElement('button');
+    btn.className = 'container__sign-up';
+    btn.textContent = lang === 'en' ? 'SignUp' : 'Зарегестрировать';
+
+    btn.addEventListener('click', this.submit.bind(this));
+
+    wrapper.append(btn);
+
+    block = document.createElement('div');
+    block.className = 'container__to-signup';
+
+    text = document.createElement('span');
+    text.className = 'container__label-invitation';
+    text.textContent = lang === 'en' ? 'Does have an account?' : 'У вас есть аккаунт?';
+
+    block.append(text);
+
+    text = document.createElement('span');
+    text.className = 'container__invitation-enter';
+    text.textContent = lang === 'en' ? 'SignIn' : 'Войти';
+
+    text.addEventListener('click', this.toSignIn.bind(this));
+
+    block.append(text);
+    wrapper.append(block);
+
+    this.wnd.append(wrapper);
   }
 
-  private logOut(): void {
-    const logoutdiv: HTMLElement = document.createElement('div');
-    logoutdiv.className = 'logout-form';
-    const i: HTMLElement = document.createElement('i');
-    i.className = 'fas';
-    logoutdiv.append(i);
+  public wndAccount(): void {
+    const wrapper: HTMLElement = document.createElement('div');
+    wrapper.className = 'container__account-wrapper';
 
-    const form: HTMLFormElement = document.createElement('form');
-    form.action = '';
+    let block: HTMLElement = document.createElement('div');
+    block.className = 'container__exit-wrapper';
 
-    const iform: HTMLElement = document.createElement('i');
-    iform.className = 'fas';
-    const button: HTMLButtonElement = document.createElement('button');
-    button.type = 'submit';
-    button.innerText = 'Log out';
-    form.append(iform, button);
+    const close: HTMLSpanElement = document.createElement('span');
+    close.className = 'container__exit-popup ';
+    close.innerHTML = '<i class="container__close-img fa-solid fa-circle-xmark"></i>';
 
-    logoutdiv.append(form);
+    const closeImg = close.querySelector('.container__close-img') as HTMLElement;
+    closeImg.addEventListener('click', this.close.bind(this));
 
-    logoutdiv.addEventListener('submit', (e) => {
-      e.preventDefault();
-    });
+    block.append(close);
+    wrapper.append(block);
+
+    let text: HTMLSpanElement = document.createElement('span');
+    text.className = 'container__title-account';
+    text.textContent = this.state.getLang() === 'en' ? 'Account' : 'Аккаунт';
+
+    wrapper.append(text);
+
+    block = document.createElement('div');
+    block.className = 'container__title-block';
+
+    const img: HTMLImageElement = document.createElement('img');
+    img.className = 'container__account-img';
+    img.alt = 'Avatar';
+    img.src = './assets/svg/autorized.svg';
+
+    block.append(img);
+
+    text = document.createElement('span');
+    text.className = 'container__login-name';
+    text.textContent = this.state.getUser();
+
+    block.append(text);
+    wrapper.append(block);
+
+    block = document.createElement('div');
+    block.className = 'container__playlist-account';
+
+    text = document.createElement('span');
+    text.className = 'container__playlist-icon';
+    text.innerHTML = '<i class="container__pls-icon fa-solid fa-ear-listen"></i>';
+
+    block.append(text);
+
+    text = document.createElement('span');
+    text.className = 'container__account-playlist';
+    text.textContent = this.state.getLang() === 'en' ? 'Playlist' : 'Плейлист';
+
+    block.append(text);
+    wrapper.append(block);
+
+    const exitBtn: HTMLButtonElement = document.createElement('button');
+    exitBtn.className = 'container__account-exit';
+    exitBtn.textContent = this.state.getLang() === 'en' ? 'Exit' : 'Выход';
+
+    wrapper.append(exitBtn);
+
+    this.wnd.append(wrapper);
+  }
+
+  private close(): void {
+    this.wnd.remove();
+  }
+
+  private loginListener(ev: Event): void {
+    const target = ev.target as HTMLInputElement;
+    const value = target.value;
+    const lang = this.state.getLang();
+    if (value.length < 3) {
+      target.value = '';
+      target.placeholder = lang === 'en' ? 'Login must be more than 3 letters' : 'Логин должен быть более 3 букв';
+      this.isValidLogin = false;
+      setTimeout(() => {
+        target.placeholder = lang === 'en' ? 'SignIn' : 'Вход в аккаунт';
+      }, 1500);
+      return;
+    }
+
+    if (!/[a-zA-Z]/.test(value)) {
+      target.value = '';
+      target.placeholder = lang === 'en' ? 'Login must be on english' : 'Логин должен быть на англиском';
+      this.isValidLogin = false;
+      setTimeout(() => {
+        target.placeholder = lang === 'en' ? 'SignIn' : 'Вход в аккаунт';
+      }, 1500);
+      return;
+    }
+
+    if (target.validity) {
+      this.isValidLogin = true;
+    } else {
+      this.isValidLogin = false;
+      target.value = '';
+    }
+  }
+
+  private passListener(ev: Event): void {
+    const target = ev.target as HTMLInputElement;
+    const value = target.value;
+    const lang = this.state.getLang();
+
+    if (!target.checkValidity()) {
+      if (value.length < 6) {
+        target.placeholder = lang === 'en' ? 'Password must be 6 symbols' : 'Пароль должен быть более 6 символов';
+        setTimeout(() => {
+          target.placeholder = lang === 'en' ? 'Enter your password' : 'Введите проль';
+        }, 1500);
+      } else {
+        target.placeholder =
+          lang === 'en' ? 'Password must be less 128 symbols' : 'Пароль должен быть менее 128 символов';
+        setTimeout(() => {
+          target.placeholder = lang === 'en' ? 'Enter your password' : 'Введите проль';
+        }, 1500);
+      }
+      this.isValidPass = false;
+    } else {
+      this.isValidPass = true;
+    }
+  }
+
+  private showPass(ev: Event): void {
+    ev.stopPropagation();
+    const input = document.querySelector('.container__pass-input') as HTMLInputElement;
+    if (input.type === 'password') {
+      input.type = 'text';
+    } else {
+      input.type = 'password';
+    }
+  }
+
+  private submit(ev: Event): void {
+    ev.stopPropagation();
+    //TODO: Add send registration form!!!
+  }
+
+  private toSignUp(ev: Event): void {
+    ev.stopPropagation();
+    const wndWrapper = this.wnd.querySelector('.container__in-wrapper') as HTMLElement;
+    wndWrapper.remove();
+    this.wndSignUp();
+  }
+
+  private toSignIn(ev: Event): void {
+    ev.stopPropagation();
+    const wndWrapper = this.wnd.querySelector('.container__up-wrapper') as HTMLElement;
+    wndWrapper.remove();
+    this.wndSignIn();
   }
 }
