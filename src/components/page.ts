@@ -8,6 +8,7 @@ import SearchElem from './search/search';
 import Login from './login/login';
 import Logo from './logo/logo';
 import LoginPopUp from './popup-section/connect-popup';
+import ApiControls from './api/api';
 
 export default class Page {
   private body: HTMLElement;
@@ -29,6 +30,8 @@ export default class Page {
   private popupSignup: LoginPopUp | undefined;
 
   private popupLogout: LoginPopUp | undefined;
+
+  private apicontrol: ApiControls | undefined;
 
   constructor() {
     this.body = document.body;
