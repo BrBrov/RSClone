@@ -1,7 +1,6 @@
 import './connect-popup.scss';
 // import State from '../../utils/state';
-// import Login from '../login/login';
-// import Login from '../page';
+import Login from '../page';
 
 export default class LoginPopUp {
   public popupLogin: HTMLElement;
@@ -10,23 +9,18 @@ export default class LoginPopUp {
 
   public popupSignup: HTMLElement;
 
+  public login: HTMLElement;
+
   constructor() {
-    // this.connectPopup = this.poUp();
     this.popupSignup = this.signUp();
     this.popupLogout = this.logOut();
     this.popupListener();
     this.popupLogin = this.logIn();
-    // this.Login = new Login();
+    this.login = new Login();
   }
 
   // public getElems(): HTMLElement {
-  //   loginBtn.getElems();
-  // }
-
-  // private poUp(): HTMLElement {
-  //   const popup: HTMLElement = document.createElement('div');
-  //   popup.className = 'connect-popup';
-  //   return popup;
+  //   return  this.login.getElems();
   // }
 
   private logIn(): HTMLElement {
@@ -82,7 +76,6 @@ export default class LoginPopUp {
     logindiv.append(form);
     popup.append(logindiv);
     return popup;
-    // return logindiv;
   }
 
   private signUp(): HTMLElement {
@@ -138,7 +131,6 @@ export default class LoginPopUp {
     signupdiv.append(form);
     popup.append(signupdiv);
     return popup;
-    // return signupdiv;
   }
 
   private logOut(): HTMLElement {
@@ -164,50 +156,13 @@ export default class LoginPopUp {
     logoutdiv.append(form);
     popup.append(logoutdiv);
     return popup;
-    // return logoutdiv;
   }
 
   private popupListener() {
-    // const popupBtn: HTMLElement = this.login.lquerySelector('.top__login-wrapper') as HTMLElement;
-    // popupBtn.addEventListener('click', (e: Event) => {
-    //   e.preventDefault();
-    //   this.poUp.bind(this);
-    // });
-    // this.logindiv.addEventListener('submit', (e: Event) => {
-    //   e.preventDefault();
-    //   this.logIn.bind(this);
-    // inpute = document.getElementById('login-email') as HTMLInputElement;
-    // inputp = document.getElementById('login-password') as HTMLInputElement;
-    // auth
-    //   .signInWithEmailAndPassword(inpute, inputp)
-    //   .then((cred) => {
-    //     popup.style.transform = "translate(-50%, -50%) scale(0)";
-    //   })
-    //   .then(() => {
-    //     alertMessage.lastElementChild.innerText = "You're Logged In!";
-    //     openForm(alertMessage);
-    //     connectPopup.style.transform = "translate(-50%, -50%) scale(1)";
-    //   });
-    // });
-    // this.signupdiv.addEventListener('submit', (e: Event) => {
-    //   e.preventDefault();
-    //   this.sigUp.bind(this);
-    //inpute = document.getElementById('signup-email') as HTMLInputElement;
-    // inputp = document.getElementById('signup-password') as HTMLInputElement;
-    // auth
-    //   .signInWithEmailAndPassword(inpute, inputp)
-    //   .then((cred) => {
-    //     popup.style.transform = "translate(-50%, -50%) scale(0)";
-    //   })
-    //   .then(() => {
-    //     alertMessage.lastElementChild.innerText = "You're Logged In!";
-    // openForm(alertMessage);
-    //     connectPopup.style.transform = "translate(-50%, -50%) scale(1)";
-    //   });
-    // });
-    // this.logoutdiv.addEventListener('submit', (e: Event) => {
-    //   e.preventDefault();
-    //   this.logOut.bind(this);
-    // });
+    const popupBtn: HTMLElement = this.popupLogin.lquerySelector('.top__login-wrapper') as HTMLElement;
+    popupBtn.addEventListener('click', (e: Event) => {
+      e.preventDefault();
+      this.logIn.bind(this);
+    });
   }
 }
