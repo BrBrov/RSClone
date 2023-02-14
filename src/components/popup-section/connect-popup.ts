@@ -2,6 +2,8 @@ import './connect-popup.scss';
 import './account.scss';
 import '../../assets/svg/autorized.svg';
 import State from '../../utils/state';
+import Warning from './warning';
+import Authorization from '../../utils/authorization';
 
 export default class LoginPopUp {
   private isValidLogin = false;
@@ -93,7 +95,7 @@ export default class LoginPopUp {
     btn.className = 'container__sign-in';
     btn.textContent = lang === 'en' ? 'Enter' : 'Вход';
 
-    btn.addEventListener('click', this.submit.bind(this));
+    btn.addEventListener('click', this.signIn.bind(this));
 
     wrapper.append(btn);
 
@@ -112,6 +114,11 @@ export default class LoginPopUp {
     text.addEventListener('click', this.toSignUp.bind(this));
 
     block.append(text);
+    wrapper.append(block);
+
+    block = document.createElement('div');
+    block.className = 'container__error-popup';
+
     wrapper.append(block);
 
     this.wnd.append(wrapper);
@@ -187,7 +194,8 @@ export default class LoginPopUp {
     btn.className = 'container__sign-up';
     btn.textContent = lang === 'en' ? 'SignUp' : 'Зарегестрировать';
 
-    btn.addEventListener('click', this.submit.bind(this));
+    //TODO: add registration logic
+    // btn.addEventListener('click', this.signUp.bind(this));
 
     wrapper.append(btn);
 
@@ -207,6 +215,11 @@ export default class LoginPopUp {
     text.addEventListener('click', this.toSignIn.bind(this));
 
     block.append(text);
+    wrapper.append(block);
+
+    block = document.createElement('div');
+    block.className = 'container__error-popup';
+
     wrapper.append(block);
 
     this.wnd.append(wrapper);
@@ -271,6 +284,8 @@ export default class LoginPopUp {
     const exitBtn: HTMLButtonElement = document.createElement('button');
     exitBtn.className = 'container__account-exit';
     exitBtn.textContent = this.state.getLang() === 'en' ? 'Exit' : 'Выход';
+
+    exitBtn.addEventListener('click', this.exitAccount.bind(this));
 
     wrapper.append(exitBtn);
 
@@ -347,9 +362,47 @@ export default class LoginPopUp {
     }
   }
 
-  private submit(ev: Event): void {
+  private signIn(ev: Event): void {
     ev.stopPropagation();
-    //TODO: Add send registration form!!!
+    if (this.isValidLogin && this.isValidPass) {
+      const login: string = (this.wnd.querySelector('.container__login-input') as HTMLInputElement).value;
+      const pass: string = (this.wnd.querySelector('.container__pass-input') as HTMLInputElement).value;
+      const registration: Authorization = new Authorization();
+      registration.logIn(login, pass).then((result: string) => {
+        const warning: Warning = new Warning();
+        const singInBlock: HTMLElement = this.wnd.querySelector('.container__error-popup') as HTMLElement;
+        let warn: HTMLElement;
+        switch (result) {
+          case '1':
+            warn = warning.alreadyRegistered(this.state.getLang());
+            singInBlock.append(warn);
+            setTimeout(() => warn.remove(), 3000);
+            return;
+          case '2':
+            warn = warning.alreadyRegistered(this.state.getLang());
+            singInBlock.append(warn);
+            setTimeout(() => warn.remove(), 3000);
+            return;
+          case '3':
+            warn = warning.wrongOops(this.state.getLang());
+            singInBlock.append(warn);
+            setTimeout(() => warn.remove(), 3000);
+            return;
+          case '5':
+            warn = warning.wrongOops(this.state.getLang());
+            singInBlock.append(warn);
+            setTimeout(() => warn.remove(), 3000);
+          default:
+            window.location.reload();
+            return;
+        }
+      });
+    } else {
+      const block = this.wnd.querySelector('.container__error-popup') as HTMLElement;
+      const warning = new Warning().wrongData(this.state.getLang());
+      block.append(warning);
+      setTimeout(() => warning.remove(), 3000);
+    }
   }
 
   private toSignUp(ev: Event): void {
@@ -364,5 +417,13 @@ export default class LoginPopUp {
     const wndWrapper = this.wnd.querySelector('.container__up-wrapper') as HTMLElement;
     wndWrapper.remove();
     this.wndSignIn();
+  }
+
+  private exitAccount(ev: Event): void {
+    ev.stopPropagation();
+    this.state.setUser('');
+    this.state.setToken('');
+    this.state.setAuth(false);
+    window.location.reload();
   }
 }

@@ -13,7 +13,7 @@
 .container__up-wrapper {
   display: flex;
   width: 300px;
-  height: 300px;
+  height: 320px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -162,4 +162,18 @@
 .container__invitation-enter:hover {
   color: #0a9483;
   text-decoration: underline;
+}
+
+.container__warning {
+  font-family: "Open Sans", serif;
+  font-weight: 400;
+  font-size: 1rem;
+  color: #ec0505;
+}
+
+.container__error-popup {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 20px;
 }
