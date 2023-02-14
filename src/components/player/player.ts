@@ -17,7 +17,8 @@ export default class Player {
 
   public async add(data: SongData): Promise<void> {
     if (this.isPlay) {
-      this.audio.pause();
+      this.stop();
+      this.view.setPlayStop();
     }
     await this.setAudio(data);
 
