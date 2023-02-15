@@ -1,6 +1,6 @@
 export default class Warning {
   public wrongData(lang: string): HTMLElement {
-    const title = lang === 'en' ? 'Wrong password!' : 'Неверные данные!';
+    const title = lang === 'en' ? 'Wrong password or login!' : 'Введены неверные данные!';
     return this.create(title);
   }
 
@@ -16,6 +16,11 @@ export default class Warning {
 
   public unregistered(lang: string): HTMLElement {
     const title: string = lang === 'en' ? 'Unregistered' : 'Незарегестрирован';
+    return this.create(title);
+  }
+
+  public registeredYet(lang: string): HTMLElement {
+    const title: string = lang === 'en' ? 'Account already exists' : 'Аккаунт уже сущетсвует';
     return this.create(title);
   }
 
