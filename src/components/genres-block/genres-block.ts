@@ -42,4 +42,19 @@ export default class GenresBlock {
     });
     return wrapper;
   }
+
+  public switchLang(): void {
+    const title = this.genresBlock.querySelector('.genre__title-block') as HTMLSpanElement;
+
+    const text = title.textContent;
+
+    switch (text) {
+      case 'Music by genres':
+        title.textContent = 'Музыка по жанрам';
+        break;
+      case 'Музыка по жанрам':
+        title.textContent = 'Music by genres';
+        break;
+    }
+  }
 }

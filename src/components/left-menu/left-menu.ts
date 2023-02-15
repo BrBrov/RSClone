@@ -10,7 +10,6 @@ export default class LeftMenu {
 
   constructor(page: Page) {
     this.page = page;
-    console.log('hi');
     this.leftMenu = this.createMenu();
   }
 

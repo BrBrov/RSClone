@@ -20,21 +20,21 @@ class Base {
     this.one_query = this.base + '/play';
   }
 
+  /*getGenre = async (page = 1, limit = nSongInPage, genre = 'pop') =>
+  fetch(this.style_query + `?genre=${genre}&page=${page}&limit=${limit}`, { method: 'GET' }).then((resp) => {
+    console.log(...resp.headers);
+    console.log(resp.headers.get('X-Total-Count'));
+    return {
+      items: resp.json(),
+      cpunt: resp.headers.get('X-Total-Count'),
+    };
+  });*/
+
   getGenre = async (page = 1, limit = nSongInPage, genre = 'pop') => {
     const hvost = `?genre=${genre}&page=${page}&limit=${limit}`;
-    const uri = new URL(this.style_query + hvost);
-    const response = await fetch(uri, {
-      method: 'GET', // *GET, POST, PUT, DELETE, etc.
-      mode: 'cors', // no-cors, *cors, same-origin
-      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-      //credentials: 'same-origin', // include, *same-origin, omit
-      headers: {
-        //'Content-Type': 'application/json'
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      redirect: 'follow', // manual, *follow, error
-      referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-    });
+
+    const response = await fetch(this.style_query + hvost, { method: 'GET' });
+    console.log(...response.headers);
 
     return {
       items: await response.json(),
@@ -44,17 +44,7 @@ class Base {
 
   getSet = async (limit = nSongInPage, page = 1) => {
     const hvost = `?limit=${limit}&page=${page}`;
-    const response = await fetch(this.random_query + hvost, {
-      method: 'GET',
-      mode: 'cors',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-    });
-
+    const response = await fetch(this.random_query + hvost, { method: 'GET' });
     return {
       items: await response.json(),
       cpunt: response.headers.get('X-Total-Count'),
@@ -63,16 +53,7 @@ class Base {
 
   getOneSong = async (id = 1) => {
     const hvost = `?id=${id}`;
-    const response = await fetch(this.one_query + hvost, {
-      method: 'GET',
-      mode: 'cors',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-    });
+    const response = await fetch(this.one_query + hvost, { method: 'GET' });
     return {
       item: await response.json(),
       cpunt: response.headers.get('X-Total-Count'),

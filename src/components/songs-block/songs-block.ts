@@ -49,4 +49,24 @@ export default class SongsBlock {
     });
     return wrapper;
   }
+
+  public switchLang(): void {
+    const title = this.songsBlock.querySelector('.top__title-block') as HTMLSpanElement;
+    const text = title.textContent;
+
+    switch (text) {
+      case 'Popular songs':
+        title.textContent = 'Популярные песни';
+        break;
+      case 'Recently played':
+        title.textContent = 'Недавно играло';
+        break;
+      case 'Популярные песни':
+        title.textContent = 'Popular songs';
+        break;
+      case 'Недавно играло':
+        title.textContent = 'Recently played';
+        break;
+    }
+  }
 }
