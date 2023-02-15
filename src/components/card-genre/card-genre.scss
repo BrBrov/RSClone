@@ -1,0 +1,36 @@
+.genre__card {
+  width:150px; display:flex; width: 200px;
+  display: flex;
+  padding: 3px;
+  cursor:pointer;
+  transition: backgroundr 2s, transform 2s;
+}
+.genre__card-wrapper {
+  max-width:50%;
+}
+.genre__card-img {
+  max-width: 100%;  
+  border-radius: 52px;
+  min-width: 100px; 
+}
+
+.genre__card__title {
+  margin-top: 20%;
+  margin-left: 10%;
+  font-size: 20px;
+  font-weight: bold;
+  -moz-transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+  -o-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}
+
+.genre__card__title:hover {
+  -moz-transform: rotate(0deg);
+  -webkit-transform: rotate(0deg);
+  -o-transform: rotate(0deg);
+  -ms-transform: rotate(0deg);
+  transform: rotate(0deg);
+  transition: transform 2s;
+}

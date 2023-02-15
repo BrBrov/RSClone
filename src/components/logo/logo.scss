@@ -36,9 +36,10 @@
 .top__pls-wrapper {
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
   gap: 10px;
+  cursor: pointer;
 }
 
 .top__pls-icon {

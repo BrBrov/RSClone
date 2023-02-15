@@ -17,7 +17,8 @@ export default class Player {
 
   public async add(data: SongData): Promise<void> {
     if (this.isPlay) {
-      this.audio.pause();
+      this.stop();
+      this.view.setPlayStop();
     }
     await this.setAudio(data);
 
@@ -46,6 +47,13 @@ export default class Player {
       };
       this.audio.onload = (ev: Event) => resolve(ev);
       this.audio.onerror = (err: Event | string) => reject(err);
+      this.audio.onended = () => {
+        this.stop();
+        this.isPlay = false;
+        const range = this.view.player.querySelector('.top__range-duration') as HTMLInputElement;
+        range.value = '0';
+        this.view.setPlayStop();
+      };
     });
   }
 

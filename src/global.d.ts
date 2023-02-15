@@ -2,6 +2,7 @@ export {};
 
 declare global {
   interface SongData {
+    _id?: string;
     id: number;
     artist: string;
     title: string;
@@ -22,5 +23,23 @@ declare global {
     auth: boolean;
     token: string;
     user: string;
+  }
+
+  interface GenreData {
+    key: string;
+    name: string;
+    img: string;
+    bg1: string;
+    bg2: string;
+  }
+
+  interface RegisterResponseData {
+    register: string;
+    user?: string;
+  }
+
+  interface RegisteredTokenData {
+    token: string;
+    login: string;
   }
 }

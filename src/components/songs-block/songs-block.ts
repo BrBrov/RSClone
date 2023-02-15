@@ -1,37 +1,52 @@
 import './songs-block.scss';
 import Card from '../card/card';
+import Page from '../page';
+import { createByTag } from '../../utils/heap';
 
 export default class SongsBlock {
   public songsBlock: HTMLElement;
 
-  constructor(title: string, data: Array<SongData>) {
+  page: Page;
+
+  constructor(title: string, data: Array<SongData>, page: Page) {
+    this.page = page;
     this.songsBlock = this.createBlock(title, data);
   }
 
+  public switchLang(): void {
+    const title = this.songsBlock.querySelector('.top__title-block') as HTMLSpanElement;
+    const text = title.textContent;
+
+    switch (text) {
+      case 'Popular songs':
+        title.textContent = 'Популярные песни';
+        break;
+      case 'Recently played':
+        title.textContent = 'Недавно играло';
+        break;
+      case 'Популярные песни':
+        title.textContent = 'Popular songs';
+        break;
+      case 'Недавно играло':
+        title.textContent = 'Recently played';
+        break;
+    }
+  }
+
   private createBlock(title: string, data: Array<SongData>): HTMLElement {
-    const wrapper: HTMLElement = document.createElement('div');
-    wrapper.className = 'top__block-wrapper';
-
-    const titleWrap: HTMLElement = document.createElement('div');
-    titleWrap.className = 'top__wrapper-title';
-
-    const text: HTMLSpanElement = document.createElement('span');
-    text.className = 'top__title-block';
+    const wrapper = createByTag({ tag: 'div', class: 'top__block-wrapper' });
+    const titleWrap = createByTag({ tag: 'div', class: 'top__wrapper-title', parent: wrapper });
+    const text = createByTag({ tag: 'span', class: 'top__title-block', parent: titleWrap });
     text.textContent = title;
 
-    titleWrap.append(text);
-    wrapper.append(titleWrap);
+    const cardWrapper = createByTag({ tag: 'div', class: 'top__cards-block', parent: wrapper });
 
-    const cardWrapper: HTMLElement = document.createElement('div');
-    cardWrapper.className = 'top__cards-block';
-
+    console.log(data);
+    data.sort(() => Math.random() - 0.5);
     data.forEach((item: SongData) => {
-      const card = new Card(item);
+      const card = new Card(item, this.page);
       cardWrapper.append(card.card);
     });
-
-    wrapper.append(cardWrapper);
-
     return wrapper;
   }
 }
