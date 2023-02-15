@@ -58,7 +58,6 @@ export default class PlayerView {
 
   public setPlayStop(): void {
     const btnPlay: HTMLImageElement = this.player.querySelector('.top__btn-play') as HTMLImageElement;
-    console.log(btnPlay.src);
     if (btnPlay.dataset.mode === 'play') {
       btnPlay.src = './assets/svg/stop.svg';
       btnPlay.dataset.mode = 'stop';
