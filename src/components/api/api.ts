@@ -1,7 +1,7 @@
 import SongData from '../../global';
 
 export default class ApiControls {
-  private static url = 'http://127.0.0.1:8081'; // backend adress?
+  private static url = 'http://127.0.0.1:8081'; // backend adress server
 
   public static async getOnTrack(track: number): Promise<void | Array<SongData>> {
     try {
@@ -25,6 +25,11 @@ export default class ApiControls {
     try {
       const response = await fetch(`${ApiControls.url}/tracks?limit=${limit}&page=${page}`, {
         method: 'GET',
+        mode: 'cors',
+        cache: 'no-cache',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
       });
       if (response.ok) {
         return (await response.json()) as Array<SongData>;
@@ -38,6 +43,11 @@ export default class ApiControls {
     try {
       const response = await fetch(`${ApiControls.url}/random?limit=${randlimit}`, {
         method: 'GET',
+        mode: 'cors',
+        cache: 'no-cache',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
       });
       if (response.ok) {
         return (await response.json()) as Array<SongData>;
@@ -51,6 +61,11 @@ export default class ApiControls {
     try {
       const response = await fetch(`${ApiControls.url}/search?string=${search}`, {
         method: 'GET',
+        mode: 'cors',
+        cache: 'no-cache',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
       });
       if (response.ok) {
         return (await response.json()) as Array<SongData>;
