@@ -1,6 +1,7 @@
 import './left-menu.scss';
 import { createByTag } from '../../utils/heap';
 import Page from '../page';
+import State from '../../utils/state';
 
 export default class LeftMenu {
   public leftMenu: HTMLElement;
@@ -9,8 +10,12 @@ export default class LeftMenu {
 
   constructor(page: Page) {
     this.page = page;
-    console.log('hi');
     this.leftMenu = this.createMenu();
+  }
+
+  public switchLang(): void {
+    const title = this.leftMenu.querySelector('.left-menu__href') as HTMLElement;
+    title.textContent = title.textContent === 'Home' ? 'Главная' : 'Home';
   }
 
   private createMenu() {
@@ -18,8 +23,9 @@ export default class LeftMenu {
 
     const ul = createByTag({ tag: 'ul', class: 'left-menu__list', parent: wrapper });
     const li = createByTag({ tag: 'li', class: 'left-menu__list-item', parent: ul });
-    li.innerHTML =
-      '<i class="fa-solid fa-house"></i> <span class="left-menu__list-item"><a class="left-menu__href" href="./">Home</a></li>';
+    const state = new State();
+    const text: string = state.getLang() === 'en' ? 'Home' : 'Главная';
+    li.innerHTML = `<i class="fa-solid fa-house"></i> <span class="left-menu__list-item"><a class="left-menu__href" href="./">${text}</a></li>`;
     /*
     TODO: many playLists
     li = createByTag({ tag: 'li', class: 'left-menu__list-item', parent: ul });

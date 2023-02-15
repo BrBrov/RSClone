@@ -4,7 +4,7 @@ import '../../assets/svg/autorized.svg';
 import State from '../../utils/state';
 
 export default class Login {
-  private loginBtn: HTMLElement;
+  private readonly loginBtn: HTMLElement;
 
   constructor() {
     this.loginBtn = this.createLoginBtn();
@@ -12,6 +12,11 @@ export default class Login {
 
   public getElems(): HTMLElement {
     return this.loginBtn;
+  }
+
+  public switchLang(state: State): void {
+    const elem = this.loginBtn.querySelector('.top__login-text') as HTMLSpanElement;
+    this.setText(elem, state);
   }
 
   private createLoginBtn(): HTMLElement {
@@ -40,14 +45,18 @@ export default class Login {
     const text: HTMLSpanElement = document.createElement('span');
     text.className = 'top__login-text';
 
-    if (state.getAuth()) {
-      text.textContent = state.getLang() === 'eu' ? 'Account' : 'Аккаунт';
-    } else {
-      text.textContent = state.getLang() === 'eu' ? 'Sign In' : 'Вход';
-    }
+    this.setText(text, state);
 
     wrapper.append(text);
 
     return wrapper;
+  }
+
+  private setText(text: HTMLSpanElement, state: State): void {
+    if (state.getAuth()) {
+      text.textContent = state.getLang() === 'en' ? 'Account' : 'Аккаунт';
+    } else {
+      text.textContent = state.getLang() === 'en' ? 'Sign In' : 'Вход';
+    }
   }
 }

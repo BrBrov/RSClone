@@ -11,10 +11,8 @@ import StaticMain from './static-main/static-main';
 import SearchElem from './search/search';
 import Login from './login/login';
 import Logo from './logo/logo';
-
 import Pagination from './pagination/pagination';
 import LanguageSwitcher from './lang-button/lang-button';
-
 import { nSongInPage } from '../utils/heap';
 
 export default class Page {
@@ -46,6 +44,8 @@ export default class Page {
 
   public genres: Array<GenreData> = [];
 
+  public curGenre: GenreData | undefined;
+
   public base: Base;
 
   public router: Router;
@@ -60,7 +60,7 @@ export default class Page {
     this.langSwitch = new LanguageSwitcher();
     this.login = new Login();
     this.player = new Player();
-    this.base.getSet(500, 1).then((result) => (this.songs = result.items.tracks));
+    this.pagination = new Pagination(this);
   }
 
   public start(): void {
@@ -91,8 +91,6 @@ export default class Page {
       { key: 'music', name: 'Lyric', img: 'lyric.jpg', bg1: '#7e3661', bg2: '#bb3658' },
       { key: 'house', name: 'House', img: 'house.png', bg1: '#a0b58d', bg2: '#8c7e51' },
     ];
-    for (let i = 0; i < this.genres.length; i += 1)
-      this.genres[i].count = this.songs.filter((item) => item.genre === this.genres[i].key).length;
 
     this.leftMenu = new LeftMenu(this);
     const leftSide: HTMLElement = this.body.querySelector('.top__left-menu') as HTMLElement;
@@ -102,10 +100,21 @@ export default class Page {
     let tmpPage = 1;
     if (this.router.page !== null) tmpPage = this.router.page;
     if (this.router.genre !== null) tmpGen = this.genres.find((item) => item.key === this.router.genre);
-    if (tmpGen && this.router.genre) this.getSongs('genre', this.router.genre, tmpGen.name, tmpPage);
-    else this.showMain();
 
-    //this.addListeners();
+    this.base
+      .getSet(500, 1)
+      .then((result) => (this.songs = result.items.tracks))
+      .then(() => {
+        for (let i = 0; i < this.genres.length; i += 1) {
+          const arr = this.songs.filter((elem) => elem.genre === this.genres[i].key);
+          this.genres[i].count = arr.length;
+        }
+      })
+      .then(() => {
+        if (tmpGen && this.router.genre) this.getSongs('genre', this.router.genre, tmpGen.name, tmpPage);
+        else this.showMain();
+      });
+    this.addListeners();
   }
 
   public playSong(id: number) {
@@ -113,21 +122,23 @@ export default class Page {
     if (curSong) this.player.add(curSong);
   }
 
-  public getSongs(type: string, val: string, title: string, page: number) {
+  public async getSongs(type: string, val: string, title: string, page: number) {
     let numPages = 1;
     if (type == 'genre') {
-      //const genre = this.genres.find((item) => item.key === 'val');
+      this.curGenre = this.genres.find((item) => item.key === val);
+      if (this.curGenre && this.curGenre.count) numPages = Math.ceil(this.curGenre.count / nSongInPage);
       this.base
         .getGenre(page, nSongInPage, val)
         .then((result) => {
           if (result.items.tracks) {
             this.showCollectionOfSongs(result.items.tracks, title);
-            numPages = Math.ceil(result.items.tracks.length / nSongInPage);
           }
         })
         .then(() => {
-          this.pagination = new Pagination(this);
-          this.pagination.createPagination(page, numPages);
+          const titleMain = document.querySelector('.top__wrapper-title') as HTMLElement;
+          if (this.pagination && titleMain) {
+            titleMain.after(this.pagination.createPagination(page, numPages));
+          }
         });
     }
   }
@@ -139,7 +150,7 @@ export default class Page {
     main.append(tmpSongs.songsBlock);
   }
 
-  public showMain() {
+  public async showMain() {
     const main: HTMLElement = this.body.querySelector('.top__main') as HTMLElement;
     main.innerHTML = '';
     const title = this.checkTitlesBlock();
@@ -159,9 +170,30 @@ export default class Page {
   }
 
   private checkTitlesBlock(): string[] {
-    const enText: string[] = ['Popular songs', 'Music by genres', 'Recently played'];
-    const ruText: string[] = ['Популярные песни', 'Музыка по жанрам', 'Слушают сейчас'];
+    const enText: string[] = ['Popular songs', 'Music by genres', 'Recently played', 'next', 'prev'];
+    const ruText: string[] = ['Популярные песни', 'Музыка по жанрам', 'Слушают сейчас', 'след', 'пред'];
 
     return this.state.getLang() === 'en' ? enText : ruText;
+  }
+
+  private addListeners(): void {
+    const lang: HTMLElement = this.langSwitch.getElems();
+    lang.addEventListener('click', this.changeLang.bind(this));
+  }
+
+  private changeLang(ev: Event): void {
+    ev.stopPropagation();
+    console.log('++++');
+    const language: string | undefined = this.state.getLang();
+    const langSwitchData = language === 'en' ? 'ru' : 'en';
+    this.state.setlang(langSwitchData);
+    this.langSwitch.switch();
+    this.search.switchlanguage(this.state);
+    this.genresBlock?.switchLang();
+    this.songsBlockPopular?.switchLang();
+    this.songsBlockRecently?.switchLang();
+    this.leftMenu?.switchLang();
+    this.login.switchLang(this.state);
+    if (this.pagination) this.pagination.switchLang(this.state);
   }
 }

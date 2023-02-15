@@ -20,7 +20,7 @@ export default class Router {
   setPage(value: number) {
     this.page = value;
     this.url.searchParams.delete('page');
-    this.url.searchParams.set('page', String(value));
+    if (value > 1) this.url.searchParams.set('page', String(value));
     history.pushState({ page: this.url.search }, '', this.url.search);
   }
 
