@@ -194,7 +194,8 @@ export default class LoginPopUp {
     btn.className = 'container__sign-up';
     btn.textContent = lang === 'en' ? 'SignUp' : 'Зарегестрировать';
 
-    btn.addEventListener('click', this.signUp.bind(this));
+    //TODO: add registration logic
+    // btn.addEventListener('click', this.signUp.bind(this));
 
     wrapper.append(btn);
 
@@ -367,27 +368,32 @@ export default class LoginPopUp {
       const login: string = (this.wnd.querySelector('.container__login-input') as HTMLInputElement).value;
       const pass: string = (this.wnd.querySelector('.container__pass-input') as HTMLInputElement).value;
       const registration: Authorization = new Authorization();
-      registration.signIn(login, pass).then((result: string) => {
+      registration.logIn(login, pass).then((result: string) => {
         const warning: Warning = new Warning();
         const singInBlock: HTMLElement = this.wnd.querySelector('.container__error-popup') as HTMLElement;
         let warn: HTMLElement;
         switch (result) {
+          case '1':
+            warn = warning.alreadyRegistered(this.state.getLang());
+            singInBlock.append(warn);
+            setTimeout(() => warn.remove(), 3000);
+            return;
           case '2':
-            warn = warning.unregistered(this.state.getLang());
+            warn = warning.alreadyRegistered(this.state.getLang());
             singInBlock.append(warn);
             setTimeout(() => warn.remove(), 3000);
             return;
           case '3':
-            warn = warning.wrongData(this.state.getLang());
-            singInBlock.append(warn);
-            setTimeout(() => warn.remove(), 3000);
-            return;
-          case '4':
-            window.location.reload();
-          default:
             warn = warning.wrongOops(this.state.getLang());
             singInBlock.append(warn);
             setTimeout(() => warn.remove(), 3000);
+            return;
+          case '5':
+            warn = warning.wrongOops(this.state.getLang());
+            singInBlock.append(warn);
+            setTimeout(() => warn.remove(), 3000);
+          default:
+            window.location.reload();
             return;
         }
       });
@@ -396,41 +402,6 @@ export default class LoginPopUp {
       const warning = new Warning().wrongData(this.state.getLang());
       block.append(warning);
       setTimeout(() => warning.remove(), 3000);
-    }
-  }
-
-  private signUp(ev: Event): void {
-    ev.stopPropagation();
-    if (this.isValidLogin && this.isValidPass) {
-      const login: string = (this.wnd.querySelector('.container__login-input') as HTMLInputElement).value;
-      const pass: string = (this.wnd.querySelector('.container__pass-input') as HTMLInputElement).value;
-      const errBlock: HTMLElement = this.wnd.querySelector('.container__error-popup') as HTMLElement;
-      const register: Authorization = new Authorization();
-      const warning: Warning = new Warning();
-      register.signUp(login, pass).then((answer: string) => {
-        let warn: HTMLSpanElement;
-        switch (answer) {
-          case '1':
-            warn = warning.registeredYet(this.state.getLang());
-            errBlock.append(warn);
-            break;
-          case '2':
-          case '3':
-            warn = warning.wrongOops(this.state.getLang());
-            errBlock.append(warn);
-            break;
-          case '4':
-            location.reload();
-            return;
-          default:
-            warn = warning.wrongOops(this.state.getLang());
-            errBlock.append(warn);
-            break;
-        }
-        setTimeout(() => {
-          warn.remove();
-        }, 1500);
-      });
     }
   }
 

@@ -7,13 +7,11 @@ export default class Authorization {
     this.origin = 'http://localhost:8081';
   }
 
-  public async signUp(login: string, pass: string): Promise<string> {
+  public async registration(login: string, pass: string): Promise<string> {
     const hash = await this.getHash(pass);
     const idHash = await this.getHash(login);
 
     let uri: URL = new URL('http://localhost:8081/login');
-
-    console.log(uri);
 
     let req: Response = await fetch(uri, { method: 'GET', mode: 'cors' });
     const resp: JsonWebKey = await req.json();
@@ -79,7 +77,7 @@ export default class Authorization {
     }
   }
 
-  public async signIn(login: string, pass: string): Promise<string> {
+  public async logIn(login: string, pass: string): Promise<string> {
     const hash = (await this.getHash(pass)) as ArrayBuffer;
     const idHash = (await this.getHash(login)) as ArrayBuffer;
 
@@ -114,7 +112,7 @@ export default class Authorization {
     const tokenChiff: string[] = reg.token.split(',');
 
     switch (reg.token) {
-      case 'none':
+      case 'Wrong request!':
         return '1';
       case 'Unregistered!':
         return '2';
