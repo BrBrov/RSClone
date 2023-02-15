@@ -14,7 +14,7 @@ class Base {
   constructor() {
     this.base = 'http://127.0.0.1:8081';
     //this.base = 'https://rs-clone-tan.vercel.app';
-    this.random_query = this.base + '/tracks';
+    this.random_query = this.base + '/random';
     this.style_query = this.base + '/style';
     this.user_query = this.base + '/login';
     this.one_query = this.base + '/play';
@@ -32,8 +32,10 @@ class Base {
 
   getGenre = async (page = 1, limit = nSongInPage, genre = 'pop') => {
     const hvost = `?genre=${genre}&page=${page}&limit=${limit}`;
+
     const response = await fetch(this.style_query + hvost, { method: 'GET' });
     console.log(...response.headers);
+
     return {
       items: await response.json(),
       cpunt: response.headers.get('X-Total-Count'),

@@ -13,6 +13,21 @@ export default class GenresBlock {
     this.genresBlock = this.createBlock(title, data);
   }
 
+  public switchLang(): void {
+    const title = this.genresBlock.querySelector('.genre__title-block') as HTMLSpanElement;
+
+    const text = title.textContent;
+
+    switch (text) {
+      case 'Music by genres':
+        title.textContent = 'Музыка по жанрам';
+        break;
+      case 'Музыка по жанрам':
+        title.textContent = 'Music by genres';
+        break;
+    }
+  }
+
   private createBlock(title: string, data: Array<GenreData>): HTMLElement {
     const wrapper = createByTag({ tag: 'div', class: 'genre__block-wrapper' });
     const titleWrap = createByTag({ tag: 'div', class: 'genre__wrapper-title', parent: wrapper });

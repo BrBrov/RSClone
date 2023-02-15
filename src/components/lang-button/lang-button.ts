@@ -2,28 +2,28 @@ import State from '../../utils/state';
 import './lang-button.scss';
 
 export default class LangquageSwitcher {
-  private langBtn: HTMLElement;
+  private readonly langBtn: HTMLElement;
 
   constructor() {
     this.langBtn = this.init();
   }
 
   public switch(): void {
-    const first = new KeyframeEffect(
-      this.langBtn,
-      [
-        {
-          transform: 'rotateY(180deg)',
-        },
-      ],
-      { duration: 500, fill: 'forwards' }
-    );
+    const first = new KeyframeEffect(this.langBtn, [{ transform: 'rotateY(0deg)' }, { transform: 'rotateY(-90deg)' }], {
+      duration: 500,
+      fill: 'forwards',
+    });
 
     let anim = new Animation(first);
 
     anim.onfinish = () => {
+      const second = new KeyframeEffect(
+        this.langBtn,
+        [{ transform: 'rotateY(90deg)' }, { transform: 'rotateY(0deg)' }],
+        { duration: 500, fill: 'forwards' }
+      );
       this.langBtn.textContent = this.langBtn.textContent === 'EN' ? 'RU' : 'EN';
-      anim = new Animation(first);
+      anim = new Animation(second);
       anim.play();
     };
 

@@ -14,11 +14,12 @@ import Logo from './logo/logo';
 import Pagination from './pagination/pagination';
 import LanguageSwitcher from './lang-button/lang-button';
 import { nSongInPage } from '../utils/heap';
+import LoginPopUp from './popup-section/connect-popup';
 
 export default class Page {
   private body: HTMLElement;
 
-  private state: State;
+  private readonly state: State;
 
   private logo: Logo;
 
@@ -77,11 +78,6 @@ export default class Page {
     const playerWrapper: HTMLElement = this.body.querySelector('.top__player-wrapper') as HTMLElement;
     playerWrapper.append(this.player.view.player);
 
-    const rand = Math.round(Math.random() * 330);
-    this.base.getOneSong(rand).then((result) => {
-      if (result.item) this.player.add(result.item);
-    });
-
     this.genres = [
       { key: 'pop', name: 'Popular', img: 'popular.jpg', bg1: 'rgb(175 175 39 / 71%)', bg2: 'yellow' },
       { key: 'rock', name: 'Rock', img: 'rock.jpg', bg1: '#7bb0a6', bg2: '#1dabb8' },
@@ -91,6 +87,11 @@ export default class Page {
       { key: 'music', name: 'Lyric', img: 'lyric.jpg', bg1: '#7e3661', bg2: '#bb3658' },
       { key: 'house', name: 'House', img: 'house.png', bg1: '#a0b58d', bg2: '#8c7e51' },
     ];
+
+    const rand = Math.round(Math.random() * 330);
+    this.base.getOneSong(rand).then((result) => {
+      if (result.item) this.player.add(result.item);
+    });
 
     this.leftMenu = new LeftMenu(this);
     const leftSide: HTMLElement = this.body.querySelector('.top__left-menu') as HTMLElement;
@@ -114,6 +115,7 @@ export default class Page {
         if (tmpGen && this.router.genre) this.getSongs('genre', this.router.genre, tmpGen.name, tmpPage);
         else this.showMain();
       });
+
     this.addListeners();
   }
 
@@ -150,8 +152,12 @@ export default class Page {
     main.append(tmpSongs.songsBlock);
   }
 
+
   public async showMain() {
     const main: HTMLElement = this.body.querySelector('.top__main') as HTMLElement;
+    if (!main) {
+      throw new Error("Can't find main element");
+    }
     main.innerHTML = '';
     const title = this.checkTitlesBlock();
     this.base
@@ -165,6 +171,7 @@ export default class Page {
       .then(() => this.base.getSet(10, 2))
       .then((result) => {
         this.songsBlockRecently = new SongsBlock(title[2], result.items.tracks, this);
+
         main.append(this.songsBlockRecently.songsBlock);
       });
   }

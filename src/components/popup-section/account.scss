@@ -1,0 +1,92 @@
+.container__account-wrapper {
+ display: flex;
+ box-sizing: border-box;
+ width: 300px;
+ height: 300px;
+ padding: 20px 0 10px;
+ flex-direction: column;
+ justify-content: center;
+ align-items: center;
+ gap: 30px;
+ border: #666e7a 2px solid;
+ border-radius: 5px;
+ background-image: linear-gradient(to top, #121212, #121212, #121212, #121212, #121212, #161419, #1a151e, #201522, #311327, #430d24, #53051b, #5e0506);
+}
+
+.container__title-account {
+ font-family: "Open Sans", sans-serif;
+ font-size: 1.2rem;
+ font-weight: 500;
+ color: #01ffdd;
+}
+
+.container__title-block {
+ display: flex;
+ width: 95%;
+ height: 25px;
+ flex-direction: row;
+ justify-content: center;
+ align-items: center;
+ gap: 20px;
+}
+
+.container__account-img {
+ width: 25px;
+ height: 100%;
+}
+
+.container__login-name {
+ font-family: "Open Sans", serif;
+ font-size: 1.2rem;
+ font-weight: 500;
+ color: #01ffdd;
+}
+
+.container__playlist-account {
+ display: flex;
+ width: 95%;
+ flex-direction: row;
+ justify-content: center;
+ align-items: center;
+ gap: 5px;
+ cursor: pointer;
+}
+
+.container__playlist-icon {
+ width: 20px;
+ height: 20px;
+}
+
+.container__pls-icon {
+ width: 100%;
+ height: 100%;
+ color: #ab96dc;
+}
+
+.container__account-playlist {
+ font-family: "Open Sans", sans-serif;
+ font-size: 1.2rem;
+ color: #01ffdd;
+}
+
+.container__account-exit {
+ width: 90px;
+ height: 35px;
+ border: none;
+ border-radius: 8px;
+ font-family: "Open Sans", sans-serif;
+ font-size: 1rem;
+ color: #0e0249;
+ background-color: #96e0d6;
+ cursor: pointer;
+}
+
+.container__account-exit:hover {
+ background-color: #0e0249;
+ color: #96e0d6;
+}
+
+.container__account-exit:active {
+ background-color: #0d3f05;
+ color: #f1c171;
+}

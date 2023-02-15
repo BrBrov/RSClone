@@ -33,4 +33,14 @@ declare global {
     bg2: string;
     count?: number;
   }
+
+  interface RegisterResponseData {
+    register: string;
+    user?: string;
+  }
+
+  interface RegisteredTokenData {
+    token: string;
+    login: string;
+  }
 }
