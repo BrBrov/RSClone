@@ -14,7 +14,6 @@ import Logo from './logo/logo';
 import Pagination from './pagination/pagination';
 import LanguageSwitcher from './lang-button/lang-button';
 import { nSongInPage } from '../utils/heap';
-import LoginPopUp from './popup-section/connect-popup';
 
 export default class Page {
   private body: HTMLElement;
@@ -104,9 +103,10 @@ export default class Page {
 
     this.base
       .getSet(500, 1)
-      .then((result) => (this.songs = result.items.tracks))
+      .then((result) => (this.songs = result.items))
       .then(() => {
         for (let i = 0; i < this.genres.length; i += 1) {
+          console.log(this.songs);
           const arr = this.songs.filter((elem) => elem.genre === this.genres[i].key);
           this.genres[i].count = arr.length;
         }
@@ -152,7 +152,6 @@ export default class Page {
     main.append(tmpSongs.songsBlock);
   }
 
-
   public async showMain() {
     const main: HTMLElement = this.body.querySelector('.top__main') as HTMLElement;
     if (!main) {
@@ -163,14 +162,14 @@ export default class Page {
     this.base
       .getSet(10, 1)
       .then((result) => {
-        this.songsBlockPopular = new SongsBlock(title[0], result.items.tracks, this);
+        this.songsBlockPopular = new SongsBlock(title[0], result.items, this);
         main.append(this.songsBlockPopular.songsBlock);
         this.genresBlock = new GenresBlock(title[1], this.genres, this);
         if (this.genresBlock) main.append(this.genresBlock.genresBlock);
       })
       .then(() => this.base.getSet(10, 2))
       .then((result) => {
-        this.songsBlockRecently = new SongsBlock(title[2], result.items.tracks, this);
+        this.songsBlockRecently = new SongsBlock(title[2], result.items, this);
 
         main.append(this.songsBlockRecently.songsBlock);
       });
