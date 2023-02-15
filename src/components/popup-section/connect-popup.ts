@@ -1,6 +1,6 @@
 import './connect-popup.scss';
 // import State from '../../utils/state';
-import Login from '../page';
+// import Login from '../page';
 
 export default class LoginPopUp {
   public popupLogin: HTMLElement;
@@ -9,14 +9,14 @@ export default class LoginPopUp {
 
   public popupSignup: HTMLElement;
 
-  public login: HTMLElement;
+  // public login: HTMLElement;
 
   constructor() {
     this.popupSignup = this.signUp();
     this.popupLogout = this.logOut();
     this.popupListener();
     this.popupLogin = this.logIn();
-    this.login = new Login();
+    // this.login = new Login();
   }
 
   // public getElems(): HTMLElement {
@@ -159,10 +159,10 @@ export default class LoginPopUp {
   }
 
   private popupListener() {
-    const popupBtn: HTMLElement = this.popupLogin.lquerySelector('.top__login-wrapper') as HTMLElement;
-    popupBtn.addEventListener('click', (e: Event) => {
-      e.preventDefault();
-      this.logIn.bind(this);
-    });
+    // const popupBtn: HTMLElement = this.popupLogin.lquerySelector('.top__login-wrapper') as HTMLElement;
+    // popupBtn.addEventListener('click', (e: Event) => {
+    // e.preventDefault();
+    // this.logIn.bind(this);
+    // });
   }
 }

@@ -195,3 +195,11 @@
   cursor: pointer;
 }
 
+@media (max-width: 740px) {
+  .top__player-image {
+    padding: 24px 0 24px 0;
+  }
+  .top__btn-control {
+    padding-bottom: 14px;
+  }
+}
