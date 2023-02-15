@@ -41,6 +41,7 @@ export default class SongsBlock {
 
     const cardWrapper = createByTag({ tag: 'div', class: 'top__cards-block', parent: wrapper });
 
+    console.log(data);
     data.sort(() => Math.random() - 0.5);
     data.forEach((item: SongData) => {
       const card = new Card(item, this.page);

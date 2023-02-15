@@ -52,7 +52,7 @@ export default class Page {
     this.langSwitch = new LanguageSwitcher();
     this.login = new Login();
     this.player = new Player();
-    this.base.getSet(500, 1).then((result) => (this.songs = result.items.tracks));
+    this.base.getSet(500).then((result) => (this.songs = result.items.tracks));
   }
 
   public start(): void {
@@ -151,19 +151,23 @@ export default class Page {
 
   public showMain() {
     const main: HTMLElement = this.body.querySelector('.top__main') as HTMLElement;
+    if (!main) {
+      throw new Error("Can't find main element");
+    }
     main.innerHTML = '';
     const title = this.checkTitlesBlock();
     this.base
-      .getSet(10, 1)
+      .getSet(10)
       .then((result) => {
-        this.songsBlockPopular = new SongsBlock(title[0], result.items.tracks, this);
-        main.append(this.songsBlockPopular.songsBlock);
+        console.log(result);
+        this.songsBlockPopular = new SongsBlock(title[0], result.items, this);
         this.genresBlock = new GenresBlock(title[1], this.genres, this);
-        if (this.genresBlock) main.append(this.genresBlock.genresBlock);
       })
-      .then(() => this.base.getSet(10, 2))
+      .then(() => this.base.getSet(10))
       .then((result) => {
-        this.songsBlockRecently = new SongsBlock(title[2], result.items.tracks, this);
+        this.songsBlockRecently = new SongsBlock(title[2], result.items, this);
+        if (this.songsBlockPopular) main.append(this.songsBlockPopular.songsBlock);
+        if (this.genresBlock) main.append(this.genresBlock.genresBlock);
         main.append(this.songsBlockRecently.songsBlock);
       });
   }

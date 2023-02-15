@@ -14,7 +14,7 @@ class Base {
   constructor() {
     this.base = 'http://127.0.0.1:8081';
     //this.base = 'https://rs-clone-tan.vercel.app';
-    this.random_query = this.base + '/tracks';
+    this.random_query = this.base + '/random';
     this.style_query = this.base + '/style';
     this.user_query = this.base + '/login';
     this.one_query = this.base + '/play';
