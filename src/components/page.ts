@@ -12,6 +12,7 @@ import Login from './login/login';
 import Logo from './logo/logo';
 import LanguageSwitcher from './lang-button/lang-button';
 import { nSongInPage } from '../utils/heap';
+import LoginPopUp from './popup-section/connect-popup';
 
 export default class Page {
   private body: HTMLElement;
@@ -114,11 +115,13 @@ export default class Page {
   private addListeners(): void {
     const lang: HTMLElement = this.langSwitch.getElems();
     lang.addEventListener('click', this.changeLang.bind(this));
+
+    const login = this.body.querySelector('.top__login-wrapper') as HTMLElement;
+    login.addEventListener('click', this.loginListener.bind(this));
   }
 
   private changeLang(ev: Event): void {
     ev.stopPropagation();
-    console.log('++++');
     const language: string | undefined = this.state.getLang();
     const langSwitchData = language === 'en' ? 'ru' : 'en';
     this.state.setlang(langSwitchData);
@@ -129,6 +132,21 @@ export default class Page {
     this.songsBlockRecently?.switchLang();
     this.leftMenu?.switchLang();
     this.login.switchLang(this.state);
+    this.logo.switchLang(this.state);
+  }
+
+  private loginListener(ev: Event): void {
+    ev.stopPropagation();
+    const container = this.body.querySelector('.container') as HTMLElement;
+    const isAuth = this.state.getAuth();
+    const loginConstructor = new LoginPopUp(this.state);
+    if (!isAuth) {
+      loginConstructor.wndSignIn();
+    } else {
+      loginConstructor.wndAccount();
+    }
+    const wndAuth = loginConstructor.getWND();
+    container.prepend(wndAuth);
   }
 
   public showMain() {

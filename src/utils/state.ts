@@ -26,7 +26,7 @@ export default class State {
     localStorage.setItem('state', JSON.stringify(this.state));
   }
 
-  public getLang(): string | undefined {
+  public getLang(): string {
     return this.state.lang;
   }
 
@@ -57,8 +57,8 @@ export default class State {
     return this.state.auth;
   }
 
-  public setAuth(): void {
-    this.state.auth = true;
+  public setAuth(bool: boolean): void {
+    this.state.auth = bool;
     this.saveStorage();
   }
 }

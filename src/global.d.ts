@@ -32,4 +32,14 @@ declare global {
     bg1: string;
     bg2: string;
   }
+
+  interface RegisterResponseData {
+    register: string;
+    user?: string;
+  }
+
+  interface RegisteredTokenData {
+    token: string;
+    login: string;
+  }
 }

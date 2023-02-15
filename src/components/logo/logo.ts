@@ -21,6 +21,11 @@ export default class Logo {
     }
   }
 
+  public switchLang(state: State): void {
+    const text = this.logo.querySelector('.top__pls-playlist') as HTMLSpanElement;
+    text.textContent = state.getLang() === 'en' ? 'Playlist' : 'Плейлист';
+  }
+
   public getLogo(): HTMLElement {
     return this.logo;
   }
@@ -81,7 +86,7 @@ export default class Logo {
     text.className = 'top__pls-playlist';
 
     const state = new State();
-    text.textContent = state.getLang() === 'eu' ? 'Playlist' : 'Плэйлист';
+    text.textContent = state.getLang() === 'en' ? 'Playlist' : 'Плейлист';
 
     wrapper.append(text);
 
