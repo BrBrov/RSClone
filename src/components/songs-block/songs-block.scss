@@ -29,3 +29,12 @@
   align-items: flex-start;
   gap: 10px;
 }
+
+@media (max-width: 740px) {
+  .top__wrapper-title {
+    justify-content: center;
+  }
+  .top__cards-block {
+    justify-content: center;
+  }
+}
