@@ -14,6 +14,7 @@ import Logo from './logo/logo';
 import Pagination from './pagination/pagination';
 import LanguageSwitcher from './lang-button/lang-button';
 import { nSongInPage } from '../utils/heap';
+import LoginPopUp from './popup-section/connect-popup';
 
 export default class Page {
   private body: HTMLElement;
@@ -185,6 +186,23 @@ export default class Page {
   private addListeners(): void {
     const lang: HTMLElement = this.langSwitch.getElems();
     lang.addEventListener('click', this.changeLang.bind(this));
+
+    const login = this.body.querySelector('.top__login-wrapper') as HTMLElement;
+    login.addEventListener('click', this.loginListener.bind(this));
+  }
+
+  private loginListener(ev: Event): void {
+    ev.stopPropagation();
+    const container = this.body.querySelector('.container') as HTMLElement;
+    const isAuth = this.state.getAuth();
+    const loginConstructor = new LoginPopUp(this.state);
+    if (!isAuth) {
+      loginConstructor.wndSignIn();
+    } else {
+      loginConstructor.wndAccount();
+    }
+    const wndAuth = loginConstructor.getWND();
+    container.prepend(wndAuth);
   }
 
   private changeLang(ev: Event): void {
