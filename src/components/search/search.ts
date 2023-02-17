@@ -1,12 +1,16 @@
 import './search.scss';
 import '../../assets/svg/search.svg';
 import State from '../../utils/state';
+import Page from '../page';
 
 export default class SearchElem {
   private readonly search: HTMLElement;
 
-  constructor() {
+  private page: Page;
+
+  constructor(page: Page) {
     this.search = this.createSearch();
+    this.page = page;
   }
 
   public getElem(): HTMLElement {
@@ -19,6 +23,13 @@ export default class SearchElem {
 
     const input = this.search.querySelector('.top__search') as HTMLInputElement;
     input.placeholder = text;
+
+    const find = document.querySelector('.find__nothing') as HTMLElement;
+    if (find !== null) find.innerHTML = lang === 'en' ? 'Nothing found' : 'Ничего не найдено';
+    const find1 = document.querySelector('.top_title_block') as HTMLElement;
+    if (find1 !== null)
+      if (lang === 'en') find1.innerHTML.replace('Search results', 'Результаты поиска');
+      else find1.innerHTML.replace('Результаты поиска', 'Search results');
   }
 
   private createSearch(): HTMLElement {
@@ -47,8 +58,13 @@ export default class SearchElem {
       input.placeholder = 'Найти';
     }
 
+    input.addEventListener('keydown', (e) => {
+      if (e.code === 'Enter' && input.value.length > 2) {
+        this.page.getSongs('search', input.value, '', 1);
+        this.page.router.setSearch(input.value);
+      }
+    });
     wrapper.append(input);
-
     return wrapper;
   }
 }

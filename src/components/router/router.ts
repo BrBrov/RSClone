@@ -5,6 +5,8 @@ export default class Router {
 
   genre: string | null = null;
 
+  search: string | null = null;
+
   constructor() {
     this.url = new URL(window.location.href);
     this.page = 0;
@@ -14,6 +16,9 @@ export default class Router {
     }
     if (this.url.searchParams.has('genre')) {
       this.genre = this.url.searchParams.get('genre');
+    }
+    if (this.url.searchParams.has('search')) {
+      this.search = this.url.searchParams.get('search');
     }
   }
 
@@ -29,5 +34,13 @@ export default class Router {
     this.url.searchParams.delete('genre');
     this.url.searchParams.set('genre', value);
     history.pushState({ genre: this.url.search }, '', this.url.search);
+  }
+
+  setSearch(value: string) {
+    this.url.searchParams.delete('genre');
+    this.url.searchParams.delete('page');
+    this.url.searchParams.delete('search');
+    this.url.searchParams.set('search', value);
+    history.pushState({ search: this.url.search }, '', this.url.search);
   }
 }

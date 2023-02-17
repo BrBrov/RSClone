@@ -57,7 +57,7 @@ export default class Page {
     this.body = document.body;
     this.state = new State();
     this.logo = new Logo();
-    this.search = new SearchElem();
+    this.search = new SearchElem(this);
     this.langSwitch = new LanguageSwitcher();
     this.login = new Login();
     this.player = new Player();
@@ -107,13 +107,13 @@ export default class Page {
       .then((result) => (this.songs = result.items))
       .then(() => {
         for (let i = 0; i < this.genres.length; i += 1) {
-          console.log(this.songs);
           const arr = this.songs.filter((elem) => elem.genre === this.genres[i].key);
           this.genres[i].count = arr.length;
         }
       })
       .then(() => {
         if (tmpGen && this.router.genre) this.getSongs('genre', this.router.genre, tmpGen.name, tmpPage);
+        else if (this.router.search) this.getSongs('search', this.router.search, '', 1);
         else this.showMain();
       });
 
@@ -127,7 +127,8 @@ export default class Page {
 
   public async getSongs(type: string, val: string, title: string, page: number) {
     let numPages = 1;
-    if (type == 'genre') {
+
+    if (type === 'genre') {
       this.curGenre = this.genres.find((item) => item.key === val);
       if (this.curGenre && this.curGenre.count) numPages = Math.ceil(this.curGenre.count / nSongInPage);
       this.base
@@ -144,13 +145,25 @@ export default class Page {
           }
         });
     }
+    if (type === 'search') {
+      this.base.getSearch(val).then((result) => {
+        if (result.items) {
+          const language: string | undefined = this.state.getLang();
+          const langSwitchData = language === 'en' ? 'Search results' : 'Результаты поиска';
+          this.showCollectionOfSongs(result.items, `${langSwitchData} ${val}`);
+        }
+      });
+    }
   }
 
   public showCollectionOfSongs(songs: Array<SongData>, title: string) {
     const main: HTMLElement = this.body.querySelector('.top__main') as HTMLElement;
+    const lang = this.checkTitlesBlock();
     main.innerHTML = '';
-    const tmpSongs = new SongsBlock(title, songs, this);
-    main.append(tmpSongs.songsBlock);
+    if (songs.length > 0) {
+      const tmpSongs = new SongsBlock(title, songs, this);
+      main.append(tmpSongs.songsBlock);
+    } else main.innerHTML = `<div class="find__nothing">${lang[5]}</div>`;
   }
 
   public async showMain() {
@@ -177,8 +190,24 @@ export default class Page {
   }
 
   private checkTitlesBlock(): string[] {
-    const enText: string[] = ['Popular songs', 'Music by genres', 'Recently played', 'next', 'prev'];
-    const ruText: string[] = ['Популярные песни', 'Музыка по жанрам', 'Слушают сейчас', 'след', 'пред'];
+    const enText: string[] = [
+      'Popular songs',
+      'Music by genres',
+      'Recently played',
+      'next',
+      'prev',
+      'Nothing found',
+      'Search results',
+    ];
+    const ruText: string[] = [
+      'Популярные песни',
+      'Музыка по жанрам',
+      'Слушают сейчас',
+      'след',
+      'пред',
+      'Ничего не найдено',
+      'Результиаты поиска',
+    ];
 
     return this.state.getLang() === 'en' ? enText : ruText;
   }
@@ -207,7 +236,6 @@ export default class Page {
 
   private changeLang(ev: Event): void {
     ev.stopPropagation();
-    console.log('++++');
     const language: string | undefined = this.state.getLang();
     const langSwitchData = language === 'en' ? 'ru' : 'en';
     this.state.setlang(langSwitchData);
