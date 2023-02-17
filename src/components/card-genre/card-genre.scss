@@ -1,12 +1,16 @@
 .genre__card {
-  width:150px; display:flex; width: 200px;
+  // width:150px; 
+  // display: flex;
+  width: 200px;
+  width: clamp(120px, 15vw, 200px);
   display: flex;
   padding: 3px;
   cursor:pointer;
   transition: backgroundr 2s, transform 2s;
 }
 .genre__card-wrapper {
-  max-width:50%;
+  // max-width: 50%;
+  max-width: clamp(20%, 15vw, 50%);
 }
 .genre__card-img {
   max-width: 100%;  
@@ -16,7 +20,8 @@
 
 .genre__card__title {
   margin-top: 20%;
-  margin-left: 10%;
+  // margin-left: 10%;
+  margin-left: calc(2vw - 50px);
   font-size: 20px;
   font-weight: bold;
   -moz-transform: rotate(-45deg);

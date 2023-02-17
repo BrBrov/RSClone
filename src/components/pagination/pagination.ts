@@ -27,14 +27,14 @@ export default class Pagination {
       class: 'top__page-button',
       parent: div,
     });
-    this.right.innerHTML = `${next} &rarr;`;
+    this.right.innerHTML = `${next} ► `;
     this.left = <HTMLButtonElement>createByTag({
       tag: 'button',
       id: 'page-back',
       class: 'top__page-button',
       parent: div,
     });
-    this.left.innerHTML = ` &larr; ${prev}`;
+    this.left.innerHTML = ` ◄ ${prev}`;
     if (curPage > 1) this.left.style.display = 'inline-block';
     else this.left.style.display = 'none';
     this.left.addEventListener('click', () => {
@@ -59,7 +59,7 @@ export default class Pagination {
   public switchLang(state: State): void {
     const prev: string = state.getLang() === 'en' ? 'prev' : 'пред';
     const next: string = state.getLang() === 'en' ? 'next' : 'след';
-    if (this.right) this.right.innerHTML = `${next} &rarr;`;
-    if (this.left) this.left.innerHTML = `${prev} &rarr;`;
+    if (this.right) this.right.innerHTML = `${next} ► `;
+    if (this.left) this.left.innerHTML = ` ◄ ${prev}`;
   }
 }
