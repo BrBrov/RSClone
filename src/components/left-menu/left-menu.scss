@@ -26,3 +26,19 @@
   color: #ff6a62;
   text-decoration: none;
 }
+
+@media (max-width: 740px) {
+
+  .left-menu__list {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    padding-left: 0px;
+  }
+
+  // .left-menu__list-item {
+  //   padding-bottom: 5px;
+  // }
+}

@@ -1,7 +1,6 @@
 .genre__card {
   // width:150px; 
-  // display: flex;
-  width: 200px;
+  // width: 200px;
   width: clamp(120px, 15vw, 200px);
   display: flex;
   padding: 3px;
@@ -38,4 +37,9 @@
   -ms-transform: rotate(0deg);
   transform: rotate(0deg);
   transition: transform 2s;
+}
+@media (max-width: 400px) {
+  .genre__card__title {
+    margin-left: calc(2vw - 40px);
+  }
 }

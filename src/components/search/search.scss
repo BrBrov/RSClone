@@ -50,3 +50,11 @@
   font-size:2em;
   margin-left: 3vw;
 }
+
+@media (max-width: 740px) {
+
+  .top__search-wrapper {
+    align-self: center;
+    padding-left: 0px;
+  }
+}

@@ -65,6 +65,7 @@
   padding-top: 20px;
   flex-direction: row;
   justify-content: space-between;
+  gap: 5px;
 }
 
 .top__main {
@@ -113,11 +114,31 @@
 @media (max-width: 740px) {
 
   .top {
-    flex-direction: column-reverse;
+    width: 125%;
+    // flex-direction: column-reverse;
+    flex-direction: column;
+  }
+
+  .top__header {
+    flex-direction: column;
+    box-sizing: content-box;
+    height: auto;
+    gap: 10px;
   }
 
   .top__left-side {
-    padding: 0 35px;
+    // padding: 0 35px;
+    padding: 0 5%;
     width: 70%;
+  }
+
+  .top__left-menu {
+    padding: 20px 20px 0px 20px;
+    gap: 20px;
+  }
+
+  .top__player-wrapper {
+    height: 160px;
+    padding: 20px 0;
   }
 }
