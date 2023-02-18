@@ -1,67 +1,39 @@
-import { nSongInPage } from '../../utils/heap';
+import { nSongInPage, base } from '../../utils/constants';
 
 class Base {
-  base: string;
+  private queryUser = base + '/login';
 
-  user_query: string;
+  private queryRandom = base + '/random';
 
-  random_query: string;
+  private querySearch = base + '/search';
 
-  search_query: string;
+  private queryStyle = base + '/style';
 
-  style_query: string;
+  private queryOne = base + '/play';
 
-  one_query: string;
-
-  constructor() {
-    this.base = 'http://127.0.0.1:8081';
-    //this.base = 'https://rs-clone-tan.vercel.app';
-    this.random_query = this.base + '/random';
-    this.search_query = this.base + '/search';
-    this.style_query = this.base + '/style';
-    this.user_query = this.base + '/login';
-    this.one_query = this.base + '/play';
+  private async get(query: string): Promise<Array<SongData>> {
+    const response: Response = await fetch(query, { method: 'GET' });
+    const songs: Array<SongData> = await response.json();
+    return songs;
   }
 
-  getSearch = async (search = '') => {
-    const hvost = `?string=${search}`;
-    const response = await fetch(this.search_query + hvost, { method: 'GET' });
-    console.log('search');
+  public getSearch = async (search = ''): Promise<Array<SongData>> => this.get(this.querySearch + `?string=${search}`);
 
-    return {
-      items: await response.json(),
-      cpunt: response.headers.get('X-Total-Count'),
-    };
-  };
+  public getSet = async (limit = nSongInPage, page = 1): Promise<Array<SongData>> =>
+    this.get(this.queryRandom + `?limit=${limit}&page=${page}`);
 
-  getGenre = async (page = 1, limit = nSongInPage, genre = 'pop') => {
-    const hvost = `?genre=${genre}&page=${page}&limit=${limit}`;
+  public async getGenre(page = 1, limit = nSongInPage, genre = 'pop'): Promise<Array<SongData>> {
+    const response: Response = await fetch(this.queryStyle + `?genre=${genre}&page=${page}&limit=${limit}`, {
+      method: 'GET',
+    });
+    const result: { tracks: Array<SongData>; count: number } = await response.json();
+    return result.tracks;
+  }
 
-    const response = await fetch(this.style_query + hvost, { method: 'GET' });
-    //console.log(...response.headers);
-
-    return {
-      items: await response.json(),
-      cpunt: response.headers.get('X-Total-Count'),
-    };
-  };
-
-  getSet = async (limit = nSongInPage, page = 1) => {
-    const hvost = `?limit=${limit}&page=${page}`;
-    const response = await fetch(this.random_query + hvost, { method: 'GET' });
-    return {
-      items: await response.json(),
-      cpunt: response.headers.get('X-Total-Count'),
-    };
-  };
-
-  getOneSong = async (id = 1) => {
-    const hvost = `?id=${id}`;
-    const response = await fetch(this.one_query + hvost, { method: 'GET' });
-    return {
-      item: await response.json(),
-      cpunt: response.headers.get('X-Total-Count'),
-    };
-  };
+  public async getOneSong(id = 1): Promise<SongData> {
+    const response: Response = await fetch(this.queryOne + `?id=${id}`, { method: 'GET' });
+    const song: SongData = await response.json();
+    return song;
+  }
 }
 export default Base;

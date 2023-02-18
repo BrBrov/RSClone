@@ -1,11 +1,11 @@
 export default class Router {
-  url: URL;
+  private url: URL;
 
-  page: number;
+  public page: number;
 
-  genre: string | null = null;
+  public genre: string | null = null;
 
-  search: string | null = null;
+  public search: string | null = null;
 
   constructor() {
     this.url = new URL(window.location.href);
@@ -22,21 +22,21 @@ export default class Router {
     }
   }
 
-  setPage(value: number) {
+  public setPage(value: number): void {
     this.page = value;
     this.url.searchParams.delete('page');
     if (value > 1) this.url.searchParams.set('page', String(value));
     history.pushState({ page: this.url.search }, '', this.url.search);
   }
 
-  setGenre(value: string) {
+  public setGenre(value: string): void {
     this.genre = value;
     this.url.searchParams.delete('genre');
     this.url.searchParams.set('genre', value);
     history.pushState({ genre: this.url.search }, '', this.url.search);
   }
 
-  setSearch(value: string) {
+  public setSearch(value: string): void {
     this.url.searchParams.delete('genre');
     this.url.searchParams.delete('page');
     this.url.searchParams.delete('search');

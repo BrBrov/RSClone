@@ -1,6 +1,6 @@
 import './card.scss';
 import Page from '../page';
-import { createByTag } from '../../utils/heap';
+import { createByTag } from '../../utils/constants';
 
 export default class Card {
   public card: HTMLElement;

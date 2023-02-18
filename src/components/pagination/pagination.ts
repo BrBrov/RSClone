@@ -1,20 +1,20 @@
 import Page from '../page';
-import { createByTag } from '../../utils/heap';
+import { createByTag } from '../../utils/constants';
 import './pagination.scss';
 import State from '../../utils/state';
 
 export default class Pagination {
-  page: Page;
+  private page: Page;
 
-  right: HTMLButtonElement | null = null;
+  private right: HTMLButtonElement | null = null;
 
-  left: HTMLButtonElement | null = null;
+  private left: HTMLButtonElement | null = null;
 
   constructor(page: Page) {
     this.page = page;
   }
 
-  public createPagination(curPage = 1, allPages = 1) {
+  public createPagination(curPage = 1, allPages = 1): HTMLElement {
     const state = new State();
     const prev: string = state.getLang() === 'en' ? 'prev' : 'пред';
     const next: string = state.getLang() === 'en' ? 'next' : 'след';
