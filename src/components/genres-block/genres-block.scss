@@ -30,3 +30,14 @@
   font-weight: 600;
   color: #adcaf2;
 }
+
+@media (max-width: 740px) {
+
+  .genre__cards-block {
+    justify-content: center;
+  }
+
+  .genre__wrapper-title {
+    justify-content: center;
+  }
+}
