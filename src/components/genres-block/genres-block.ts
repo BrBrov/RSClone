@@ -1,12 +1,12 @@
 import './genres-block.scss';
 import CardGenre from '../card-genre/card-genre';
 import Page from '../page';
-import { createByTag } from '../../utils/heap';
+import { createByTag } from '../../utils/constants';
 
 export default class GenresBlock {
   public genresBlock: HTMLElement;
 
-  page: Page;
+  private page: Page;
 
   constructor(title: string, data: Array<GenreData>, page: Page) {
     this.page = page;

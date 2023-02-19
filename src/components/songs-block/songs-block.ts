@@ -1,12 +1,12 @@
 import './songs-block.scss';
 import Card from '../card/card';
 import Page from '../page';
-import { createByTag } from '../../utils/heap';
+import { createByTag } from '../../utils/constants';
 
 export default class SongsBlock {
   public songsBlock: HTMLElement;
 
-  page: Page;
+  private page: Page;
 
   constructor(title: string, data: Array<SongData>, page: Page) {
     this.page = page;

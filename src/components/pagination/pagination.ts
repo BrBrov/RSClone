@@ -1,20 +1,20 @@
 import Page from '../page';
-import { createByTag } from '../../utils/heap';
+import { createByTag } from '../../utils/constants';
 import './pagination.scss';
 import State from '../../utils/state';
 
 export default class Pagination {
-  page: Page;
+  private page: Page;
 
-  right: HTMLButtonElement | null = null;
+  private right: HTMLButtonElement | null = null;
 
-  left: HTMLButtonElement | null = null;
+  private left: HTMLButtonElement | null = null;
 
   constructor(page: Page) {
     this.page = page;
   }
 
-  public createPagination(curPage = 1, allPages = 1) {
+  public createPagination(curPage = 1, allPages = 1): HTMLElement {
     const state = new State();
     const prev: string = state.getLang() === 'en' ? 'prev' : 'пред';
     const next: string = state.getLang() === 'en' ? 'next' : 'след';
@@ -27,14 +27,14 @@ export default class Pagination {
       class: 'top__page-button',
       parent: div,
     });
-    this.right.innerHTML = `${next} &rarr;`;
+    this.right.innerHTML = `${next} ► `;
     this.left = <HTMLButtonElement>createByTag({
       tag: 'button',
       id: 'page-back',
       class: 'top__page-button',
       parent: div,
     });
-    this.left.innerHTML = ` &larr; ${prev}`;
+    this.left.innerHTML = ` ◄ ${prev}`;
     if (curPage > 1) this.left.style.display = 'inline-block';
     else this.left.style.display = 'none';
     this.left.addEventListener('click', () => {
@@ -59,7 +59,7 @@ export default class Pagination {
   public switchLang(state: State): void {
     const prev: string = state.getLang() === 'en' ? 'prev' : 'пред';
     const next: string = state.getLang() === 'en' ? 'next' : 'след';
-    if (this.right) this.right.innerHTML = `${next} &rarr;`;
-    if (this.left) this.left.innerHTML = `${prev} &rarr;`;
+    if (this.right) this.right.innerHTML = `${next} ► `;
+    if (this.left) this.left.innerHTML = ` ◄ ${prev}`;
   }
 }

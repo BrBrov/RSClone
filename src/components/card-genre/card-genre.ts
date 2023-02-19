@@ -1,11 +1,11 @@
 import './card-genre.scss';
 import Page from '../page';
-import { createByTag } from '../../utils/heap';
+import { createByTag } from '../../utils/constants';
 
 export default class CardGenre {
   public card: HTMLElement;
 
-  page: Page;
+  private page: Page;
 
   constructor(data: GenreData, page: Page) {
     this.page = page;
