@@ -245,6 +245,7 @@ export default class Page {
     this.songsBlockRecently?.switchLang();
     this.leftMenu?.switchLang();
     this.login.switchLang(this.state);
+    this.logo.switchLang(this.state);
     if (this.pagination) this.pagination.switchLang(this.state);
   }
 }

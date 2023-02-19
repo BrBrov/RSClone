@@ -7,7 +7,7 @@ export default class Authorization {
     this.origin = 'http://localhost:8081';
   }
 
-  public async registration(login: string, pass: string): Promise<string> {
+  public async signUp(login: string, pass: string): Promise<string> {
     const hash = await this.getHash(pass);
     const idHash = await this.getHash(login);
 
