@@ -19,6 +19,11 @@ export default class Warning {
     return this.create(title);
   }
 
+  public registeredYet(lang: string): HTMLElement {
+    const title: string = lang === 'en' ? 'Account already exists' : 'Аккаунт уже сущетсвует';
+    return this.create(title);
+  }
+
   private create(message: string): HTMLSpanElement {
     const warning: HTMLSpanElement = document.createElement('span');
     warning.className = 'container__warning';

@@ -1,11 +1,11 @@
 import './card-genre.scss';
 import Page from '../page';
-import { createByTag } from '../../utils/heap';
+import { createByTag } from '../../utils/constants';
 
 export default class CardGenre {
   public card: HTMLElement;
 
-  page: Page;
+  private page: Page;
 
   constructor(data: GenreData, page: Page) {
     this.page = page;
@@ -22,7 +22,8 @@ export default class CardGenre {
       wrapper.style.background = data.bg1;
     });
     wrapper.addEventListener('click', () => {
-      this.page.getSongs('genre', data.key, data.name);
+      this.page.getSongs('genre', data.key, data.name, 1);
+      this.page.router.setGenre(data.key);
     });
 
     const container = createByTag({ tag: 'div', class: 'genre__card-wrapper', parent: wrapper });

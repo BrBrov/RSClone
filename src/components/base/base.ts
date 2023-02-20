@@ -1,82 +1,39 @@
-import { nSongInPage } from '../../utils/heap';
+import { nSongInPage, base } from '../../utils/constants';
 
 class Base {
-  base: string;
+  private queryUser = base + '/login';
 
-  user_query: string;
+  private queryRandom = base + '/random';
 
-  random_query: string;
+  private querySearch = base + '/search';
 
-  style_query: string;
+  private queryStyle = base + '/style';
 
-  one_query: string;
+  private queryOne = base + '/play';
 
-  constructor() {
-    this.base = 'http://127.0.0.1:8081';
-    //this.base = 'https://rs-clone-tan.vercel.app';
-    this.random_query = this.base + '/tracks';
-    this.style_query = this.base + '/style';
-    this.user_query = this.base + '/login';
-    this.one_query = this.base + '/play';
+  private async get(query: string): Promise<Array<SongData>> {
+    const response: Response = await fetch(query, { method: 'GET' });
+    const songs: Array<SongData> = await response.json();
+    return songs;
   }
 
-  getGenre = async (page = 1, limit = nSongInPage, genre = 'pop') => {
-    const hvost = `?genre=${genre}&page=${page}&limit=${limit}`;
-    const uri = new URL(this.style_query + hvost);
-    const response = await fetch(uri, {
-      method: 'GET', // *GET, POST, PUT, DELETE, etc.
-      mode: 'cors', // no-cors, *cors, same-origin
-      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-      //credentials: 'same-origin', // include, *same-origin, omit
-      headers: {
-        //'Content-Type': 'application/json'
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      redirect: 'follow', // manual, *follow, error
-      referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-    });
+  public getSearch = async (search = ''): Promise<Array<SongData>> => this.get(this.querySearch + `?string=${search}`);
 
-    return {
-      items: await response.json(),
-      cpunt: response.headers.get('X-Total-Count'),
-    };
-  };
+  public getSet = async (limit = nSongInPage, page = 1): Promise<Array<SongData>> =>
+    this.get(this.queryRandom + `?limit=${limit}&page=${page}`);
 
-  getSet = async (limit = nSongInPage, page = 1) => {
-    const hvost = `?limit=${limit}&page=${page}`;
-    const response = await fetch(this.random_query + hvost, {
+  public async getGenre(page = 1, limit = nSongInPage, genre = 'pop'): Promise<Array<SongData>> {
+    const response: Response = await fetch(this.queryStyle + `?genre=${genre}&page=${page}&limit=${limit}`, {
       method: 'GET',
-      mode: 'cors',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
     });
+    const result: { tracks: Array<SongData>; count: number } = await response.json();
+    return result.tracks;
+  }
 
-    return {
-      items: await response.json(),
-      cpunt: response.headers.get('X-Total-Count'),
-    };
-  };
-
-  getOneSong = async (id = 1) => {
-    const hvost = `?id=${id}`;
-    const response = await fetch(this.one_query + hvost, {
-      method: 'GET',
-      mode: 'cors',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-    });
-    return {
-      item: await response.json(),
-      cpunt: response.headers.get('X-Total-Count'),
-    };
-  };
+  public async getOneSong(id = 1): Promise<SongData> {
+    const response: Response = await fetch(this.queryOne + `?id=${id}`, { method: 'GET' });
+    const song: SongData = await response.json();
+    return song;
+  }
 }
 export default Base;

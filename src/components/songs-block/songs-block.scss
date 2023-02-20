@@ -1,18 +1,16 @@
 .top__block-wrapper {
-  display: flex;
   width: 98%;
   margin: 0 auto  20px auto;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
   gap: 20px;
   cursor: pointer;
+  display: grid;
 }
 
 .top__wrapper-title {
   display: flex;
   width: 95%;
   justify-content: flex-start;
+  margin-left:20px;
 }
 
 .top__title-block {
@@ -28,4 +26,13 @@
   justify-content: flex-start;
   align-items: flex-start;
   gap: 10px;
+}
+
+@media (max-width: 740px) {
+  .top__wrapper-title {
+    justify-content: center;
+  }
+  .top__cards-block {
+    justify-content: center;
+  }
 }

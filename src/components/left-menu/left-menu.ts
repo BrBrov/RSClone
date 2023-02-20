@@ -1,12 +1,12 @@
 import './left-menu.scss';
-import { createByTag } from '../../utils/heap';
+import { createByTag } from '../../utils/constants';
 import Page from '../page';
 import State from '../../utils/state';
 
 export default class LeftMenu {
   public leftMenu: HTMLElement;
 
-  page: Page;
+  private page: Page;
 
   constructor(page: Page) {
     this.page = page;
@@ -18,7 +18,7 @@ export default class LeftMenu {
     title.textContent = title.textContent === 'Home' ? 'Главная' : 'Home';
   }
 
-  private createMenu() {
+  private createMenu(): HTMLElement {
     const wrapper = createByTag({ tag: 'div', class: 'left-menu__wrapper' });
 
     const ul = createByTag({ tag: 'ul', class: 'left-menu__list', parent: wrapper });
