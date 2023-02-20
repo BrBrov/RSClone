@@ -17,7 +17,7 @@ export function createByTag(param: ParamCreateByTag): HTMLElement {
 
 export const nSongInPage = 20;
 export const base = 'http://127.0.0.1:8081';
-//export const = 'https://rs-clone-tan.vercel.app';
+// export const base = location.origin;
 
 export const genres = [
   { key: 'pop', name: 'Popular', img: 'popular.jpg', bg1: 'rgb(175 175 39 / 71%)', bg2: 'yellow' },

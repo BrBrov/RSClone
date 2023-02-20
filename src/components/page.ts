@@ -55,7 +55,7 @@ export default class Page {
     this.base = base;
     this.router = router;
     this.body = document.body;
-    this.state = new State();
+    this.state = this.base.state;
     this.logo = new Logo();
     this.search = new SearchElem(this);
     this.langSwitch = new LanguageSwitcher();
@@ -79,9 +79,12 @@ export default class Page {
     playerWrapper.append(this.player.view.player);
 
     const rand = Math.round(Math.random() * 330);
-    this.base.getOneSong(rand).then((song) => {
-      if (song) this.player.add(song);
-    });
+    this.base
+      .getPlaylist()
+      .then(() => this.base.getOneSong(rand))
+      .then((song) => {
+        if (song) this.player.add(song);
+      });
 
     this.leftMenu = new LeftMenu(this);
     const leftSide: HTMLElement = this.body.querySelector('.top__left-menu') as HTMLElement;
@@ -140,7 +143,7 @@ export default class Page {
         if (songs) {
           const language: string | undefined = this.state.getLang();
           const langSwitchData = language === 'en' ? 'Search results' : 'Результаты поиска';
-          // уникализируем выдачу. удаляем повторяющиеся песни
+          //TODO уникализируем выдачу. удаляем повторяющиеся песни
           const arrTitle: Array<string> = [];
           const newArr: Array<SongData> = [];
           songs.forEach((elem: SongData) => {

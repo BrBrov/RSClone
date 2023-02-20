@@ -33,7 +33,6 @@ export default class Login {
     img.alt = 'Login';
 
     if (state.getAuth()) {
-      //TODO: add logic for get avatar;
       img.src = './assets/svg/autorized.svg';
     } else {
       img.src = './assets/svg/key.svg';

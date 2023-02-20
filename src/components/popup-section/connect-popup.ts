@@ -384,6 +384,7 @@ export default class LoginPopUp {
             return;
           case '4':
             window.location.reload();
+            return;
           default:
             warn = warning.wrongOops(this.state.getLang());
             singInBlock.append(warn);
@@ -453,6 +454,7 @@ export default class LoginPopUp {
     this.state.setUser('');
     this.state.setToken('');
     this.state.setAuth(false);
+    sessionStorage.clear();
     window.location.reload();
   }
 }

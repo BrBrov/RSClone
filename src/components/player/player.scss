@@ -11,6 +11,33 @@
   border-radius: 3px;
 }
 
+.top__player-playlist {
+  display: flex;
+  width: 100%;
+  height: 30px;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.top__player-pls {
+  width: 30px;
+  height: 30px;
+}
+
+.top__add-icon,
+.top__del-icon {
+  padding: 0;
+  font-size: 1.5rem;
+}
+
+.top__add-icon {
+  color: #b5ecaa;
+}
+
+.top__del-icon {
+ color: #ec66a4;
+}
+
 .top__player-image {
   display: flex;
   align-self: center;
@@ -141,6 +168,17 @@
   border-radius: 10px;
 }
 
+.btn-prev_hidden,
+.btn-next_hidden {
+  visibility: hidden;
+}
+
+.btn-prev_visible,
+.btn-next_visible {
+  visibility: visible;
+}
+
+
 .top__prev-play:hover,
 .top__play-stop:hover,
 .top__next-play:hover {
@@ -199,7 +237,7 @@
 
   .top__player {
     flex-direction: row;
-    padding: 0px;
+    padding: 0;
     // height: 100%;
   }
 
@@ -229,7 +267,7 @@
   .top__player-label {
     min-width: 100px;
     gap: 15px;
-    padding: 0px 8px;
+    padding: 0 8px;
   }
 
   .top__volume-controls {

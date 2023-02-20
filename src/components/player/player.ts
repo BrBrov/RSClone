@@ -5,8 +5,9 @@ export default class Player {
 
   private isPlay = false;
 
-  // TODO: audioSource have duration and currentTime
   public view: PlayerView;
+
+  private mode = false;
 
   constructor() {
     this.view = new PlayerView();
@@ -20,6 +21,11 @@ export default class Player {
       this.stop();
       this.view.setPlayStop();
     }
+
+    this.view.player.dataset.id = `${data.id}`;
+
+    this.view.setPlsIcon(this.checkSongInPls(data.id));
+
     await this.setAudio(data);
 
     const audioStrings: PlayerViewData = {
@@ -30,6 +36,13 @@ export default class Player {
     };
     this.view.setData(audioStrings);
     await this.play();
+  }
+
+  public setMode(): void {
+    this.mode = !this.mode;
+    this.view.btnState(this.mode);
+    const id = Number(this.view.player.dataset.id);
+    this.view.setPlsIcon(this.checkSongInPls(id));
   }
 
   private setAudio(data: SongData): Promise<Event> {
@@ -86,6 +99,8 @@ export default class Player {
 
     const volume: HTMLInputElement = this.view.player.querySelector('.top__volume') as HTMLInputElement;
     volume.addEventListener('input', this.volumeListener.bind(this));
+
+    this.view.player.addEventListener('changemode', this.setMode);
   }
 
   private async playListener(ev: Event): Promise<void> {
@@ -115,5 +130,15 @@ export default class Player {
     ev.stopPropagation();
     const target: HTMLInputElement = ev.target as HTMLInputElement;
     this.audio.volume = Number(target.value) / 100;
+  }
+
+  private checkSongInPls(id: number): boolean | null {
+    const data: string | undefined = sessionStorage.getItem('pls');
+    if (!data) {
+      return null;
+    }
+    const pls: Playlist = JSON.parse(data);
+    console.log(pls);
+    return pls.pls.songsID.includes(id);
   }
 }

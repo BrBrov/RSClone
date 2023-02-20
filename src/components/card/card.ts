@@ -1,6 +1,7 @@
 import './card.scss';
 import Page from '../page';
 import { createByTag } from '../../utils/constants';
+import State from '../../utils/state';
 
 export default class Card {
   public card: HTMLElement;
@@ -19,7 +20,7 @@ export default class Card {
   }
 
   private createCard(data: SongData): HTMLElement {
-    const wrapper = createByTag({ tag: 'div', class: 'top__card', id: `song${data.id}` });
+    const wrapper = createByTag({ tag: 'div', class: 'top__card', id: `${data.id}` });
     const page = this.page;
     wrapper.addEventListener('click', () => page.playSong(data.id));
 
@@ -29,12 +30,26 @@ export default class Card {
     img.src = data.logo;
     img.addEventListener('click', () => page.playSong(data.id));
 
+    const state: State = new State();
+    if (state.getAuth()) {
+      const plsIcon = createByTag({ tag: 'span', class: 'top__song-pls', parent: container });
+      const isSong: boolean | null = this.checkSongInPls(data.id);
+      if (isSong !== null) {
+        if (isSong) {
+          plsIcon.innerHTML = '<i class="top__del-icon fa-solid fa-heart-circle-minus"></i>';
+        } else {
+          plsIcon.innerHTML = '<i class="top__add-icon fa-solid fa-heart-circle-plus"></i>';
+        }
+      }
+    }
+
     container = createByTag({ tag: 'div', class: 'top__label-wrapper', parent: wrapper });
     const titleArt = createByTag({ tag: 'span', class: 'top__song-artist', parent: container });
     titleArt.innerHTML = data.artist;
 
     const titleSong = createByTag({ tag: 'span', class: 'top__song-title', parent: container });
     titleSong.innerHTML = data.title;
+
     return wrapper;
   }
 
@@ -68,5 +83,15 @@ export default class Card {
 
     const animate = new Animation(frames);
     animate.play();
+  }
+
+  private checkSongInPls(id: number): boolean | null {
+    const data: string | undefined = sessionStorage.getItem('pls');
+    if (!data) {
+      return null;
+    }
+    const pls: Playlist = JSON.parse(data);
+    console.log(pls);
+    return pls.pls.songsID.includes(id);
   }
 }

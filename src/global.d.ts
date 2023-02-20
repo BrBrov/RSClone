@@ -39,8 +39,12 @@ declare global {
     user?: string;
   }
 
-  interface RegisteredTokenData {
-    token: string;
-    login: string;
+  interface Playlist {
+    pls: {
+      _id?: string;
+      id: string;
+      tracks: SongData [];
+      songsID: number[];
+    };
   }
 }
