@@ -26,10 +26,10 @@ export default class SearchElem {
 
     const find = document.querySelector('.find__nothing') as HTMLElement;
     if (find !== null) find.innerHTML = lang === 'en' ? 'Nothing found' : 'Ничего не найдено';
-    const find1 = document.querySelector('.top_title_block') as HTMLElement;
+    const find1 = document.querySelector('.top__title-block') as HTMLElement;
     if (find1 !== null)
-      if (lang === 'en') find1.innerHTML.replace('Search results', 'Результаты поиска');
-      else find1.innerHTML.replace('Результаты поиска', 'Search results');
+      if (lang === 'en') find1.innerHTML = find1.innerHTML.replace('Результаты поиска', 'Search results');
+      else find1.innerHTML = find1.innerHTML.replace('Search results', 'Результаты поиска');
   }
 
   private createSearch(): HTMLElement {
