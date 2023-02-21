@@ -81,6 +81,7 @@ export default class Page {
     const rand = Math.round(Math.random() * 330);
     this.base.getOneSong(rand).then((song) => {
       if (song) this.player.add(song);
+      this.base.getPlayList();
     });
 
     this.leftMenu = new LeftMenu(this);
@@ -113,6 +114,14 @@ export default class Page {
   public playSong(id: number): void {
     const curSong = this.songs.find((elem) => elem.id === id);
     if (curSong) this.player.add(curSong);
+  }
+
+  public async getPlayList(): Promise<void> {
+    this.base.getPlayList().then((songs) => {
+      if (songs) {
+        this.showCollectionOfSongs(songs, 'PlayList');
+      }
+    });
   }
 
   public async getSongs(type: string, val: string, title: string, page: number): Promise<void> {

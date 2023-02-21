@@ -11,6 +11,8 @@ class Base {
 
   private static queryOne = base + '/play';
 
+  private static queryAddRate = base + '/rate';
+
   private async get(query: string): Promise<Array<SongData>> {
     const response: Response = await fetch(query, { method: 'GET' });
     const songs: Array<SongData> = await response.json();
@@ -34,6 +36,24 @@ class Base {
     const response: Response = await fetch(Base.queryOne + `?id=${id}`, { method: 'GET' });
     const song: SongData = await response.json();
     return song;
+  }
+
+  public async getPlayList() {
+    const response: Response = await fetch(
+      'http://localhost:8081/playlist?user=qqq&token=12196210851313013683231112176474456123',
+      { method: 'GET' }
+    );
+    const result = await response.json();
+    console.log(result.pls, result.pls.tracks);
+    return result.pls.tracks;
+  }
+
+  public async addView(id: number) {
+    await fetch(Base.queryAddRate + `?id=${id}`, {
+      method: 'POST',
+      body: JSON.stringify(id),
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 }
 export default Base;
