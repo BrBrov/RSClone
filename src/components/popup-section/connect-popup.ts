@@ -384,6 +384,7 @@ export default class LoginPopUp {
             return;
           case '4':
             window.location.reload();
+            break;
           default:
             warn = warning.wrongOops(this.state.getLang());
             singInBlock.append(warn);
