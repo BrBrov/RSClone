@@ -43,4 +43,11 @@ export default class Router {
     this.url.searchParams.set('search', value);
     history.pushState({ search: this.url.search }, '', this.url.search);
   }
+
+  public clear(): void {
+    this.url.searchParams.delete('genre');
+    this.url.searchParams.delete('page');
+    this.url.searchParams.delete('search');
+    history.pushState({}, '', this.url);
+  }
 }
