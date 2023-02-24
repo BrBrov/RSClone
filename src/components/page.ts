@@ -89,11 +89,11 @@ export default class Page {
     const leftSide: HTMLElement = this.body.querySelector('.top__left-menu') as HTMLElement;
     leftSide.append(this.leftMenu.leftMenu);
 
+    this.fillPlayList();
     let tmpGen: GenreData | undefined;
     let tmpPage = 1;
     if (this.router.page !== null) tmpPage = this.router.page;
     if (this.router.genre !== null) tmpGen = this.genres.find((item) => item.key === this.router.genre);
-
     this.base
       .getSet(500, 1)
       .then((songs) => (this.songs = songs))
@@ -121,7 +121,6 @@ export default class Page {
     const state = new State();
     this.base.getPlayList(state.getUser(), state.getToken()).then((songs) => {
       if (songs) {
-        this.playListID = songs.map((elem: SongData) => elem.id);
         this.showCollectionOfSongs(songs, 'PlayList');
         this.router.clear();
       }
@@ -253,8 +252,10 @@ export default class Page {
     const loginConstructor = new LoginPopUp(this.state);
     if (!isAuth) {
       loginConstructor.wndSignIn();
+      this.playListID = [];
     } else {
       loginConstructor.wndAccount();
+      this.fillPlayList();
     }
     const wndAuth = loginConstructor.getWND();
     container.prepend(wndAuth);
@@ -273,5 +274,12 @@ export default class Page {
     this.leftMenu?.switchLang();
     this.login.switchLang(this.state);
     if (this.pagination) this.pagination.switchLang(this.state);
+  }
+
+  private fillPlayList() {
+    const state = new State();
+    this.base.getPlayList(state.getUser(), state.getToken()).then((songs) => {
+      if (songs) this.playListID = songs.map((elem: SongData) => elem.id);
+    });
   }
 }
