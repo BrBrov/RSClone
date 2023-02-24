@@ -23,13 +23,11 @@
 
 .left-menu__href {
   margin-left: 15px;
-  color: #ff6a62;
+  color: #a5b1d5;;
   text-decoration: none;
 }
-.left-menu__href {
-  margin-left: 15px;
+.left-menu__href:hover {
   color: #ff6a62;
-  text-decoration: none;
 }
 
 @media (max-width: 740px) {
@@ -43,7 +41,4 @@
     padding-left: 0px;
   }
 
-  // .left-menu__list-item {
-  //   padding-bottom: 5px;
-  // }
 }

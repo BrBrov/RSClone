@@ -271,12 +271,15 @@ export default class LoginPopUp {
     text = document.createElement('span');
     text.className = 'container__playlist-icon';
     text.innerHTML = '<i class="container__pls-icon fa-solid fa-ear-listen"></i>';
-
     block.append(text);
 
     text = document.createElement('span');
     text.className = 'container__account-playlist';
     text.textContent = this.state.getLang() === 'en' ? 'Playlist' : 'Плейлист';
+    text.addEventListener('click', () => {
+      this.close();
+      document.dispatchEvent(new CustomEvent('showPlayList'));
+    });
 
     block.append(text);
     wrapper.append(block);

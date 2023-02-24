@@ -17,7 +17,7 @@ export default class PlayList {
 
   public switchlanguage(state: State): void {
     const lang = state.getLang();
-    const text = lang === 'en' ? 'PlayList' : 'Избранное';
+    const text = lang === 'en' ? 'PlayList' : 'Плейлист11';
 
     const title = document.querySelector('.top__title-block') as HTMLElement;
     if (title !== null) title.innerHTML = text;

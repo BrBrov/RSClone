@@ -13,6 +13,8 @@ class Base {
 
   private static queryAddRate = base + '/rate';
 
+  private static queryPlaylist = base + '/playlist';
+
   private async get(query: string): Promise<Array<SongData>> {
     const response: Response = await fetch(query, { method: 'GET' });
     const songs: Array<SongData> = await response.json();
@@ -38,20 +40,35 @@ class Base {
     return song;
   }
 
-  public async getPlayList() {
-    const response: Response = await fetch(
-      'http://localhost:8081/playlist?user=qqq&token=12196210851313013683231112176474456123',
-      { method: 'GET' }
-    );
+  public async getPlayList(login: string, token: string) {
+    const response: Response = await fetch(Base.queryPlaylist + `?user=${login}&token=${token}`, { method: 'GET' });
     const result = await response.json();
-    console.log(result.pls, result.pls.tracks);
+    console.log(login, token, result.pls);
     return result.pls.tracks;
+  }
+
+  public async addSongToPlayList(login: string, token: string, id: number) {
+    const response: Response = await fetch(Base.queryPlaylist + `?user=${login}&token=${token}`, {
+      method: 'POST',
+      body: JSON.stringify({ id: id }),
+      headers: { 'Content-Type': 'application/json' },
+    });
+    console.log(response);
+  }
+
+  public async removeSongFromPlayList(login: string, token: string, id: number) {
+    const response: Response = await fetch(Base.queryPlaylist + `?user=${login}&token=${token}`, {
+      method: 'PUT',
+      body: JSON.stringify({ id: id }),
+      headers: { 'Content-Type': 'application/json' },
+    });
+    console.log(response);
   }
 
   public async addView(id: number) {
     await fetch(Base.queryAddRate + `?id=${id}`, {
       method: 'POST',
-      body: JSON.stringify(id),
+      body: JSON.stringify({ id: id }),
       headers: { 'Content-Type': 'application/json' },
     });
   }
