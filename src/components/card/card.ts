@@ -1,6 +1,7 @@
 import './card.scss';
 import Page from '../page';
 import { createByTag } from '../../utils/constants';
+import State from '../../utils/state';
 
 export default class Card {
   public card: HTMLElement;
@@ -30,13 +31,31 @@ export default class Card {
       page.playSong(data.id);
       page.base.addView(data.id);
     });
-
+    const state = new State();
+    if (state.getAuth()) {
+      if (this.page.playListID.indexOf(data.id) >= 0) {
+        const icon = createByTag({ tag: 'i', class: 'fa-heart-circle-minus', parent: wrapper });
+        icon.classList.add('playlist__minus');
+        icon.classList.add('fa-solid');
+        icon.addEventListener('click', () =>
+          document.dispatchEvent(new CustomEvent('changeSongPL', { detail: { id: data.id } }))
+        );
+      } else {
+        const icon = createByTag({ tag: 'i', class: 'fa-heart-circle-plus', parent: wrapper });
+        icon.classList.add('fa-solid');
+        icon.classList.add('playlist__plus');
+        icon.addEventListener('click', () =>
+          document.dispatchEvent(new CustomEvent('changeSongPL', { detail: { id: data.id } }))
+        );
+      }
+    }
     container = createByTag({ tag: 'div', class: 'top__label-wrapper', parent: wrapper });
     const titleArt = createByTag({ tag: 'span', class: 'top__song-artist', parent: container });
     titleArt.innerHTML = data.artist;
 
     const titleSong = createByTag({ tag: 'span', class: 'top__song-title', parent: container });
     titleSong.innerHTML = data.title;
+
     return wrapper;
   }
 

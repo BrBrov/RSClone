@@ -51,6 +51,8 @@ export default class Page {
 
   public router: Router;
 
+  public playListID: Array<number> = [];
+
   constructor(base: Base, router: Router) {
     this.base = base;
     this.router = router;
@@ -81,7 +83,6 @@ export default class Page {
     const rand = Math.round(Math.random() * 330);
     this.base.getOneSong(rand).then((song) => {
       if (song) this.player.add(song);
-      this.base.getPlayList();
     });
 
     this.leftMenu = new LeftMenu(this);
@@ -117,9 +118,12 @@ export default class Page {
   }
 
   public async getPlayList(): Promise<void> {
-    this.base.getPlayList().then((songs) => {
+    const state = new State();
+    this.base.getPlayList(state.getUser(), state.getToken()).then((songs) => {
       if (songs) {
+        this.playListID = songs.map((elem: SongData) => elem.id);
         this.showCollectionOfSongs(songs, 'PlayList');
+        this.router.clear();
       }
     });
   }
@@ -149,7 +153,6 @@ export default class Page {
         if (songs) {
           const language: string | undefined = this.state.getLang();
           const langSwitchData = language === 'en' ? 'Search results' : 'Результаты поиска';
-          // уникализируем выдачу. удаляем повторяющиеся песни
           const arrTitle: Array<string> = [];
           const newArr: Array<SongData> = [];
           songs.forEach((elem: SongData) => {
@@ -226,6 +229,21 @@ export default class Page {
 
     const login = this.body.querySelector('.top__login-wrapper') as HTMLElement;
     login.addEventListener('click', this.loginListener.bind(this));
+
+    document.addEventListener('showPlayList', () => {
+      this.getPlayList();
+    });
+
+    document.addEventListener('changeSongPL', (e: Event) => {
+      const event = <CustomEvent>e;
+      this.changePlayList(event.detail.id);
+    });
+  }
+
+  private changePlayList(id: number): void {
+    const state = new State();
+    if (this.playListID.indexOf(id) >= 0) this.base.removeSongFromPlayList(state.getUser(), state.getToken(), id);
+    else this.base.addSongToPlayList(state.getUser(), state.getToken(), id);
   }
 
   private loginListener(ev: Event): void {
