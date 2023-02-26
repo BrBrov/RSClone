@@ -23,7 +23,7 @@ export default class PlayerView {
 
   private isAnim = false;
 
-  private addPlaylist: HTMLElement;
+  public addPlaylist: HTMLElement;
 
   private animate: Animation | null;
 

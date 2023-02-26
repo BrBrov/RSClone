@@ -121,6 +121,17 @@ export default class Player {
 
     const volume: HTMLInputElement = this.view.player.querySelector('.top__volume') as HTMLInputElement;
     volume.addEventListener('input', this.volumeListener.bind(this));
+
+    this.view.addPlaylist.addEventListener('click', (ev: Event) => {
+      ev.stopPropagation();
+      const idSong = this.view.player.dataset.id;
+      if (this.checkSongInPls(Number(idSong))) {
+        this.view.setPlsIcon(false);
+      } else {
+        this.view.setPlsIcon(true);
+      }
+      document.dispatchEvent(new CustomEvent('changeSongPL', { detail: { id: Number(idSong) } }));
+    });
   }
 
   private async playListener(ev: Event): Promise<void> {
