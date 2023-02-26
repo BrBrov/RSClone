@@ -457,6 +457,7 @@ export default class LoginPopUp {
     this.state.setUser('');
     this.state.setToken('');
     this.state.setAuth(false);
+    sessionStorage.clear();
     window.location.reload();
   }
 }

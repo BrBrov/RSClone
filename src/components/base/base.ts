@@ -1,4 +1,5 @@
 import { nSongInPage, base } from '../../utils/constants';
+import State from '../../utils/state';
 
 class Base {
   private static queryUser = base + '/login';
@@ -14,6 +15,14 @@ class Base {
   private static queryAddRate = base + '/rate';
 
   private static queryPlaylist = base + '/playlist';
+
+  private queryPls = base + '/playlist';
+
+  public state: State;
+
+  constructor() {
+    this.state = new State();
+  }
 
   private async get(query: string): Promise<Array<SongData>> {
     const response: Response = await fetch(query, { method: 'GET' });

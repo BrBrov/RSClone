@@ -15,6 +15,7 @@ export default class SongsBlock {
 
   public switchLang(): void {
     const title = this.songsBlock.querySelector('.top__title-block') as HTMLSpanElement;
+    console.log(title.textContent);
     const text = title.textContent;
 
     switch (text) {
@@ -22,12 +23,12 @@ export default class SongsBlock {
         title.textContent = 'Популярные песни';
         break;
       case 'Recently played':
-        title.textContent = 'Недавно звучало';
+        title.textContent = 'Слушают сейчас';
         break;
       case 'Популярные песни':
         title.textContent = 'Popular songs';
         break;
-      case 'Недавно играло':
+      case 'Слушают сейчас':
         title.textContent = 'Recently played';
         break;
     }

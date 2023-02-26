@@ -20,13 +20,14 @@ export default class Card {
   }
 
   private createCard(data: SongData): HTMLElement {
-    const wrapper = createByTag({ tag: 'div', class: 'top__card', id: `song${data.id}` });
+    const wrapper = createByTag({ tag: 'div', class: 'top__card', id: `${data.id}` });
     const page = this.page;
 
     let container = createByTag({ tag: 'div', class: 'top__song-wrapper', parent: wrapper });
     const img = <HTMLImageElement>createByTag({ tag: 'img', class: 'top__song-img', parent: container });
     img.alt = data.title;
     img.src = data.logo;
+
     img.addEventListener('click', () => {
       page.playSong(data.id);
       page.base.addView(data.id);
@@ -49,6 +50,7 @@ export default class Card {
         );
       }
     }
+
     container = createByTag({ tag: 'div', class: 'top__label-wrapper', parent: wrapper });
     const titleArt = createByTag({ tag: 'span', class: 'top__song-artist', parent: container });
     titleArt.innerHTML = data.artist;
@@ -89,5 +91,15 @@ export default class Card {
 
     const animate = new Animation(frames);
     animate.play();
+  }
+
+  private checkSongInPls(id: number): boolean | null {
+    const data: string | undefined = sessionStorage.getItem('pls');
+    if (!data) {
+      return null;
+    }
+    const pls: Playlist = JSON.parse(data);
+    console.log(pls);
+    return pls.pls.songsID.includes(id);
   }
 }

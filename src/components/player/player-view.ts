@@ -9,23 +9,25 @@ import '../../assets/svg/next.svg';
 export default class PlayerView {
   public player: HTMLElement;
 
-  private imgArtist: HTMLImageElement | undefined;
+  private imgArtist: HTMLImageElement;
 
-  private artist: HTMLSpanElement | undefined;
+  private artist: HTMLSpanElement;
 
-  private title: HTMLSpanElement | undefined;
+  private title: HTMLSpanElement;
 
-  private current: HTMLSpanElement | undefined;
+  private current: HTMLSpanElement;
 
-  private duration: HTMLSpanElement | undefined;
+  private duration: HTMLSpanElement;
 
-  private volume: HTMLInputElement | undefined;
+  private volume: HTMLInputElement;
 
   private isAnim = false;
 
+  private addPlaylist: HTMLElement;
+
   private animate: Animation | null;
 
-  public timeControl: HTMLInputElement | undefined;
+  public timeControl: HTMLInputElement;
 
   constructor() {
     this.animate = null;
@@ -112,11 +114,44 @@ export default class PlayerView {
     this.current.textContent = `${minute}:${seconds}`;
   }
 
+  public setPlsIcon(isContain: boolean | null): void {
+    if (isContain === null) {
+      this.addPlaylist.innerHTML = '';
+    } else if (!isContain) {
+      this.addPlaylist.innerHTML = '<i class="top__add-icon fa-solid fa-heart-circle-plus"></i>';
+    } else {
+      this.addPlaylist.innerHTML = '<i class="top__del-icon fa-solid fa-heart-circle-minus"></i>';
+    }
+  }
+
+  public btnState(mode: boolean): void {
+    const prev = this.player.querySelector('.top__btn-prev') as HTMLElement;
+    const next = this.player.querySelector('.top__btn-next') as HTMLElement;
+
+    if (mode) {
+      prev.className = 'top__prev-play btn-prev_visible';
+      next.className = 'top__next-play btn-next_visible';
+    } else {
+      prev.className = 'top__prev-play btn-prev_hidden';
+      next.className = 'top__next-play btn-next_hidden';
+    }
+  }
+
   private createPlayer(): HTMLElement {
     const wrapper: HTMLElement = document.createElement('div');
     wrapper.className = 'top__player';
 
     let container: HTMLElement = document.createElement('div');
+    container.className = 'top__player-playlist';
+
+    wrapper.append(container);
+
+    this.addPlaylist = document.createElement('div');
+    this.addPlaylist.className = 'top__player-pls';
+
+    container.append(this.addPlaylist);
+
+    container = document.createElement('div');
     container.className = 'top__player-image';
 
     this.imgArtist = document.createElement('img');
@@ -172,7 +207,7 @@ export default class PlayerView {
   }
 
   private btnCreate(block: HTMLElement): void {
-    const arrClasses = ['top__prev-play', 'top__play-stop', 'top__next-play'];
+    const arrClasses = ['top__prev-play btn-prev_hidden', 'top__play-stop', 'top__next-play btn-next_hidden'];
     const linksArr = ['./assets/svg/prev.svg', './assets/svg/play.svg', './assets/svg/next.svg'];
     const imgClassesArr = ['top__btn-prev', 'top__btn-play', 'top__btn-next'];
     const altArr = ['Previous', 'Play', 'Next'];
