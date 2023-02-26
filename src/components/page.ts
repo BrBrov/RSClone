@@ -101,6 +101,10 @@ export default class Page {
         if (this.state.getAuth()) {
           return this.base.getPlayList(this.state.getUser(), this.state.getToken());
         }
+        return null;
+      })
+      .then((data: PlsData | null) => {
+        if (data) this.playListID = data.tracks.map((elem: SongData) => elem.id);
       })
       .then(() => {
         for (let i = 0; i < this.genres.length; i += 1) {
@@ -123,11 +127,11 @@ export default class Page {
   }
 
   public async getPlayList(): Promise<void> {
-    this.base.getPlayList(this.state.getUser(), this.state.getToken()).then((songs: Playlist) => {
+    this.base.getPlayList(this.state.getUser(), this.state.getToken()).then((songs: PlsData) => {
       if (songs) {
-        this.playListID = songs.pls.tracks.map((elem: SongData) => elem.id);
+        this.playListID = songs.tracks.map((elem: SongData) => elem.id);
         const title: string = this.state.getLang() === 'en' ? 'Playlist' : 'Плейлист';
-        this.showCollectionOfSongs(songs.pls.tracks, title);
+        this.showCollectionOfSongs(songs.tracks, title);
         this.router.clear();
       }
     });
@@ -246,10 +250,18 @@ export default class Page {
     });
   }
 
-  private changePlayList(id: number): void {
-    if (this.playListID.indexOf(id) >= 0)
-      this.base.removeSongFromPlayList(this.state.getUser(), this.state.getToken(), id);
-    else this.base.addSongToPlayList(this.state.getUser(), this.state.getToken(), id);
+  private async changePlayList(id: number): Promise<void> {
+    let pls: Playlist;
+    console.log(this.playListID.includes(id));
+    if (this.playListID.includes(id)) {
+      console.log('-');
+      pls = await this.base.removeSongFromPlayList(this.state.getUser(), this.state.getToken(), id);
+    } else {
+      console.log('+');
+      pls = await this.base.addSongToPlayList(this.state.getUser(), this.state.getToken(), id);
+    }
+    this.playListID = pls.pls.songsID;
+    console.log(pls);
   }
 
   private loginListener(ev: Event): void {

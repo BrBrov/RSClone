@@ -1,7 +1,6 @@
 import './card.scss';
 import Page from '../page';
 import { createByTag } from '../../utils/constants';
-import State from '../../utils/state';
 
 export default class Card {
   public card: HTMLElement;
@@ -32,23 +31,27 @@ export default class Card {
       page.playSong(data.id);
       page.base.addView(data.id);
     });
-    const state = new State();
-    if (state.getAuth()) {
-      if (this.page.playListID.indexOf(data.id) >= 0) {
-        const icon = createByTag({ tag: 'i', class: 'fa-heart-circle-minus', parent: wrapper });
+    const icon = createByTag({ tag: 'i', class: 'top__add-del', parent: wrapper });
+    if (this.page.state.getAuth()) {
+      if (this.page.playListID.includes(data.id)) {
+        icon.classList.add('fa-solid');
+        icon.classList.add('fa-heart-circle-minus');
         icon.classList.add('playlist__minus');
-        icon.classList.add('fa-solid');
-        icon.addEventListener('click', () =>
-          document.dispatchEvent(new CustomEvent('changeSongPL', { detail: { id: data.id } }))
-        );
       } else {
-        const icon = createByTag({ tag: 'i', class: 'fa-heart-circle-plus', parent: wrapper });
         icon.classList.add('fa-solid');
+        icon.classList.add('fa-heart-circle-plus');
         icon.classList.add('playlist__plus');
-        icon.addEventListener('click', () =>
-          document.dispatchEvent(new CustomEvent('changeSongPL', { detail: { id: data.id } }))
-        );
       }
+
+      icon.addEventListener('click', (ev: Event) => {
+        ev.stopPropagation();
+        document.dispatchEvent(new CustomEvent('changeSongPL', { detail: { id: data.id } }));
+        if (icon.className === 'top__add-del fa-solid fa-heart-circle-minus playlist__minus') {
+          icon.className = 'top__add-del fa-solid fa-heart-circle-plus playlist__plus';
+        } else {
+          icon.className = 'top__add-del fa-solid fa-heart-circle-minus playlist__minus';
+        }
+      });
     }
 
     container = createByTag({ tag: 'div', class: 'top__label-wrapper', parent: wrapper });
@@ -91,15 +94,5 @@ export default class Card {
 
     const animate = new Animation(frames);
     animate.play();
-  }
-
-  private checkSongInPls(id: number): boolean | null {
-    const data: string | undefined = sessionStorage.getItem('pls');
-    if (!data) {
-      return null;
-    }
-    const pls: Playlist = JSON.parse(data);
-    console.log(pls);
-    return pls.pls.songsID.includes(id);
   }
 }
