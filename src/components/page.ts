@@ -244,7 +244,6 @@ export default class Page {
 
     document.addEventListener('showPlayList', () => {
       this.plsShow = true;
-      this.player.setMode();
       this.getPlayList();
     });
 

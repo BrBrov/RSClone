@@ -10,6 +10,10 @@ export default class Player {
 
   private mode = false;
 
+  private ready = true;
+
+  private firstLoad = false;
+
   constructor() {
     const state = new State();
     if (state.getAuth()) {
@@ -22,6 +26,7 @@ export default class Player {
   }
 
   public async add(data: SongData): Promise<void> {
+    this.ready = false;
     if (this.isPlay) {
       this.stop();
       this.view.setPlayStop();
@@ -33,27 +38,22 @@ export default class Player {
       this.view.setPlsIcon(this.checkSongInPls(data.id));
     }
 
-    await this.setAudio(data);
+    const result: Event | string = await this.setAudio(data);
 
-    const audioStrings: PlayerViewData = {
-      artist: data.artist,
-      title: data.title,
-      duration: this.audio.duration,
-      logo: data.logo,
-    };
-    this.view.setData(audioStrings);
-    await this.play();
+    console.log(result);
   }
 
-  public setMode(): void {
-    this.mode = !this.mode;
-    const id = Number(this.view.player.dataset.id);
-    this.view.setPlsIcon(this.checkSongInPls(id));
-  }
-
-  private setAudio(data: SongData): Promise<Event> {
+  private setAudio(data: SongData): Promise<Event | string> {
     return new Promise((resolve, reject) => {
       this.audio.src = data.file;
+
+      this.audio.oncanplay = () => {
+        if (this.firstLoad) {
+          this.play();
+        } else {
+          this.firstLoad = true;
+        }
+      };
 
       this.audio.onloadedmetadata = () => {
         const audioStrings: PlayerViewData = {
@@ -65,8 +65,23 @@ export default class Player {
 
         this.view.setData(audioStrings);
       };
-      this.audio.onload = (ev: Event) => resolve(ev);
-      this.audio.onerror = (err: Event | string) => reject(err);
+      this.audio.onload = (ev: Event) => {
+        this.ready = true;
+
+        const audioStrings: PlayerViewData = {
+          artist: data.artist,
+          title: data.title,
+          duration: this.audio.duration,
+          logo: data.logo,
+        };
+        this.view.setData(audioStrings);
+        resolve(ev);
+      };
+      this.audio.onerror = (err: Event | string) => {
+        this.ready = true;
+        console.log(`Can\'t load track: ${err}`);
+        reject(err);
+      };
       this.audio.onended = () => {
         this.stop();
         this.isPlay = false;
@@ -106,8 +121,6 @@ export default class Player {
 
     const volume: HTMLInputElement = this.view.player.querySelector('.top__volume') as HTMLInputElement;
     volume.addEventListener('input', this.volumeListener.bind(this));
-
-    this.view.player.addEventListener('changemode', this.setMode);
   }
 
   private async playListener(ev: Event): Promise<void> {
