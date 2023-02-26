@@ -49,7 +49,7 @@ class Base {
     return song;
   }
 
-  public async getPlayList(login: string, token: string) {
+  public async getPlaylist(login: string, token: string) {
     const response: Response = await fetch(Base.queryPlaylist + `?user=${login}&token=${token}`, { method: 'GET' });
     const result = await response.json();
     console.log(login, token, result.pls);

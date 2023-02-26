@@ -81,12 +81,9 @@ export default class Page {
     playerWrapper.append(this.player.view.player);
 
     const rand = Math.round(Math.random() * 330);
-    this.base
-      .getPlaylist()
-      .then(() => this.base.getOneSong(rand))
-      .then((song) => {
-        if (song) this.player.add(song);
-      });
+    this.base.getOneSong(rand).then((song) => {
+      if (song) this.player.add(song);
+    });
 
     this.leftMenu = new LeftMenu(this);
     const leftSide: HTMLElement = this.body.querySelector('.top__left-menu') as HTMLElement;
@@ -122,7 +119,7 @@ export default class Page {
 
   public async getPlayList(): Promise<void> {
     const state = new State();
-    this.base.getPlayList(state.getUser(), state.getToken()).then((songs) => {
+    this.base.getPlaylist(state.getUser(), state.getToken()).then((songs) => {
       if (songs) {
         this.playListID = songs.map((elem: SongData) => elem.id);
         this.showCollectionOfSongs(songs, 'PlayList');
