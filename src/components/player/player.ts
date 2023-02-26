@@ -1,4 +1,5 @@
 import PlayerView from './player-view';
+import State from '../../utils/state';
 
 export default class Player {
   private audio: HTMLAudioElement;
@@ -10,6 +11,10 @@ export default class Player {
   private mode = false;
 
   constructor() {
+    const state = new State();
+    if (state.getAuth()) {
+      this.mode = true;
+    }
     this.view = new PlayerView();
     this.audio = new Audio();
     this.audio.volume = 0.5;
@@ -24,7 +29,9 @@ export default class Player {
 
     this.view.player.dataset.id = `${data.id}`;
 
-    this.view.setPlsIcon(this.checkSongInPls(data.id));
+    if (this.mode) {
+      this.view.setPlsIcon(this.checkSongInPls(data.id));
+    }
 
     await this.setAudio(data);
 
@@ -40,7 +47,6 @@ export default class Player {
 
   public setMode(): void {
     this.mode = !this.mode;
-    this.view.btnState(this.mode);
     const id = Number(this.view.player.dataset.id);
     this.view.setPlsIcon(this.checkSongInPls(id));
   }
@@ -56,6 +62,7 @@ export default class Player {
           duration: this.audio.duration,
           logo: data.logo,
         };
+
         this.view.setData(audioStrings);
       };
       this.audio.onload = (ev: Event) => resolve(ev);

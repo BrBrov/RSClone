@@ -124,19 +124,6 @@ export default class PlayerView {
     }
   }
 
-  public btnState(mode: boolean): void {
-    const prev = this.player.querySelector('.top__btn-prev') as HTMLElement;
-    const next = this.player.querySelector('.top__btn-next') as HTMLElement;
-
-    if (mode) {
-      prev.className = 'top__prev-play btn-prev_visible';
-      next.className = 'top__next-play btn-next_visible';
-    } else {
-      prev.className = 'top__prev-play btn-prev_hidden';
-      next.className = 'top__next-play btn-next_hidden';
-    }
-  }
-
   private createPlayer(): HTMLElement {
     const wrapper: HTMLElement = document.createElement('div');
     wrapper.className = 'top__player';
@@ -207,24 +194,17 @@ export default class PlayerView {
   }
 
   private btnCreate(block: HTMLElement): void {
-    const arrClasses = ['top__prev-play btn-prev_hidden', 'top__play-stop', 'top__next-play btn-next_hidden'];
-    const linksArr = ['./assets/svg/prev.svg', './assets/svg/play.svg', './assets/svg/next.svg'];
-    const imgClassesArr = ['top__btn-prev', 'top__btn-play', 'top__btn-next'];
-    const altArr = ['Previous', 'Play', 'Next'];
-
-    arrClasses.forEach((classElem: string, i: number): void => {
-      const btn: HTMLButtonElement = document.createElement('button');
-      btn.className = classElem;
-      const img: HTMLImageElement = document.createElement('img');
-      img.className = imgClassesArr[i];
-      img.alt = altArr[i];
-      img.src = linksArr[i];
-      if (altArr[i] === 'Play') {
-        img.dataset.mode = 'play';
-      }
-      btn.append(img);
-      block.append(btn);
-    });
+    const btn: HTMLButtonElement = document.createElement('button');
+    btn.className = 'top__play-stop';
+    const img: HTMLImageElement = document.createElement('img');
+    img.className = 'top__btn-play';
+    img.alt = 'Play';
+    img.src = './assets/svg/play.svg';
+    if (img.alt === 'Play') {
+      img.dataset.mode = 'play';
+    }
+    btn.append(img);
+    block.append(btn);
   }
 
   private addDurationElems(block: HTMLElement): void {

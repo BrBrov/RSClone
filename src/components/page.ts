@@ -19,7 +19,7 @@ import LoginPopUp from './popup-section/connect-popup';
 export default class Page {
   private body: HTMLElement;
 
-  readonly state: State;
+  public readonly state: State;
 
   private logo: Logo;
 
@@ -31,27 +31,29 @@ export default class Page {
 
   private player: Player;
 
-  private songsBlockPopular: SongsBlock | undefined;
+  private songsBlockPopular: SongsBlock;
 
-  private songsBlockRecently: SongsBlock | undefined;
+  private songsBlockRecently: SongsBlock;
 
-  private pagination: Pagination | undefined;
+  private pagination: Pagination;
 
-  private genresBlock: GenresBlock | undefined;
+  private genresBlock: GenresBlock;
 
-  private leftMenu: LeftMenu | undefined;
+  private leftMenu: LeftMenu;
 
-  public songs: Array<SongData> = [];
+  private songs: Array<SongData> = [];
 
   public genres: Array<GenreData> = genres;
 
-  public curGenre: GenreData | undefined;
+  public curGenre: GenreData;
 
   public base: Base;
 
   public router: Router;
 
   public playListID: Array<number> = [];
+
+  private plsShow = false;
 
   constructor(base: Base, router: Router) {
     this.base = base;
@@ -241,6 +243,8 @@ export default class Page {
     login.addEventListener('click', this.loginListener.bind(this));
 
     document.addEventListener('showPlayList', () => {
+      this.plsShow = true;
+      this.player.setMode();
       this.getPlayList();
     });
 
@@ -252,16 +256,16 @@ export default class Page {
 
   private async changePlayList(id: number): Promise<void> {
     let pls: Playlist;
-    console.log(this.playListID.includes(id));
     if (this.playListID.includes(id)) {
-      console.log('-');
       pls = await this.base.removeSongFromPlayList(this.state.getUser(), this.state.getToken(), id);
     } else {
-      console.log('+');
       pls = await this.base.addSongToPlayList(this.state.getUser(), this.state.getToken(), id);
     }
     this.playListID = pls.pls.songsID;
-    console.log(pls);
+    sessionStorage.setItem('pls', JSON.stringify(pls.pls));
+    if (this.plsShow) {
+      this.replacePlsCards(pls.pls.tracks);
+    }
   }
 
   private loginListener(ev: Event): void {
@@ -297,5 +301,12 @@ export default class Page {
     if (plsTitle.textContent === 'Playlist' || plsTitle.textContent === 'Плейлист') {
       plsTitle.textContent = this.state.getLang() === 'en' ? 'Playlist' : 'Плейлист';
     }
+  }
+
+  private replacePlsCards(data: SongData[]): void {
+    const block = this.body.querySelector('.top__cards-block');
+    block.replaceChildren();
+    const title: string = this.state.getLang() === 'en' ? 'Playlist' : 'Плейлист';
+    this.showCollectionOfSongs(data, title);
   }
 }
