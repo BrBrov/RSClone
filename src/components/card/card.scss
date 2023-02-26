@@ -1,8 +1,6 @@
 .top__card {
   position: relative;
   z-index: 0;
-  // width: 200px;
-  // height: 200px;
   width: clamp(120px, 15vw, 200px);
   height: clamp(120px, 15vw, 200px);
   overflow: hidden;

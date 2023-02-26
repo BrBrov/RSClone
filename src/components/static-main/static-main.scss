@@ -89,17 +89,44 @@
   background-color: #191919;
 }
 
-.footer__git-wrapper {
+.footer__git {
+  display: flex;
+  width: 160px;
+  height: 30px;
+  justify-content: space-between;
+}
+
+.footer__git-wrapper-a,
+.footer__git-wrapper-b,
+.footer__git-wrapper-c {
   display: flex;
   width: 30px;
   height: 30px;
   justify-content: center;
+  border-radius: 3px;
+}
+
+.footer__git-wrapper-a {
+  background-color: rgba(60, 116, 0, 0.5);
+}
+
+.footer__git-wrapper-b,
+.footer__git-wrapper-c {
+  background-color: rgb(57, 57, 57);
+}
+
+.footer__git-wrapper-year {
+  display: flex;
+  width: 30px;
+  height: 30px;
+  justify-content: center;
+  align-items: center;
 }
 
 .footer__rs-wrapper {
   display: flex;
-  width: 20px;
-  height: 20px;
+  width: 27px;
+  height: 27px;
   justify-content: center;
 }
 
@@ -115,7 +142,6 @@
 
   .top {
     width: 125%;
-    // flex-direction: column-reverse;
     flex-direction: column;
   }
 
@@ -127,7 +153,6 @@
   }
 
   .top__left-side {
-    // padding: 0 35px;
     padding: 0 5%;
     width: 70%;
   }

@@ -50,8 +50,11 @@ export default class StaticMain {
   }
 
   private createFooter(footer: HTMLElement): void {
+    const wrappergit: HTMLElement = document.createElement('div');
+    wrappergit.className = 'footer__git';
+
     let wrapper: HTMLElement = document.createElement('div');
-    wrapper.className = 'footer__git-wrapper';
+    wrapper.className = 'footer__git-wrapper-a';
 
     let img: HTMLImageElement = document.createElement('img');
     img.className = 'footer__git-img';
@@ -59,10 +62,45 @@ export default class StaticMain {
     img.src = './assets/svg/git.svg';
 
     img.addEventListener('click', (): void => {
-      location.href = 'https://github.com/BrBrov/RSClone';
+      location.href = 'https://github.com/BrBrov';
     });
-
     wrapper.append(img);
+    wrappergit.append(wrapper);
+
+    wrapper = document.createElement('div');
+    wrapper.className = 'footer__git-wrapper-b';
+
+    img = document.createElement('img');
+    img.className = 'footer__git-img';
+    img.alt = 'Git';
+    img.src = './assets/svg/git.svg';
+
+    img.addEventListener('click', (): void => {
+      location.href = 'https://github.com/irinapika';
+    });
+    wrapper.append(img);
+    wrappergit.append(wrapper);
+
+    wrapper = document.createElement('div');
+    wrapper.className = 'footer__git-wrapper-c';
+
+    img = document.createElement('img');
+    img.className = 'footer__git-img';
+    img.alt = 'Git';
+    img.src = './assets/svg/git.svg';
+
+    img.addEventListener('click', (): void => {
+      location.href = 'https://github.com/dzmitrysh';
+    });
+    wrapper.append(img);
+    wrappergit.append(wrapper);
+    footer.append(wrappergit);
+
+    const span: HTMLSpanElement = document.createElement('span');
+    span.innerText = '2023';
+    wrapper = document.createElement('div');
+    wrapper.className = 'footer__git-wrapper-year';
+    wrapper.append(span);
     footer.append(wrapper);
 
     wrapper = document.createElement('div');
