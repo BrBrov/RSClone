@@ -19,7 +19,7 @@ import LoginPopUp from './popup-section/connect-popup';
 export default class Page {
   private body: HTMLElement;
 
-  private readonly state: State;
+  readonly state: State;
 
   private logo: Logo;
 
@@ -118,7 +118,7 @@ export default class Page {
   }
 
   public playSong(id: number): void {
-    const curSong = this.songs.find((elem) => elem.id === id);
+    const curSong: SongData = this.songs.find((elem: SongData) => elem.id === id);
     if (curSong) this.player.add(curSong);
   }
 
@@ -126,7 +126,8 @@ export default class Page {
     this.base.getPlayList(this.state.getUser(), this.state.getToken()).then((songs: Playlist) => {
       if (songs) {
         this.playListID = songs.pls.tracks.map((elem: SongData) => elem.id);
-        this.showCollectionOfSongs(songs.pls.tracks, 'PlayList');
+        const title: string = this.state.getLang() === 'en' ? 'Playlist' : 'Плейлист';
+        this.showCollectionOfSongs(songs.pls.tracks, title);
         this.router.clear();
       }
     });
@@ -246,9 +247,9 @@ export default class Page {
   }
 
   private changePlayList(id: number): void {
-    const state = new State();
-    if (this.playListID.indexOf(id) >= 0) this.base.removeSongFromPlayList(state.getUser(), state.getToken(), id);
-    else this.base.addSongToPlayList(state.getUser(), state.getToken(), id);
+    if (this.playListID.indexOf(id) >= 0)
+      this.base.removeSongFromPlayList(this.state.getUser(), this.state.getToken(), id);
+    else this.base.addSongToPlayList(this.state.getUser(), this.state.getToken(), id);
   }
 
   private loginListener(ev: Event): void {
@@ -279,5 +280,9 @@ export default class Page {
     this.login.switchLang(this.state);
     this.logo.switchLang(this.state);
     if (this.pagination) this.pagination.switchLang(this.state);
+    const plsTitle = document.querySelector('.top__title-block') as HTMLElement;
+    if (plsTitle) {
+      plsTitle.textContent = plsTitle.textContent === 'Playlist' ? 'Плейлист' : 'Playlist';
+    }
   }
 }

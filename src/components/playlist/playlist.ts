@@ -15,14 +15,6 @@ export default class PlayList {
     return this.playList;
   }
 
-  public switchlanguage(state: State): void {
-    const lang = state.getLang();
-    const text = lang === 'en' ? 'PlayList' : 'Плейлист11';
-
-    const title = document.querySelector('.top__title-block') as HTMLElement;
-    if (title !== null) title.innerHTML = text;
-  }
-
   private createPlayList(): HTMLElement {
     const wrapper: HTMLElement = document.createElement('div');
     wrapper.className = 'top__pl-wrapper';
