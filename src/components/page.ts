@@ -280,9 +280,10 @@ export default class Page {
     this.login.switchLang(this.state);
     this.logo.switchLang(this.state);
     if (this.pagination) this.pagination.switchLang(this.state);
-    const plsTitle = document.querySelector('.top__title-block') as HTMLElement;
-    if (plsTitle) {
-      plsTitle.textContent = plsTitle.textContent === 'Playlist' ? 'Плейлист' : 'Playlist';
+    const plsTitle: HTMLElement = document.querySelector('.top__title-block');
+    if (!plsTitle) return;
+    if (plsTitle.textContent === 'Playlist' || plsTitle.textContent === 'Плейлист') {
+      plsTitle.textContent = this.state.getLang() === 'en' ? 'Playlist' : 'Плейлист';
     }
   }
 }

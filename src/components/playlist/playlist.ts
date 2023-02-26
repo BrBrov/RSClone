@@ -1,4 +1,3 @@
-import State from '../../utils/state';
 import Page from '../page';
 
 export default class PlayList {

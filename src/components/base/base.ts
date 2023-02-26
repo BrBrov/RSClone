@@ -1,8 +1,7 @@
-import {base, nSongInPage} from '../../utils/constants';
+import { base, nSongInPage } from '../../utils/constants';
 import State from '../../utils/state';
 
 class Base {
-
   private static queryRandom = base + '/random';
 
   private static querySearch = base + '/search';
@@ -23,7 +22,7 @@ class Base {
 
   private async get(query: string): Promise<Array<SongData>> {
     const response: Response = await fetch(query, { method: 'GET' });
-    return await response.json();
+    return response.json();
   }
 
   public getSearch = async (search = ''): Promise<Array<SongData>> => this.get(Base.querySearch + `?string=${search}`);
@@ -41,7 +40,7 @@ class Base {
 
   public async getOneSong(id = 1): Promise<SongData> {
     const response: Response = await fetch(Base.queryOne + `?id=${id}`, { method: 'GET' });
-    return await response.json();
+    return response.json();
   }
 
   public async getPlayList(login: string, token: string): Promise<Playlist> {
