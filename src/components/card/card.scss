@@ -1,8 +1,6 @@
 .top__card {
   position: relative;
   z-index: 0;
-  // width: 200px;
-  // height: 200px;
   width: clamp(120px, 15vw, 200px);
   height: clamp(120px, 15vw, 200px);
   overflow: hidden;
@@ -66,7 +64,7 @@
   top: 15px;
   right: 15px;
   font-size: 20px;
-  color: #5e1111;
+  color: #0fb25e;
   background: white;
   border-radius: 5px;
   width: 12px;
@@ -77,16 +75,16 @@
   top: 15px;
   right: 15px;
   font-size: 20px;
-  color: forestgreen;
+  color: #b2356d;
   background: white;
   border-radius: 5px;
   width: 12px;
 }
 
 .playlist__plus:hover{
-  color: forestgreen;
+  color: #03692d;
 }
 
 .playlist__minus:hover{
-  color: #5e1111;
+  color: #f10505;
 }

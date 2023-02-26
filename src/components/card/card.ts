@@ -71,7 +71,7 @@ export default class Card {
     ev.stopPropagation();
     const label: HTMLElement = this.card.querySelector('.top__label-wrapper') as HTMLElement;
 
-    const frames = new KeyframeEffect(label, [{ transform: 'translateY(-140px)' }], {
+    const frames = new KeyframeEffect(label, [{ transform: 'translateY(-150%)' }], {
       duration: 1000,
       fill: 'forwards',
     });
@@ -84,7 +84,7 @@ export default class Card {
     ev.stopPropagation();
     const label: HTMLElement = this.card.querySelector('.top__label-wrapper') as HTMLElement;
 
-    const frames = new KeyframeEffect(label, [{ transform: 'translateY(140px)' }], {
+    const frames = new KeyframeEffect(label, [{ transform: 'translateY(150%)' }], {
       duration: 1000,
       fill: 'forwards',
     });

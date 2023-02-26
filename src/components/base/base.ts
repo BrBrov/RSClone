@@ -49,11 +49,11 @@ class Base {
     return song;
   }
 
-  public async getPlayList(login: string, token: string) {
+  public async getPlayList(login: string, token: string): Promise<Playlist> {
     const response: Response = await fetch(Base.queryPlaylist + `?user=${login}&token=${token}`, { method: 'GET' });
-    const result = await response.json();
-    console.log(login, token, result.pls);
-    return result.pls.tracks;
+    const result: Playlist = await response.json();
+    sessionStorage.setItem('pls', JSON.stringify(result.pls));
+    return result;
   }
 
   public async addSongToPlayList(login: string, token: string, id: number) {

@@ -81,12 +81,9 @@ export default class Page {
     playerWrapper.append(this.player.view.player);
 
     const rand = Math.round(Math.random() * 330);
-    this.base
-      .getPlaylist()
-      .then(() => this.base.getOneSong(rand))
-      .then((song) => {
-        if (song) this.player.add(song);
-      });
+    this.base.getOneSong(rand).then((song: SongData) => {
+      if (song) this.player.add(song);
+    });
 
     this.leftMenu = new LeftMenu(this);
     const leftSide: HTMLElement = this.body.querySelector('.top__left-menu') as HTMLElement;
@@ -99,7 +96,12 @@ export default class Page {
 
     this.base
       .getSet(500, 1)
-      .then((songs) => (this.songs = songs))
+      .then((songs: SongData[]) => (this.songs = songs))
+      .then(() => {
+        if (this.state.getAuth()) {
+          return this.base.getPlayList(this.state.getUser(), this.state.getToken());
+        }
+      })
       .then(() => {
         for (let i = 0; i < this.genres.length; i += 1) {
           const arr = this.songs.filter((elem) => elem.genre === this.genres[i].key);
@@ -121,11 +123,10 @@ export default class Page {
   }
 
   public async getPlayList(): Promise<void> {
-    const state = new State();
-    this.base.getPlayList(state.getUser(), state.getToken()).then((songs) => {
+    this.base.getPlayList(this.state.getUser(), this.state.getToken()).then((songs: Playlist) => {
       if (songs) {
-        this.playListID = songs.map((elem: SongData) => elem.id);
-        this.showCollectionOfSongs(songs, 'PlayList');
+        this.playListID = songs.pls.tracks.map((elem: SongData) => elem.id);
+        this.showCollectionOfSongs(songs.pls.tracks, 'PlayList');
         this.router.clear();
       }
     });

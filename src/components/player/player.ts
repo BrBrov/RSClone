@@ -137,8 +137,7 @@ export default class Player {
     if (!data) {
       return null;
     }
-    const pls: Playlist = JSON.parse(data);
-    console.log(pls);
-    return pls.pls.songsID.includes(id);
+    const pls: PlsData = JSON.parse(data);
+    return pls.songsID.includes(id);
   }
 }
