@@ -43,12 +43,7 @@
   align-items: center;
   gap: 8px;
   backdrop-filter: brightness(50%);
-  // transform: translateY(-10px);
 }
-
-// .top__label-wrapper:hover {
-//   transform: translateY(10px);
-// }
 
 .top__song-artist,
 .top__song-title {
@@ -64,4 +59,34 @@
 .top__song-title {
   font-size: 0.8rem;
   font-weight: 400;
+}
+
+.playlist__plus{
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 20px;
+  color: #5e1111;
+  background: white;
+  border-radius: 5px;
+  width: 12px;
+}
+
+.playlist__minus{
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 20px;
+  color: forestgreen;
+  background: white;
+  border-radius: 5px;
+  width: 12px;
+}
+
+.playlist__plus:hover{
+  color: forestgreen;
+}
+
+.playlist__minus:hover{
+  color: #5e1111;
 }

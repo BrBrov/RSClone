@@ -22,24 +22,32 @@ export default class Card {
   private createCard(data: SongData): HTMLElement {
     const wrapper = createByTag({ tag: 'div', class: 'top__card', id: `${data.id}` });
     const page = this.page;
-    wrapper.addEventListener('click', () => page.playSong(data.id));
 
     let container = createByTag({ tag: 'div', class: 'top__song-wrapper', parent: wrapper });
     const img = <HTMLImageElement>createByTag({ tag: 'img', class: 'top__song-img', parent: container });
     img.alt = data.title;
     img.src = data.logo;
-    img.addEventListener('click', () => page.playSong(data.id));
 
-    const state: State = new State();
+    img.addEventListener('click', () => {
+      page.playSong(data.id);
+      page.base.addView(data.id);
+    });
+    const state = new State();
     if (state.getAuth()) {
-      const plsIcon = createByTag({ tag: 'span', class: 'top__song-pls', parent: container });
-      const isSong: boolean | null = this.checkSongInPls(data.id);
-      if (isSong !== null) {
-        if (isSong) {
-          plsIcon.innerHTML = '<i class="top__del-icon fa-solid fa-heart-circle-minus"></i>';
-        } else {
-          plsIcon.innerHTML = '<i class="top__add-icon fa-solid fa-heart-circle-plus"></i>';
-        }
+      if (this.page.playListID.indexOf(data.id) >= 0) {
+        const icon = createByTag({ tag: 'i', class: 'fa-heart-circle-minus', parent: wrapper });
+        icon.classList.add('playlist__minus');
+        icon.classList.add('fa-solid');
+        icon.addEventListener('click', () =>
+          document.dispatchEvent(new CustomEvent('changeSongPL', { detail: { id: data.id } }))
+        );
+      } else {
+        const icon = createByTag({ tag: 'i', class: 'fa-heart-circle-plus', parent: wrapper });
+        icon.classList.add('fa-solid');
+        icon.classList.add('playlist__plus');
+        icon.addEventListener('click', () =>
+          document.dispatchEvent(new CustomEvent('changeSongPL', { detail: { id: data.id } }))
+        );
       }
     }
 

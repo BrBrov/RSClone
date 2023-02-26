@@ -26,11 +26,6 @@ export default class LeftMenu {
     const state = new State();
     const text: string = state.getLang() === 'en' ? 'Home' : 'Главная';
     li.innerHTML = `<i class="fa-solid fa-house"></i> <span class="left-menu__list-item"><a class="left-menu__href" href="./">${text}</a></li>`;
-    /*
-    TODO: many playLists
-    li = createByTag({ tag: 'li', class: 'left-menu__list-item', parent: ul });
-    li.innerHTML = '<i class="fa-solid fa-square-plus"></i> <span>Create PlayList</li>';
-    */
 
     const ulGenres = createByTag({ tag: 'ul', class: 'left-menu__list', parent: wrapper });
     this.page.genres.forEach((item) => {

@@ -88,6 +88,8 @@ export default class Logo {
     const state = new State();
     text.textContent = state.getLang() === 'en' ? 'Playlist' : 'Плейлист';
 
+    wrapper.addEventListener('click', () => document.dispatchEvent(new CustomEvent('showPlayList')));
+
     wrapper.append(text);
 
     return wrapper;

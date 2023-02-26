@@ -39,11 +39,7 @@ export default class SongsBlock {
     const titleWrap = createByTag({ tag: 'div', class: 'top__wrapper-title', parent: wrapper });
     const text = createByTag({ tag: 'span', class: 'top__title-block', parent: titleWrap });
     text.textContent = title;
-
     const cardWrapper = createByTag({ tag: 'div', class: 'top__cards-block', parent: wrapper });
-
-    console.log(data);
-    data.sort(() => Math.random() - 0.5);
     data.forEach((item: SongData) => {
       const card = new Card(item, this.page);
       cardWrapper.append(card.card);
