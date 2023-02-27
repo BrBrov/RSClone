@@ -131,12 +131,12 @@ export default class Page {
 
   public async getPlayList(): Promise<void> {
     this.base.getPlayList(this.state.getUser(), this.state.getToken()).then((songs: PlsData) => {
-      if (songs) {
+      const title: string = this.state.getLang() === 'en' ? 'Playlist' : 'Плейлист';
+      if (songs && Array.isArray(songs.tracks)) {
         this.playListID = songs.tracks.map((elem: SongData) => elem.id);
-        const title: string = this.state.getLang() === 'en' ? 'Playlist' : 'Плейлист';
         this.showCollectionOfSongs(songs.tracks, title);
-        this.router.clear();
       }
+      this.router.clear();
     });
   }
 
