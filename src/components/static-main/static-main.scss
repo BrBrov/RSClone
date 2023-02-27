@@ -106,13 +106,16 @@
   border-radius: 3px;
 }
 
-.footer__git-wrapper-a {
-  background-color: rgba(60, 116, 0, 0.5);
+.footer__git-wrapper:nth-child(1) {
+  background-color: rgba(236, 7, 7, 0.5);
 }
 
-.footer__git-wrapper-b,
-.footer__git-wrapper-c {
-  background-color: rgb(57, 57, 57);
+.footer__git-wrapper:nth-child(2) {
+  background-color: rgba(253, 249, 4, 0.5);
+}
+
+.footer__git-wrapper:nth-child(3) {
+  background-color: rgb(51, 148, 8);
 }
 
 .footer__git-wrapper-year {

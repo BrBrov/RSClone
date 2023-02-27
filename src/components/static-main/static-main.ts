@@ -54,7 +54,7 @@ export default class StaticMain {
     wrappergit.className = 'footer__git';
 
     let wrapper: HTMLElement = document.createElement('div');
-    wrapper.className = 'footer__git-wrapper-a';
+    wrapper.className = 'footer__git-wrapper';
 
     let img: HTMLImageElement = document.createElement('img');
     img.className = 'footer__git-img';
@@ -68,7 +68,7 @@ export default class StaticMain {
     wrappergit.append(wrapper);
 
     wrapper = document.createElement('div');
-    wrapper.className = 'footer__git-wrapper-b';
+    wrapper.className = 'footer__git-wrapper';
 
     img = document.createElement('img');
     img.className = 'footer__git-img';
@@ -82,7 +82,7 @@ export default class StaticMain {
     wrappergit.append(wrapper);
 
     wrapper = document.createElement('div');
-    wrapper.className = 'footer__git-wrapper-c';
+    wrapper.className = 'footer__git-wrapper';
 
     img = document.createElement('img');
     img.className = 'footer__git-img';
