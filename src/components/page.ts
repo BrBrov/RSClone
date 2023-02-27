@@ -305,7 +305,7 @@ export default class Page {
 
   private replacePlsCards(data: SongData[]): void {
     const block = this.body.querySelector('.top__cards-block');
-    block.replaceChildren();
+    if (block) block.replaceChildren();
     const title: string = this.state.getLang() === 'en' ? 'Playlist' : 'Плейлист';
     this.showCollectionOfSongs(data, title);
   }
