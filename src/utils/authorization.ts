@@ -83,9 +83,6 @@ export default class Authorization {
 
     let uri: URL = new URL(`${this.origin}/auth`);
 
-    console.log(this.origin);
-    console.log(uri);
-
     let req: Response = await fetch(uri, { method: 'GET', mode: 'cors' });
     const resp: JsonWebKey = await req.json();
 

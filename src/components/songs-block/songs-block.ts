@@ -15,7 +15,6 @@ export default class SongsBlock {
 
   public switchLang(): void {
     const title = this.songsBlock.querySelector('.top__title-block') as HTMLSpanElement;
-    console.log(title.textContent);
     const text = title.textContent;
 
     switch (text) {
