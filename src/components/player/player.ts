@@ -42,6 +42,7 @@ export default class Player {
 
       this.audio.oncanplay = () => {
         if (this.firstLoad) {
+          if (!this.isPlay) this.view.setPlayStop();
           this.play();
         } else {
           this.firstLoad = true;
@@ -131,13 +132,15 @@ export default class Player {
     ev.stopPropagation();
     if (this.isPlay) {
       this.stop();
+      this.view.setPlayStop();
     } else {
       await this.play();
+      this.view.setPlayStop();
     }
-    this.view.setPlayStop();
   }
 
-  private async timerListener(): Promise<void> {
+  private async timerListener(ev: Event): Promise<void> {
+    ev.stopPropagation();
     this.view.updateCurrTime(this.audio.currentTime);
   }
 
