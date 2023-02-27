@@ -1,4 +1,5 @@
 import PlayerView from './player-view';
+import State from '../../utils/state';
 
 export default class Player {
   private audio: HTMLAudioElement;
@@ -7,7 +8,9 @@ export default class Player {
 
   public view: PlayerView;
 
-  private mode = false;
+  private ready = true;
+
+  private firstLoad = false;
 
   constructor() {
     this.view = new PlayerView();
@@ -17,6 +20,7 @@ export default class Player {
   }
 
   public async add(data: SongData): Promise<void> {
+    this.ready = false;
     if (this.isPlay) {
       this.stop();
       this.view.setPlayStop();
@@ -24,30 +28,25 @@ export default class Player {
 
     this.view.player.dataset.id = `${data.id}`;
 
-    this.view.setPlsIcon(this.checkSongInPls(data.id));
+    const state = new State();
+    if (state.getAuth()) {
+      this.view.setPlsIcon(this.checkSongInPls(data.id));
+    }
 
     await this.setAudio(data);
-
-    const audioStrings: PlayerViewData = {
-      artist: data.artist,
-      title: data.title,
-      duration: this.audio.duration,
-      logo: data.logo,
-    };
-    this.view.setData(audioStrings);
-    await this.play();
   }
 
-  public setMode(): void {
-    this.mode = !this.mode;
-    this.view.btnState(this.mode);
-    const id = Number(this.view.player.dataset.id);
-    this.view.setPlsIcon(this.checkSongInPls(id));
-  }
-
-  private setAudio(data: SongData): Promise<Event> {
+  private setAudio(data: SongData): Promise<Event | string> {
     return new Promise((resolve, reject) => {
       this.audio.src = data.file;
+
+      this.audio.oncanplay = () => {
+        if (this.firstLoad) {
+          this.play();
+        } else {
+          this.firstLoad = true;
+        }
+      };
 
       this.audio.onloadedmetadata = () => {
         const audioStrings: PlayerViewData = {
@@ -56,10 +55,26 @@ export default class Player {
           duration: this.audio.duration,
           logo: data.logo,
         };
+
         this.view.setData(audioStrings);
       };
-      this.audio.onload = (ev: Event) => resolve(ev);
-      this.audio.onerror = (err: Event | string) => reject(err);
+      this.audio.onload = (ev: Event) => {
+        this.ready = true;
+
+        const audioStrings: PlayerViewData = {
+          artist: data.artist,
+          title: data.title,
+          duration: this.audio.duration,
+          logo: data.logo,
+        };
+        this.view.setData(audioStrings);
+        resolve(ev);
+      };
+      this.audio.onerror = (err: Event | string) => {
+        this.ready = true;
+        console.log(`Can\'t load track: ${err}`);
+        reject(err);
+      };
       this.audio.onended = () => {
         this.stop();
         this.isPlay = false;
@@ -100,7 +115,16 @@ export default class Player {
     const volume: HTMLInputElement = this.view.player.querySelector('.top__volume') as HTMLInputElement;
     volume.addEventListener('input', this.volumeListener.bind(this));
 
-    this.view.player.addEventListener('changemode', this.setMode);
+    this.view.addPlaylist.addEventListener('click', (ev: Event) => {
+      ev.stopPropagation();
+      const idSong = this.view.player.dataset.id;
+      if (this.checkSongInPls(Number(idSong))) {
+        this.view.setPlsIcon(false);
+      } else {
+        this.view.setPlsIcon(true);
+      }
+      document.dispatchEvent(new CustomEvent('changeSongPL', { detail: { id: Number(idSong) } }));
+    });
   }
 
   private async playListener(ev: Event): Promise<void> {
@@ -137,8 +161,8 @@ export default class Player {
     if (!data) {
       return null;
     }
-    const pls: Playlist = JSON.parse(data);
-    console.log(pls);
-    return pls.pls.songsID.includes(id);
+    const pls: PlsData = JSON.parse(data);
+    if (pls.songsID) return pls.songsID.includes(id);
+    return false;
   }
 }

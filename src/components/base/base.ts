@@ -1,9 +1,7 @@
-import { nSongInPage, base } from '../../utils/constants';
+import { base, nSongInPage } from '../../utils/constants';
 import State from '../../utils/state';
 
 class Base {
-  private static queryUser = base + '/login';
-
   private static queryRandom = base + '/random';
 
   private static querySearch = base + '/search';
@@ -16,8 +14,6 @@ class Base {
 
   private static queryPlaylist = base + '/playlist';
 
-  private queryPls = base + '/playlist';
-
   public state: State;
 
   constructor() {
@@ -26,8 +22,7 @@ class Base {
 
   private async get(query: string): Promise<Array<SongData>> {
     const response: Response = await fetch(query, { method: 'GET' });
-    const songs: Array<SongData> = await response.json();
-    return songs;
+    return response.json();
   }
 
   public getSearch = async (search = ''): Promise<Array<SongData>> => this.get(Base.querySearch + `?string=${search}`);
@@ -45,15 +40,14 @@ class Base {
 
   public async getOneSong(id = 1): Promise<SongData> {
     const response: Response = await fetch(Base.queryOne + `?id=${id}`, { method: 'GET' });
-    const song: SongData = await response.json();
-    return song;
+    return response.json();
   }
 
-  public async getPlaylist(login: string, token: string) {
+  public async getPlayList(login: string, token: string): Promise<PlsData> {
     const response: Response = await fetch(Base.queryPlaylist + `?user=${login}&token=${token}`, { method: 'GET' });
-    const result = await response.json();
-    console.log(login, token, result.pls);
-    return result.pls.tracks;
+    const result: Playlist = await response.json();
+    sessionStorage.setItem('pls', JSON.stringify(result.pls));
+    return result.pls;
   }
 
   public async addSongToPlayList(login: string, token: string, id: number) {
@@ -62,7 +56,7 @@ class Base {
       body: JSON.stringify({ id: id }),
       headers: { 'Content-Type': 'application/json' },
     });
-    console.log(response);
+    return response.json();
   }
 
   public async removeSongFromPlayList(login: string, token: string, id: number) {
@@ -71,7 +65,7 @@ class Base {
       body: JSON.stringify({ id: id }),
       headers: { 'Content-Type': 'application/json' },
     });
-    console.log(response);
+    return response.json();
   }
 
   public async addView(id: number) {

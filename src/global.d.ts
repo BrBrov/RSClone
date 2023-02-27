@@ -40,11 +40,13 @@ declare global {
   }
 
   interface Playlist {
-    pls: {
-      _id?: string;
-      id: string;
-      tracks: SongData [];
-      songsID: number[];
-    };
+    pls: PlsData;
+  }
+
+  interface PlsData {
+    _id?: string;
+    id: string;
+    tracks: SongData[];
+    songsID: number[];
   }
 }

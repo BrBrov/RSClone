@@ -19,7 +19,7 @@ import LoginPopUp from './popup-section/connect-popup';
 export default class Page {
   private body: HTMLElement;
 
-  private readonly state: State;
+  public readonly state: State;
 
   private logo: Logo;
 
@@ -31,27 +31,29 @@ export default class Page {
 
   private player: Player;
 
-  private songsBlockPopular: SongsBlock | undefined;
+  private songsBlockPopular: SongsBlock;
 
-  private songsBlockRecently: SongsBlock | undefined;
+  private songsBlockRecently: SongsBlock;
 
-  private pagination: Pagination | undefined;
+  private pagination: Pagination;
 
-  private genresBlock: GenresBlock | undefined;
+  private genresBlock: GenresBlock;
 
-  private leftMenu: LeftMenu | undefined;
+  private leftMenu: LeftMenu;
 
-  public songs: Array<SongData> = [];
+  private songs: Array<SongData> = [];
 
   public genres: Array<GenreData> = genres;
 
-  public curGenre: GenreData | undefined;
+  public curGenre: GenreData;
 
   public base: Base;
 
   public router: Router;
 
   public playListID: Array<number> = [];
+
+  private plsShow = false;
 
   constructor(base: Base, router: Router) {
     this.base = base;
@@ -80,11 +82,6 @@ export default class Page {
     const playerWrapper: HTMLElement = this.body.querySelector('.top__player-wrapper') as HTMLElement;
     playerWrapper.append(this.player.view.player);
 
-    const rand = Math.round(Math.random() * 330);
-    this.base.getOneSong(rand).then((song) => {
-      if (song) this.player.add(song);
-    });
-
     this.leftMenu = new LeftMenu(this);
     const leftSide: HTMLElement = this.body.querySelector('.top__left-menu') as HTMLElement;
     leftSide.append(this.leftMenu.leftMenu);
@@ -96,7 +93,16 @@ export default class Page {
 
     this.base
       .getSet(500, 1)
-      .then((songs) => (this.songs = songs))
+      .then((songs: SongData[]) => (this.songs = songs))
+      .then(() => {
+        if (this.state.getAuth()) {
+          return this.base.getPlayList(this.state.getUser(), this.state.getToken());
+        }
+        return null;
+      })
+      .then((data: PlsData | null) => {
+        if (data && data.tracks) this.playListID = data.tracks.map((elem: SongData) => elem.id);
+      })
       .then(() => {
         for (let i = 0; i < this.genres.length; i += 1) {
           const arr = this.songs.filter((elem) => elem.genre === this.genres[i].key);
@@ -107,22 +113,28 @@ export default class Page {
         if (tmpGen && this.router.genre) this.getSongs('genre', this.router.genre, tmpGen.name, tmpPage);
         else if (this.router.search) this.getSongs('search', this.router.search, '', 1);
         else this.showMain();
+      })
+      .then(() => {
+        const rand = Math.round(Math.random() * 330);
+        this.base.getOneSong(rand).then((song: SongData) => {
+          if (song) this.player.add(song);
+        });
       });
 
     this.addListeners();
   }
 
   public playSong(id: number): void {
-    const curSong = this.songs.find((elem) => elem.id === id);
+    const curSong: SongData = this.songs.find((elem: SongData) => elem.id === id);
     if (curSong) this.player.add(curSong);
   }
 
   public async getPlayList(): Promise<void> {
-    const state = new State();
-    this.base.getPlaylist(state.getUser(), state.getToken()).then((songs) => {
+    this.base.getPlayList(this.state.getUser(), this.state.getToken()).then((songs: PlsData) => {
       if (songs) {
-        this.playListID = songs.map((elem: SongData) => elem.id);
-        this.showCollectionOfSongs(songs, 'PlayList');
+        this.playListID = songs.tracks.map((elem: SongData) => elem.id);
+        const title: string = this.state.getLang() === 'en' ? 'Playlist' : 'Плейлист';
+        this.showCollectionOfSongs(songs.tracks, title);
         this.router.clear();
       }
     });
@@ -232,6 +244,7 @@ export default class Page {
     login.addEventListener('click', this.loginListener.bind(this));
 
     document.addEventListener('showPlayList', () => {
+      this.plsShow = true;
       this.getPlayList();
     });
 
@@ -241,10 +254,18 @@ export default class Page {
     });
   }
 
-  private changePlayList(id: number): void {
-    const state = new State();
-    if (this.playListID.indexOf(id) >= 0) this.base.removeSongFromPlayList(state.getUser(), state.getToken(), id);
-    else this.base.addSongToPlayList(state.getUser(), state.getToken(), id);
+  private async changePlayList(id: number): Promise<void> {
+    let pls: Playlist;
+    if (this.playListID.includes(id)) {
+      pls = await this.base.removeSongFromPlayList(this.state.getUser(), this.state.getToken(), id);
+    } else {
+      pls = await this.base.addSongToPlayList(this.state.getUser(), this.state.getToken(), id);
+    }
+    this.playListID = pls.pls.songsID;
+    sessionStorage.setItem('pls', JSON.stringify(pls.pls));
+    if (this.plsShow) {
+      this.replacePlsCards(pls.pls.tracks);
+    }
   }
 
   private loginListener(ev: Event): void {
@@ -275,5 +296,17 @@ export default class Page {
     this.login.switchLang(this.state);
     this.logo.switchLang(this.state);
     if (this.pagination) this.pagination.switchLang(this.state);
+    const plsTitle: HTMLElement = document.querySelector('.top__title-block');
+    if (!plsTitle) return;
+    if (plsTitle.textContent === 'Playlist' || plsTitle.textContent === 'Плейлист') {
+      plsTitle.textContent = this.state.getLang() === 'en' ? 'Playlist' : 'Плейлист';
+    }
+  }
+
+  private replacePlsCards(data: SongData[]): void {
+    const block = this.body.querySelector('.top__cards-block');
+    block.replaceChildren();
+    const title: string = this.state.getLang() === 'en' ? 'Playlist' : 'Плейлист';
+    this.showCollectionOfSongs(data, title);
   }
 }
