@@ -4,14 +4,14 @@ export default class Authorization {
   private readonly origin: string;
 
   constructor() {
-    this.origin = 'http://localhost:8081';
+    this.origin = location.origin;
   }
 
   public async signUp(login: string, pass: string): Promise<string> {
     const hash = await this.getHash(pass);
     const idHash = await this.getHash(login);
 
-    let uri: URL = new URL('http://localhost:8081/login');
+    let uri: URL = new URL(`${this.origin}/login`);
 
     let req: Response = await fetch(uri, { method: 'GET', mode: 'cors' });
     const resp: JsonWebKey = await req.json();
@@ -36,7 +36,7 @@ export default class Authorization {
       login: login,
     });
 
-    uri = new URL('http://localhost:8081/login?mode=register');
+    uri = new URL(`${this.origin}/login?mode=register`);
 
     req = await fetch(uri, {
       method: 'POST',
@@ -81,7 +81,10 @@ export default class Authorization {
     const hash = (await this.getHash(pass)) as ArrayBuffer;
     const idHash = (await this.getHash(login)) as ArrayBuffer;
 
-    let uri: URL = new URL('http://localhost:8081/auth');
+    let uri: URL = new URL(`${this.origin}/auth`);
+
+    console.log(this.origin);
+    console.log(uri);
 
     let req: Response = await fetch(uri, { method: 'GET', mode: 'cors' });
     const resp: JsonWebKey = await req.json();
@@ -93,7 +96,7 @@ export default class Authorization {
     const hashChif = (await this.encrypt(hash, key, iv)) as ArrayBuffer;
     const idHashChif = (await this.encrypt(idHash, key, iv)) as ArrayBuffer;
 
-    uri = new URL('http://localhost:8081/auth?mode=enter');
+    uri = new URL(`${this.origin}/auth?mode=enter`);
 
     req = await fetch(uri, {
       method: 'POST',
