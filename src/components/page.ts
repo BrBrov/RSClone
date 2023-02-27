@@ -106,7 +106,7 @@ export default class Page {
         return null;
       })
       .then((data: PlsData | null) => {
-        if (data) this.playListID = data.tracks.map((elem: SongData) => elem.id);
+        if (data && data.tracks) this.playListID = data.tracks.map((elem: SongData) => elem.id);
       })
       .then(() => {
         for (let i = 0; i < this.genres.length; i += 1) {

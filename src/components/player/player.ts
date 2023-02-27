@@ -169,6 +169,7 @@ export default class Player {
       return null;
     }
     const pls: PlsData = JSON.parse(data);
-    return pls.songsID.includes(id);
+    if (pls.songsID) return pls.songsID.includes(id);
+    return false;
   }
 }
