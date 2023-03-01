@@ -30,7 +30,11 @@ export default class LeftMenu {
     const ulGenres = createByTag({ tag: 'ul', class: 'left-menu__list', parent: wrapper });
     this.page.genres.forEach((item) => {
       const liG = createByTag({ tag: 'li', class: 'left-menu__list-item', parent: ulGenres });
-      liG.innerHTML = `<a class="left-menu__href" href="./?genre=${item.key}">${item.name}</a>`;
+      liG.innerHTML = `<span class="left-menu__href" >${item.name}</span>`;
+      liG.addEventListener('click', () => {
+        this.page.getSongs('genre', item.key, item.name, 1);
+        this.page.router.setGenre(item.key);
+      });
     });
     return wrapper;
   }
