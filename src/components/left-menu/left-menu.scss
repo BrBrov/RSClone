@@ -1,0 +1,44 @@
+.left-menu__wrapper{
+  color: white;
+  margin-left:20%
+}
+.left-menu__logo {
+  margin:20px; 
+  text-align: center;
+}
+.left-menu__img {
+  max-width:85%;
+}
+
+.left-menu__list-item {
+  list-style-type: none; 
+  font-size: 18px;
+  color: #adcaf2;
+  padding-bottom:15px;
+  cursor: pointer;
+}
+
+.fa-solid {
+  padding-right: 10px;
+}
+
+.left-menu__href {
+  color: #a5b1d5;;
+  text-decoration: none;
+}
+.left-menu__href:hover {
+  color: #ff6a62;
+}
+
+@media (max-width: 740px) {
+
+  .left-menu__list {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    padding-left: 0px;
+  }
+
+}
