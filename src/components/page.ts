@@ -82,11 +82,6 @@ export default class Page {
     const playerWrapper: HTMLElement = this.body.querySelector('.top__player-wrapper') as HTMLElement;
     playerWrapper.append(this.player.view.player);
 
-    const rand = Math.round(Math.random() * 330);
-    this.base.getOneSong(rand).then((song: SongData) => {
-      if (song) this.player.add(song);
-    });
-
     this.leftMenu = new LeftMenu(this);
     const leftSide: HTMLElement = this.body.querySelector('.top__left-menu') as HTMLElement;
     leftSide.append(this.leftMenu.leftMenu);
@@ -118,6 +113,12 @@ export default class Page {
         if (tmpGen && this.router.genre) this.getSongs('genre', this.router.genre, tmpGen.name, tmpPage);
         else if (this.router.search) this.getSongs('search', this.router.search, '', 1);
         else this.showMain();
+      })
+      .then(() => {
+        const rand = Math.round(Math.random() * 330);
+        this.base.getOneSong(rand).then((song: SongData) => {
+          if (song) this.player.add(song);
+        });
       });
 
     this.addListeners();
@@ -130,12 +131,12 @@ export default class Page {
 
   public async getPlayList(): Promise<void> {
     this.base.getPlayList(this.state.getUser(), this.state.getToken()).then((songs: PlsData) => {
-      if (songs) {
+      const title: string = this.state.getLang() === 'en' ? 'Playlist' : 'Плейлист';
+      if (songs && Array.isArray(songs.tracks)) {
         this.playListID = songs.tracks.map((elem: SongData) => elem.id);
-        const title: string = this.state.getLang() === 'en' ? 'Playlist' : 'Плейлист';
         this.showCollectionOfSongs(songs.tracks, title);
-        this.router.clear();
       }
+      this.router.clear();
     });
   }
 
@@ -304,7 +305,7 @@ export default class Page {
 
   private replacePlsCards(data: SongData[]): void {
     const block = this.body.querySelector('.top__cards-block');
-    block.replaceChildren();
+    if (block) block.replaceChildren();
     const title: string = this.state.getLang() === 'en' ? 'Playlist' : 'Плейлист';
     this.showCollectionOfSongs(data, title);
   }

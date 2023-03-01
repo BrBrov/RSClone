@@ -8,17 +8,11 @@ export default class Player {
 
   public view: PlayerView;
 
-  private mode = false;
-
   private ready = true;
 
   private firstLoad = false;
 
   constructor() {
-    const state = new State();
-    if (state.getAuth()) {
-      this.mode = true;
-    }
     this.view = new PlayerView();
     this.audio = new Audio();
     this.audio.volume = 0.5;
@@ -34,13 +28,12 @@ export default class Player {
 
     this.view.player.dataset.id = `${data.id}`;
 
-    if (this.mode) {
+    const state = new State();
+    if (state.getAuth()) {
       this.view.setPlsIcon(this.checkSongInPls(data.id));
     }
 
-    const result: Event | string = await this.setAudio(data);
-
-    console.log(result);
+    await this.setAudio(data);
   }
 
   private setAudio(data: SongData): Promise<Event | string> {
@@ -49,6 +42,7 @@ export default class Player {
 
       this.audio.oncanplay = () => {
         if (this.firstLoad) {
+          if (!this.isPlay) this.view.setPlayStop();
           this.play();
         } else {
           this.firstLoad = true;
@@ -138,13 +132,15 @@ export default class Player {
     ev.stopPropagation();
     if (this.isPlay) {
       this.stop();
+      this.view.setPlayStop();
     } else {
       await this.play();
+      this.view.setPlayStop();
     }
-    this.view.setPlayStop();
   }
 
-  private async timerListener(): Promise<void> {
+  private async timerListener(ev: Event): Promise<void> {
+    ev.stopPropagation();
     this.view.updateCurrTime(this.audio.currentTime);
   }
 
